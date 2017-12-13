@@ -1,0 +1,13 @@
+! Remap caps-lock to ctrl
+clear lock
+clear control
+keycode 66 = Control_L
+add control = Control_L Control_R
+
+! Free up right-Alt for remapping
+remove mod1 = Alt_R
+
+! Right-Alt remapped to Super
+clear mod4
+keycode 108 = Super_R
+add mod4 = Super_R
