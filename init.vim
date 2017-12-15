@@ -76,19 +76,6 @@ call plug#begin('~/.config/nvim/bundle')
       \ 'ctagsbin'  : 'gotags',
       \ 'ctagsargs' : '-sort -silent'
       \ }
-    let g:tagbar_type_rust = {
-    \ 'ctagstype' : 'rust',
-    \ 'kinds' : [
-      \'T:types,type definitions',
-      \'f:functions,function definitions',
-      \'g:enum,enumeration names',
-      \'s:structure names',
-      \'m:modules,module names',
-      \'c:consts,static constants',
-      \'t:traits',
-      \'i:impls,trait implementations',
-    \]
-    \}
   "}
 
   " Autocompletion (#p.3)
@@ -101,9 +88,10 @@ call plug#begin('~/.config/nvim/bundle')
     execute "set rtp+=" . g:opamshare . "/merlin/vim"
   "}
   Plug 'sebastianmarkow/deoplete-rust' "{
-    let g:deoplete#sources#rust#racer_binary='which racer'
-    let g:deoplete#sources#rust#rust_source_path='/usr/local/lib/rust/src'
+    let g:deoplete#sources#rust#racer_binary='/home/nwtnni/.cargo/bin/racer'
+    let g:deoplete#sources#rust#rust_source_path='$RUST_SRC_PATH'
     let g:deoplete#sources#rust#disable_keymap=1
+    let g:ale_rust_rls_executable='/home/nwtnni/.cargo/bin/rls'
   "}
   Plug 'eagletmt/neco-ghc' "{
     let g:haskellmode_completion_ghc=0
@@ -114,6 +102,8 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
     let g:deoplete#enable_at_startup=1
     let g:deoplete#max_list=5
+    let g:deoplete#omni_patterns={}
+    let g:deoplete#omni_patterns.rust='[(\.)(::)]'
   "}
 
   " Utilities (#p.4)
@@ -150,7 +140,7 @@ call plug#begin('~/.config/nvim/bundle')
     \ 'latex'   : ['lacheck'],
     \ 'ocaml'   : ['merlin'],
     \ 'python'  : ['flake8'],
-    \ 'rust'    : ['rls'],
+    \ 'rust'    : ['cargo', 'rls', 'rustfmt'],
     \}
     let g:ale_sign_error="◼"
     let g:ale_sign_warning="▲"
@@ -175,6 +165,7 @@ call plug#begin('~/.config/nvim/bundle')
     let g:rustfmt_autosave=1
     let g:rustfmt_fail_silently=1
   "}
+  Plug 'cespare/vim-toml'
 
 call plug#end()
 
@@ -202,7 +193,7 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set shiftround
-set number
+set relativenumber
 set mouse=
 set splitright
 set backspace=indent,eol,start
@@ -258,7 +249,7 @@ nnoremap <M-a> <C-a>
 nnoremap <M-x> <C-x>
 
 " Source .vimrc
-nnoremap \ev :vsplit ~/.config/nvim/config/keys.vim<CR>
+nnoremap \ev :vsplit ~/.config/nvim/init.vim<CR>
 nnoremap \sv :source ~/.config/nvim/init.vim<cr>
 
 " Clear search
@@ -284,7 +275,7 @@ vnoremap \d "+d
 nnoremap \p "+p
 nnoremap \<S-p> "+P
 
-noremap <SPACE>= :NERDTreeToggle<CR>
+nnoremap <SPACE>- :TagbarToggle<CR>
 nnoremap <SPACE>t :Files<CR>
 
 fun! TrimWhitespace()
