@@ -85,7 +85,7 @@ dir () {
   fi
 }
 
-export PS1='╭[$(name)\u$(clear)@$(network)\H$(clear)]-[$(branch)$(clear)]-[$(dir \w)$(clear)]\n╰→$(setc 142 192 124) λ $(clear)'
+export PS1='╭[$(name)\u$(clear)@$(network)\H$(clear)]-[$(branch)$(clear)]-[$(dir \w)$(clear)]\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
 export PS2='>>>> '
 
 # If running bash
