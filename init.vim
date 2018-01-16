@@ -81,6 +81,13 @@ call plug#begin('~/.config/nvim/bundle')
   " Autocompletion (#p.3)
 
   Plug 'Shougo/echodoc.vim'
+	Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-unknown-linux-musl'} "{
+    let g:LanguageClient_autoStart=1
+		let g:LanguageClient_serverCommands = {
+				\ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+				\ }
+		nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+	"}
   Plug 'zchee/deoplete-go', { 'do': 'make'}
   Plug 'zchee/deoplete-jedi'
   Plug 'copy/deoplete-ocaml' "{
@@ -101,7 +108,8 @@ call plug#begin('~/.config/nvim/bundle')
   "}
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
     let g:deoplete#enable_at_startup=1
-    let g:deoplete#max_list=5
+    let g:deoplete#max_list=10
+    let g:deoplete#auto_complete_start_length=3
     let g:deoplete#omni_patterns={}
     let g:deoplete#omni_patterns.rust='[(\.)(::)]'
   "}
@@ -122,14 +130,15 @@ call plug#begin('~/.config/nvim/bundle')
       \   <bang>0)
   "}
   Plug 'raimondi/delimitmate'
+  Plug 'unblevable/quick-scope'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
+  Plug 'justinmk/vim-sneak'
 
   " Linting (#p.5)
 
-  Plug 'alx741/vim-hindent'
   Plug 'w0rp/ale' "{
     let g:ale_linters= {
     \ 'bash'    : ['shellcheck'],
@@ -140,8 +149,9 @@ call plug#begin('~/.config/nvim/bundle')
     \ 'latex'   : ['lacheck'],
     \ 'ocaml'   : ['merlin'],
     \ 'python'  : ['flake8'],
-    \ 'rust'    : ['cargo', 'rls', 'rustfmt'],
+    \ 'rust'    : ['cargo', 'rustfmt'],
     \}
+    let g:ale_lint_on_save=1
     let g:ale_sign_error="◼"
     let g:ale_sign_warning="▲"
     let g:airline#extensions#ale#enabled=1
@@ -162,10 +172,10 @@ call plug#begin('~/.config/nvim/bundle')
   "}
   Plug 'donRaphaco/neotex'  , { 'for': 'tex'  }
   Plug 'rust-lang/rust.vim' , { 'for': 'rust' } "{
-    let g:rustfmt_autosave=1
     let g:rustfmt_fail_silently=1
   "}
   Plug 'cespare/vim-toml'
+  Plug 'urso/haskell_syntax.vim'
 
 call plug#end()
 
@@ -193,6 +203,7 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set shiftround
+set nonumber
 set relativenumber
 set mouse=
 set splitright
@@ -250,7 +261,7 @@ nnoremap <M-x> <C-x>
 
 " Source .vimrc
 nnoremap \ev :vsplit ~/.config/nvim/init.vim<CR>
-nnoremap \sv :source ~/.config/nvim/init.vim<cr>
+nnoremap \sv :source ~/.config/nvim/init.vim<CR>
 
 " Clear search
 nnoremap <SPACE>h :nohlsearch<CR>
@@ -258,6 +269,10 @@ nnoremap <SPACE>h :nohlsearch<CR>
 " Swap 0 and ^
 noremap 0 ^
 noremap ^ 0
+nnoremap <S-L> $
+vnoremap <S-L> $
+nnoremap <S-H> ^
+vnoremap <S-H> ^
 
 " Split line
 nnoremap <S-K> 080lBi<CR><ESC>

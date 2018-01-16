@@ -17,13 +17,13 @@ export PATH="/home/nwtnni/.pyenv/bin:$PATH"
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
 
 # Ruby
 export PATH="$PATH:$HOME/.rvm/bin"
 
 export EDITOR="nvim"
 export TERM="xterm-256color-italic"
-export LD_LIBRARY_PATH=$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH
 
 setc () {
   printf "\x1b[38;2;%s;%s;%sm" "$1" "$2" "$3"
@@ -68,24 +68,23 @@ branch () {
 dir () {
   # Orange for pwd
   setc 254 128 25
-  local wd="$1"
-  local len="$(echo $1 | tr -dc '/' | wc -c)"
+  local len="$(pwd | tr -dc '/' | wc -c)"
   if [[ $COLUMNS -lt 80 ]]; then
     echo "${wd##*/}"
     return 0
   fi
   if [[ $len -lt 2 ]]; then
-    echo "$1"
+    pwd
   elif [[ $len == 2 ]]; then
     echo "~"
-  elif [[ $len -lt 8 ]]; then
-    echo "~/$(echo $1 | cut -d '/' -f 4-$((len+1)))"
+  elif [[ $len -lt 6 ]]; then
+    echo "~/$(pwd | cut -d '/' -f 4-)"
   else
-    echo "~/.../$(echo $1 | cut -d '/' -f $((len-3))-$((len+1)))"
+    echo "~/.../$(pwd | cut -d '/' -f $((len-1))-)"
   fi
 }
 
-export PS1='╭[$(name)\u$(clear)@$(network)\H$(clear)]-[$(branch)$(clear)]-[$(dir \w)$(clear)]\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
+export PS1='╭[$(name)\u$(clear)@$(network)\H$(clear)]-[$(branch)$(clear)]-[$(dir)$(clear)]\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
 export PS2='>>>> '
 
 # If running bash
