@@ -14,6 +14,9 @@ export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/2.0/bin:/opt/ghc/8.2.2/bin"
 # Python
 export PATH="/home/nwtnni/.pyenv/bin:$PATH"
 
+# Java
+export PATH="$PATH:/usr/local/lib/jflex/bin"
+
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -68,12 +71,15 @@ branch () {
 dir () {
   # Orange for pwd
   setc 254 128 25
+  local root="$(pwd | cut -d '/' -f 1-3)"
   local len="$(pwd | tr -dc '/' | wc -c)"
   if [[ $COLUMNS -lt 80 ]]; then
     echo "${wd##*/}"
     return 0
   fi
-  if [[ $len -lt 2 ]]; then
+  if [[ "$root" != "/home/nwtnni" ]]; then
+    pwd
+  elif [[ $len -lt 2 ]]; then
     pwd
   elif [[ $len == 2 ]]; then
     echo "~"

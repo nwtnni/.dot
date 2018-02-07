@@ -39,79 +39,30 @@ call plug#begin('~/.config/nvim/bundle')
 
   " Tags (#p.2)
 
-  Plug 'MarcWeber/hasktags'
-  Plug 'rob-b/gutenhasktags'
   Plug 'ludovicchabant/vim-gutentags' "{
     let g:gutentags_cache_dir='~/.config/nvim/tags'
     let g:gutentags_project_info = [ {'type': 'python', 'file': 'setup.py'},
-                                  \ {'type': 'ruby', 'file': 'Gemfile'},
-                                  \ {'type': 'haskell', 'file': 'Setup.hs'} ]
-    let g:gutentags_ctags_executable_haskell = 'gutenhasktags'
+                                  \ {'type': 'ruby', 'file': 'Gemfile'}, ]
   "}
-  Plug 'majutsushi/tagbar' "{
-    let g:tagbar_type_go = {
-      \ 'ctagstype' : 'go',
-      \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-      \ ],
-      \ 'sro' : '.',
-      \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-      \ },
-      \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-      \ },
-      \ 'ctagsbin'  : 'gotags',
-      \ 'ctagsargs' : '-sort -silent'
-      \ }
-  "}
+  Plug 'majutsushi/tagbar'
 
   " Autocompletion (#p.3)
 
   Plug 'Shougo/echodoc.vim'
-	Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-unknown-linux-musl'} "{
-    let g:LanguageClient_autoStart=1
-		let g:LanguageClient_serverCommands = {
-				\ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-				\ }
-		nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-	"}
-  Plug 'zchee/deoplete-go', { 'do': 'make'}
   Plug 'zchee/deoplete-jedi'
-  Plug 'copy/deoplete-ocaml' "{
-    let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-    execute "set rtp+=" . g:opamshare . "/merlin/vim"
-  "}
   Plug 'sebastianmarkow/deoplete-rust' "{
     let g:deoplete#sources#rust#racer_binary='/home/nwtnni/.cargo/bin/racer'
     let g:deoplete#sources#rust#rust_source_path='$RUST_SRC_PATH'
     let g:deoplete#sources#rust#disable_keymap=1
-    let g:ale_rust_rls_executable='/home/nwtnni/.cargo/bin/rls'
-  "}
-  Plug 'eagletmt/neco-ghc' "{
-    let g:haskellmode_completion_ghc=0
-    let g:necoghc_enable_detailed_browse=1
-    let g:necoghc_use_stack=1
-    autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
   "}
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
     let g:deoplete#enable_at_startup=1
     let g:deoplete#max_list=10
-    let g:deoplete#auto_complete_start_length=3
-    let g:deoplete#omni_patterns={}
-    let g:deoplete#omni_patterns.rust='[(\.)(::)]'
+    let g:deoplete#ignore_sources = {}
+    let g:deoplete#ignore_sources.ocaml = ['buffer', 'around']
+    let g:deoplete#omni#input_patterns={}
+    let g:deoplete#omni#input_patterns.rust='[(\.)(::)]'
+    let g:deoplete#omni#input_patterns.ocaml = '[^ ,;\t\[()\]]{2,}'
   "}
 
   " Utilities (#p.4)
@@ -130,7 +81,6 @@ call plug#begin('~/.config/nvim/bundle')
       \   <bang>0)
   "}
   Plug 'raimondi/delimitmate'
-  Plug 'unblevable/quick-scope'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
@@ -149,9 +99,8 @@ call plug#begin('~/.config/nvim/bundle')
     \ 'latex'   : ['lacheck'],
     \ 'ocaml'   : ['merlin'],
     \ 'python'  : ['flake8'],
-    \ 'rust'    : ['cargo', 'rustfmt'],
     \}
-    let g:ale_lint_on_save=1
+    let g:ale_lint_on_save=0
     let g:ale_sign_error="◼"
     let g:ale_sign_warning="▲"
     let g:airline#extensions#ale#enabled=1
@@ -161,22 +110,44 @@ call plug#begin('~/.config/nvim/bundle')
 
   " Language-specific (#p.6)
 
-  Plug 'fatih/vim-go'       , { 'for': 'go'   } "{
-    let g:go_highlight_types=1
-    let g:go_highlight_fields=1
-    let g:go_highlight_functions=1
-    let g:go_highlight_methods=1
-    let g:go_highlight_extra_types=1
-    let g:go_highlight_build_constraints=1
-    let g:go_highlight_generate_tags=1
-  "}
   Plug 'donRaphaco/neotex'  , { 'for': 'tex'  }
   Plug 'rust-lang/rust.vim' , { 'for': 'rust' } "{
     let g:rustfmt_fail_silently=1
   "}
   Plug 'cespare/vim-toml'
-  Plug 'urso/haskell_syntax.vim'
 
+  " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+  let s:opam_share_dir = system("opam config var share")
+  let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+  let s:opam_configuration = {}
+
+  function! OpamConfOcpIndent()
+    execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+  endfunction
+  let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+  function! OpamConfOcpIndex()
+    execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+  endfunction
+  let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+  function! OpamConfMerlin()
+    let l:dir = s:opam_share_dir . "/merlin/vim"
+    execute "set rtp+=" . l:dir
+  endfunction
+  let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+  let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+  let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+  let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+  for tool in s:opam_packages
+    " Respect package order (merlin should be after ocp-index)
+    if count(s:opam_available_tools, tool) > 0
+      call s:opam_configuration[tool]()
+    endif
+  endfor
+  " ## end of OPAM user-setup addition for vim / base ## keep this line
 call plug#end()
 
 "----------------------------------------"
