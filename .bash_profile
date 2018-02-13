@@ -3,6 +3,10 @@
 # Initial setup
 PATH="$HOME/bin:$HOME/local/bin:$HOME/.local/bin:$PATH:/usr/local/bin"
 
+# C
+export PATH="$PATH:/usr/local/lib/cquery/bin"
+export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig"
+
 # Go
 export PATH="$PATH:/usr/lib/go-1.9/bin"
 export GOPATH="$HOME/go"
@@ -13,9 +17,6 @@ export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/2.0/bin:/opt/ghc/8.2.2/bin"
 
 # Python
 export PATH="/home/nwtnni/.pyenv/bin:$PATH"
-
-# Java
-export PATH="$PATH:/usr/local/lib/jflex/bin"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -36,26 +37,6 @@ clear () {
   printf "\x1b[0m"
 }
 
-name () {
-  if [[ $? == 0 ]]; then
-    # Green for good
-    setc 184 187 38
-  else
-    # Red for bad
-    setc 251 73 52
-  fi
-}
-
-network () {
-  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    # Purple for ssh
-    setc 211 134 155
-  else
-    # Yellow for local
-    setc 250 189 47
-  fi
-}
-
 branch () {
   if git rev-parse --git-dir > /dev/null 2>&1; then
     # Blue for git branch
@@ -69,12 +50,18 @@ branch () {
 }
 
 dir () {
-  # Orange for pwd
-  setc 254 128 25
+  if [[ $? == 0 ]]; then
+    # Green for good
+    setc 184 187 38
+  else
+    # Red for bad
+    setc 251 73 52
+  fi
   local root="$(pwd | cut -d '/' -f 1-3)"
   local len="$(pwd | tr -dc '/' | wc -c)"
-  if [[ $COLUMNS -lt 80 ]]; then
-    echo "${wd##*/}"
+  if [[ $COLUMNS -lt 40 ]]; then
+    local path="$(pwd)"
+    echo "${path##*/}"
     return 0
   fi
   if [[ "$root" != "/home/nwtnni" ]]; then
@@ -86,11 +73,11 @@ dir () {
   elif [[ $len -lt 6 ]]; then
     echo "~/$(pwd | cut -d '/' -f 4-)"
   else
-    echo "~/.../$(pwd | cut -d '/' -f $((len-1))-)"
+    echo "~/.../$(pwd | cut -d '/' -f $((len))-)"
   fi
 }
 
-export PS1='╭[$(name)\u$(clear)@$(network)\H$(clear)]-[$(branch)$(clear)]-[$(dir)$(clear)]\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
+export PS1='| $(dir)$(clear) | $(branch)$(clear) |\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
 export PS2='>>>> '
 
 # If running bash

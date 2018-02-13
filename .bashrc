@@ -8,10 +8,17 @@ case $- in
       *) return;;
 esac
 
+shopt -s autocd
+shopt -s dirspell
+shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
+
 set -o vi &> /dev/null
 bind '"jk":vi-movement-mode'
+bind "set completion-ignore-case on"
+bind "set completion-map-case on"
+bind "set show-all-if-ambiguous on"
 
 HISTCONTROL=ignoreboth
 HISTSIZE=1000

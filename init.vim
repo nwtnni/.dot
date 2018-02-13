@@ -27,12 +27,6 @@ call plug#begin('~/.config/nvim/bundle')
 
   " Status Line (#p.1)
 
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'vim-airline/vim-airline' "{
-    let g:airline_powerline_fonts=1
-    let g:airline#extensions#tabline#enabled=1
-    let g:airline#extensions#tmuxline#enabled=0
-  "}
   Plug 'airblade/vim-gitgutter' "{
     let g:gitgutter_map_keys=0
   "}
@@ -41,29 +35,39 @@ call plug#begin('~/.config/nvim/bundle')
 
   Plug 'ludovicchabant/vim-gutentags' "{
     let g:gutentags_cache_dir='~/.config/nvim/tags'
-    let g:gutentags_project_info = [ {'type': 'python', 'file': 'setup.py'},
-                                  \ {'type': 'ruby', 'file': 'Gemfile'}, ]
   "}
   Plug 'majutsushi/tagbar'
 
   " Autocompletion (#p.3)
 
-  Plug 'Shougo/echodoc.vim'
-  Plug 'zchee/deoplete-jedi'
-  Plug 'sebastianmarkow/deoplete-rust' "{
-    let g:deoplete#sources#rust#racer_binary='/home/nwtnni/.cargo/bin/racer'
-    let g:deoplete#sources#rust#rust_source_path='$RUST_SRC_PATH'
-    let g:deoplete#sources#rust#disable_keymap=1
-  "}
+  Plug 'Shougo/neosnippet'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'zchee/deoplete-clang'
+  Plug 'artur-shaik/vim-javacomplete2'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
-    let g:deoplete#enable_at_startup=1
-    let g:deoplete#max_list=10
+    autocmd FileType java setlocal omnifunc=javacomplete#Complete
+    let g:deoplete#enable_at_startup = 1 
     let g:deoplete#ignore_sources = {}
-    let g:deoplete#ignore_sources.ocaml = ['buffer', 'around']
+    let g:deoplete#ignore_sources._ = ['buffer', 'around']
+    let g:deoplete#sources#clang#libclang_path='/usr/local/lib/cquery/lib/clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-14.04/lib/libclang.so.5'
+    let g:deoplete#sources#clang#clang_header='/usr/local/lib/cquery/lib/clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-14.04/lib/clang'
     let g:deoplete#omni#input_patterns={}
     let g:deoplete#omni#input_patterns.rust='[(\.)(::)]'
-    let g:deoplete#omni#input_patterns.ocaml = '[^ ,;\t\[()\]]{2,}'
+    let g:deoplete#omni#input_patterns.ocaml='[^ ,;\t\[()\]]{2,}'
   "}
+  "
+  Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'} "{
+		let g:LanguageClient_serverCommands = {
+        \ 'c': ['cquery'],
+        \ 'cpp': ['cquery'],
+        \ 'python': ['pyls'],
+        \ 'rust': ['rls'],
+        \ }
+
+    nnoremap <silent> <SPACE>h :call LanguageClient_textDocument_hover()<CR>
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+    nnoremap <silent> <SPACE>r :call LanguageClient_textDocument_rename()<CR>
+	"}
 
   " Utilities (#p.4)
 
@@ -82,31 +86,11 @@ call plug#begin('~/.config/nvim/bundle')
   "}
   Plug 'raimondi/delimitmate'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
   Plug 'justinmk/vim-sneak'
 
   " Linting (#p.5)
-
-  Plug 'w0rp/ale' "{
-    let g:ale_linters= {
-    \ 'bash'    : ['shellcheck'],
-    \ 'c'       : ['gcc'],
-    \ 'go'      : ['golint'],
-    \ 'haskell' : ['ghc'],
-    \ 'java'    : ['javac'],
-    \ 'latex'   : ['lacheck'],
-    \ 'ocaml'   : ['merlin'],
-    \ 'python'  : ['flake8'],
-    \}
-    let g:ale_lint_on_save=0
-    let g:ale_sign_error="◼"
-    let g:ale_sign_warning="▲"
-    let g:airline#extensions#ale#enabled=1
-    highlight ALEErrorSign cterm=None ctermfg=124 ctermbg=237
-    highlight ALEWarningSign cterm=None ctermfg=214 ctermbg=237
-  "}
 
   " Language-specific (#p.6)
 
@@ -193,6 +177,12 @@ set background=dark
 set termguicolors
 set completeopt-=preview
 set updatetime=250
+
+augroup FourSpaces
+  autocmd Filetype java,groovy,c,cpp setlocal tabstop=4
+  autocmd Filetype java,groovy,c,cpp setlocal softtabstop=4
+  autocmd Filetype java,groovy,c,cpp setlocal shiftwidth=4
+augroup end
 
 let g:python_host_prog="/home/nwtnni/.pyenv/versions/neovim2/bin/python"
 let g:python3_host_prog="/home/nwtnni/.pyenv/versions/neovim3/bin/python3"
@@ -288,3 +278,15 @@ nnoremap <silent> \v :call fzf#run({
 \  'right': winwidth('.') / 2,
 \  'sink':  'vertical botright split' })<CR>
 
+" Expand snippets with tab
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+ \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" Expands or completes the selected snippet/item in the popup menu
+imap <expr><silent><CR> pumvisible() ? deoplete#mappings#close_popup() .
+      \ "\<Plug>(neosnippet_jump_or_expand)" : "\<CR>"
+smap <silent><CR> <Plug>(neosnippet_jump_or_expand)
