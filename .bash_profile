@@ -49,14 +49,36 @@ branch () {
   fi
 }
 
-dir () {
-  if [[ $? == 0 ]]; then
+last () {
+  if [[ "$success" == 0 ]]; then
     # Green for good
     setc 184 187 38
   else
     # Red for bad
     setc 251 73 52
   fi
+}
+
+timer_start () {
+  success="$?"
+  timer=${timer:-$(date +%s.%N)}
+}
+
+timer_stop () {
+  timer_show=$(printf "%.3fs" $(bc <<< "$(date +%s.%N) - $timer"))
+  unset timer
+}
+
+trap 'timer_start' DEBUG
+
+if [ "$PROMPT_COMMAND" == "" ]; then
+  PROMPT_COMMAND="timer_stop"
+else
+  PROMPT_COMMAND="$PROMPT_COMMAND timer_stop"
+fi
+
+dir () {
+  setc 250 189 47
   local root="$(pwd | cut -d '/' -f 1-3)"
   local len="$(pwd | tr -dc '/' | wc -c)"
   if [[ $COLUMNS -lt 40 ]]; then
@@ -70,14 +92,14 @@ dir () {
     pwd
   elif [[ $len == 2 ]]; then
     echo "~"
-  elif [[ $len -lt 6 ]]; then
+  elif [[ $len -lt 7 ]]; then
     echo "~/$(pwd | cut -d '/' -f 4-)"
   else
-    echo "~/.../$(pwd | cut -d '/' -f $((len))-)"
+    echo "~/.../$(pwd | cut -d '/' -f $((len - 2))-)"
   fi
 }
 
-export PS1='| $(dir)$(clear) | $(branch)$(clear) |\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
+export PS1='| $(dir)$(clear) | $(branch)$(clear) | $(last)$timer_show$(clear) |\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
 export PS2='>>>> '
 
 # If running bash
