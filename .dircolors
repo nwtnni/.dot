@@ -245,9 +245,11 @@ CHR    01;38;5;137 # character device driver
 .sql    00;38;5;179
 .css    00;38;5;179
 .js     00;38;5;179
+.java   00;38;5;179
 .sh     00;38;5;179
 .R      00;38;5;179
 .r      00;38;5;179
+.rs     00;38;5;179
 .hs     00;38;5;179
 .rb     00;38;5;179
 .cc     00;38;5;179
@@ -255,10 +257,12 @@ CHR    01;38;5;137 # character device driver
 .lua    00;38;5;179
 .vim    00;38;5;179
 .m      00;38;5;179
+.ml     00;38;5;179
 
 # Libraries/Literates/Documentations
 .1      00;38;5;137
 .h      00;38;5;137
+.mli    00;38;5;137
 .tex    00;38;5;137
 .bib    00;38;5;137
 .Rd     00;38;5;137
@@ -266,12 +270,13 @@ CHR    01;38;5;137 # character device driver
 .Rmd    00;38;5;137
 
 # Special sources/configs
-*Makefile 00;38;5;94
-*do       00;38;5;94
-*Doxyfile 00;38;5;94
-*config   00;38;5;94
-.conf     00;38;5;94
-.cfg      00;38;5;94
+*Makefile   00;38;5;94
+*do         00;38;5;94
+*Doxyfile   00;38;5;94
+*config     00;38;5;94
+*Cargo.toml 00;38;5;94
+.conf       00;38;5;94
+.cfg        00;38;5;94
 
 # Plain text
 .txt 00;38;5;230

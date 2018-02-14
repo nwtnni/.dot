@@ -39,8 +39,13 @@ clear () {
 
 branch () {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    # Blue for git branch
-    setc 131 165 152
+    if [[ $(git diff --shortstat | tail -n 1) == "" ]]; then
+      # Blue for git branch
+      setc 131 165 152
+    else
+      # Red for dirty
+      setc 251 73 52
+    fi
     echo "⎇  $(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1/p")"
   else
     # Gray for no version control
