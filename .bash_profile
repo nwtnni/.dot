@@ -39,8 +39,7 @@ clear () {
 
 branch () {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    git ls-files --others --error-unmatch . >/dev/null 2>&1
-    if [[ "$?" == 0 ]]; then
+    if [[ -z $(git status --porcelain) ]]; then
       # Blue for git branch
       setc 131 165 152
     else
