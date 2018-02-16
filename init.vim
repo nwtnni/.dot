@@ -163,7 +163,7 @@ set softtabstop=2
 set shiftwidth=2
 set shiftround
 set nonumber
-set relativenumber
+set norelativenumber
 set mouse=
 set splitright
 set backspace=indent,eol,start

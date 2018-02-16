@@ -3,6 +3,8 @@
 # Initial setup
 PATH="$HOME/bin:$HOME/local/bin:$HOME/.local/bin:$PATH:/usr/local/bin"
 
+export RANGER_LOAD_DEFAULT_RC="FALSE"
+
 # C
 export PATH="$PATH:/usr/local/lib/cquery/bin"
 export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig"
@@ -111,4 +113,9 @@ if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bash_aliases" ]; then
 		. "$HOME/.bash_aliases"
 	fi
+fi
+
+# Launch tmux
+if command -v tmux>/dev/null; then
+  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi
