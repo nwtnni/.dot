@@ -24,6 +24,10 @@ call plug#begin('~/.config/nvim/bundle')
     let g:gruvbox_italic=1
     let g:gruvbox_contrast_dark='soft'
   "}
+  Plug 'miyakogi/seiya.vim' "{
+    let g:seiya_auto_enable=1
+    let g:seiya_target_groups = has('nvim') ? ['guibg'] : ['ctermbg']
+  "}
 
   " Status Line (#p.1)
 

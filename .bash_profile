@@ -84,23 +84,18 @@ fi
 
 dir () {
   setc 250 189 47
+
   local root="$(pwd | cut -d '/' -f 1-3)"
   local len="$(pwd | tr -dc '/' | wc -c)"
-  if [[ $COLUMNS -lt 40 ]]; then
-    local path="$(pwd)"
-    echo "${path##*/}"
-    return 0
-  fi
-  if [[ "$root" != "/home/nwtnni" ]]; then
-    pwd
-  elif [[ $len -lt 2 ]]; then
-    pwd
+
+  if [[ "$root" != "/home/nwtnni" ]] || [[ $len -lt 2 ]]; then
+    echo $(pwd | sed 's@\(.\)//@\1 → @g')
   elif [[ $len == 2 ]]; then
     echo "~"
-  elif [[ $len -lt 7 ]]; then
-    echo "~/$(pwd | cut -d '/' -f 4-)"
+  elif [[ $len -lt 6 ]]; then
+    echo "~ → $(pwd | cut -d '/' -f 4- | sed 's@/@ → @g')"
   else
-    echo "~/.../$(pwd | cut -d '/' -f $((len - 2))-)"
+    echo "~ → ... → $(pwd | cut -d '/' -f $((len - 1))- | sed 's@/@ → @g')"
   fi
 }
 
