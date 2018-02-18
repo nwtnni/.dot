@@ -18,7 +18,7 @@ export PATH="$PATH:$GOPATH/bin"
 export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/2.0/bin:/opt/ghc/8.2.2/bin"
 
 # Python
-export PATH="/home/nwtnni/.pyenv/bin:$PATH"
+export PATH="$HOME/.pyenv/bin:$PATH"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
