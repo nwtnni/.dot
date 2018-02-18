@@ -94,10 +94,8 @@ dir () {
     echo $(pwd | sed 's@\(.\)//@\1 → @g')
   elif [[ $len == 2 ]]; then
     echo "~"
-  elif [[ $len -lt 6 ]]; then
-    echo "~ → $(pwd | cut -d '/' -f 4- | sed 's@/@ → @g')"
   else
-    echo "~ → ... → $(pwd | cut -d '/' -f $((len - 1))- | sed 's@/@ → @g')"
+    echo "~ → $(pwd | cut -d '/' -f 4- | sed 's@/@ → @g')"
   fi
 }
 
@@ -113,9 +111,4 @@ if [ -n "$BASH_VERSION" ]; then
 	if [ -f "$HOME/.bash_aliases" ]; then
 		. "$HOME/.bash_aliases"
 	fi
-fi
-
-# Launch tmux
-if command -v tmux>/dev/null; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi

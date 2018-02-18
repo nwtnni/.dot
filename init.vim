@@ -23,11 +23,7 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'morhetz/gruvbox' "{
     let g:gruvbox_italic=1
     let g:gruvbox_contrast_dark='soft'
-  "}
-  Plug 'miyakogi/seiya.vim' "{
-    let g:seiya_auto_enable=1
-    let g:seiya_target_groups = has('nvim') ? ['guibg'] : ['ctermbg']
-  "}
+  "} 
 
   " Status Line (#p.1)
 
@@ -41,6 +37,10 @@ call plug#begin('~/.config/nvim/bundle')
     let g:gutentags_cache_dir='~/.config/nvim/tags'
   "}
   Plug 'majutsushi/tagbar'
+  Plug 'scrooloose/nerdtree' "{
+    nnoremap <SPACE>= :NERDTreeToggle<CR>
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+  "}
 
   " Autocompletion (#p.3)
 
@@ -107,7 +107,6 @@ call plug#begin('~/.config/nvim/bundle')
   " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
   let s:opam_share_dir = system("opam config var share")
   let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
   let s:opam_configuration = {}
 
   function! OpamConfOcpIndent()
@@ -148,6 +147,7 @@ call plug#end()
 execute "set t_8f=\e[38;2;%lu;%lu;%lum"
 execute "set t_8b=\e[48;2;%lu;%lu;%lum"
 colorscheme gruvbox
+hi EndOfBuffer ctermbg=none ctermfg=none guibg=none guifg=none
 hi Normal guibg=none ctermbg=none
 
 filetype plugin indent on
@@ -168,10 +168,11 @@ set mouse=
 set splitright
 set backspace=indent,eol,start
 set hidden
-set laststatus=2
-set display=lastline
 set noshowmode
-set showcmd
+set noruler
+set laststatus=0
+set noshowcmd
+set display=lastline
 set ttyfast
 set lazyredraw
 set incsearch
@@ -183,9 +184,10 @@ set completeopt-=preview
 set updatetime=250
 
 augroup FourSpaces
-  autocmd Filetype java,groovy,c,cpp setlocal tabstop=4
-  autocmd Filetype java,groovy,c,cpp setlocal softtabstop=4
-  autocmd Filetype java,groovy,c,cpp setlocal shiftwidth=4
+  autocmd Filetype java,groovy,c,cpp,makefile setlocal tabstop=4
+  autocmd Filetype java,groovy,c,cpp,makefile setlocal softtabstop=4
+  autocmd Filetype java,groovy,c,cpp,makefile setlocal shiftwidth=4
+  autocmd Filetype makefile setlocal noexpandtab
 augroup end
 
 let g:python_host_prog="/home/nwtnni/.pyenv/versions/neovim2/bin/python"
@@ -226,7 +228,6 @@ nnoremap <M-x> <C-x>
 
 " Source .vimrc
 nnoremap \ev :vsplit ~/.config/nvim/init.vim<CR>
-nnoremap \sv :source ~/.config/nvim/init.vim<CR>
 
 " Clear search
 nnoremap <SPACE>h :nohlsearch<CR>
@@ -257,6 +258,26 @@ nnoremap \<S-p> "+P
 
 nnoremap <SPACE>- :TagbarToggle<CR>
 nnoremap <SPACE>t :Files<CR>
+
+let s:hidden_all = 1
+function! ToggleHiddenAll()
+    if s:hidden_all == 0
+        let s:hidden_all = 1
+        set noshowmode
+        set noruler
+        set laststatus=0
+        set noshowcmd
+        set nonumber
+    else
+        let s:hidden_all = 0
+        set showmode
+        set ruler
+        set laststatus=2
+        set showcmd
+        set number
+    endif
+endfunction
+nnoremap <SPACE>0 :call ToggleHiddenAll()<CR>
 
 fun! TrimWhitespace()
     let l:save = winsaveview()
