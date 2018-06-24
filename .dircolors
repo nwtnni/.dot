@@ -225,6 +225,7 @@ CHR    01;38;5;137 # character device driver
 # Documents/Readables
 .pdf  00;38;5;109
 .PDF  00;38;5;109
+.djvu 00;38;5;109
 .html 00;38;5;109
 .HTML 00;38;5;109
 .doc  00;38;5;109
@@ -250,6 +251,8 @@ CHR    01;38;5;137 # character device driver
 .R      00;38;5;179
 .r      00;38;5;179
 .rs     00;38;5;179
+.rkt    00;38;5;179
+.scm    00;38;5;179
 .hs     00;38;5;179
 .rb     00;38;5;179
 .cc     00;38;5;179
