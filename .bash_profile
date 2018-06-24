@@ -14,6 +14,21 @@ export PATH="$PATH:/usr/lib/go-1.9/bin"
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/nwtnni/.google/google-cloud-sdk/path.bash.inc' ]; then source '/home/nwtnni/.google/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/nwtnni/.google/google-cloud-sdk/completion.bash.inc' ]; then source '/home/nwtnni/.google/google-cloud-sdk/completion.bash.inc'; fi
+
+# JS
+export NPM_PACKAGES="/home/nwtnni/.npm-packages"
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules${NODE_PATH:+:$NODE_PATH}"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+# Unset manpath so we can inherit from /etc/manpath via the `manpath`
+# command
+unset MANPATH  # delete if you already modified MANPATH elsewhere in your config
+export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+
 # Haskell
 export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/2.0/bin:/opt/ghc/8.2.2/bin"
 
@@ -29,6 +44,12 @@ export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
 export PATH="$PATH:$HOME/.rvm/bin"
 
 export EDITOR="nvim"
+
+export FZF_DEFAULT_COMMAND="fd --type f"
+export FZF_ALT_C_COMMAND="fd --type d"
+export FZF_CTRL_T_COMMAND="$FZF_ALT_C_COMMAND"
+export FZF_TMUX=1
+
 export TERM="xterm-256color-italic"
 
 setc () {
@@ -45,61 +66,28 @@ branch () {
       # Blue for git branch
       setc 131 165 152
     else
-      # Red for dirty
-      setc 251 73 52
+      # Orange for dirty
+      setc 254 128 25
     fi
-    echo "⎇  $(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1/p")"
   else
-    # Gray for no version control
-    setc 168 153 132
-    echo "∅"
+    # White for no version control
+    setc 235 219 178
   fi
 }
 
+
 last () {
-  if [[ "$success" == 0 ]]; then
+  if [[ "$?" -eq 0 ]]; then
     # Green for good
-    setc 184 187 38
+    setc 152 151 26
   else
     # Red for bad
     setc 251 73 52
   fi
 }
 
-timer_start () {
-  success="$?"
-  timer=${timer:-$(date +%s.%N)}
-}
+export PS1='\[$(last)\]λ \[$(clear)$(branch)\]→ \[$(clear)\]'
 
-timer_stop () {
-  timer_show=$(printf "%.3fs" $(bc <<< "$(date +%s.%N) - $timer"))
-  unset timer
-}
-
-trap 'timer_start' DEBUG
-
-if [ "$PROMPT_COMMAND" == "" ]; then
-  PROMPT_COMMAND="timer_stop"
-else
-  PROMPT_COMMAND="$PROMPT_COMMAND timer_stop"
-fi
-
-dir () {
-  setc 250 189 47
-
-  local root="$(pwd | cut -d '/' -f 1-3)"
-  local len="$(pwd | tr -dc '/' | wc -c)"
-
-  if [[ "$root" != "/home/nwtnni" ]] || [[ $len -lt 2 ]]; then
-    echo $(pwd | sed 's@\(.\)//@\1 → @g')
-  elif [[ $len == 2 ]]; then
-    echo "~"
-  else
-    echo "~ → $(pwd | cut -d '/' -f 4- | sed 's@/@ → @g')"
-  fi
-}
-
-export PS1='| $(dir)$(clear) | $(branch)$(clear) | $(last)$timer_show$(clear) |\n╰→\[$(setc 142 192 124)\] λ \[$(clear)\]'
 export PS2='>>>> '
 
 # If running bash
