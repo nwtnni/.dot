@@ -1,14 +1,16 @@
 set recolor true
-set recolor-lightcolor "#282828"
+set recolor-lightcolor "#32302f"
 set recolor-darkcolor "#ebdbb2"
 set highlight-color "d79921"
 set highlight-active-color "fabd2f"
 set first-page-column 1:1
 set font "Hack 12"
 
-set default-bg "#282828"
+set default-bg "#32302f"
 set default-fg "#ebdbb2"
 set inputbar-bg "#282828"
 set inputbar-fg "#ebdbb2"
 set statusbar-bg "#282828"
 set statusbar-fg "#ebdbb2"
+
+set guioptions ""
