@@ -22,8 +22,11 @@ call plug#begin('~/.config/nvim/bundle')
 
   Plug 'morhetz/gruvbox' "{
     let g:gruvbox_italic=1
+    let g:gruvbox_sign_column="dark0_soft"
+    let g:gruvbox_number_column="dark0_soft"
     let g:gruvbox_contrast_dark='soft'
-  "} 
+  "}
+  Plug 'chrisbra/Colorizer'
 
   " Status Line (#p.1)
 
@@ -37,40 +40,24 @@ call plug#begin('~/.config/nvim/bundle')
     let g:gutentags_cache_dir='~/.config/nvim/tags'
   "}
   Plug 'majutsushi/tagbar'
-  Plug 'scrooloose/nerdtree' "{
-    nnoremap <SPACE>= :NERDTreeToggle<CR>
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-  "}
 
   " Autocompletion (#p.3)
 
-  Plug 'Shougo/neosnippet'
-  Plug 'Shougo/neosnippet-snippets'
   Plug 'zchee/deoplete-clang'
-  Plug 'artur-shaik/vim-javacomplete2'
+  Plug 'eagletmt/neco-ghc' "{
+    let g:necoghc_enable_detailed_browse=1
+    let g:necoghc_use_stack=1
+  "}
+  Plug 'Shougo/neoinclude.vim'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
     autocmd FileType java setlocal omnifunc=javacomplete#Complete
-    let g:deoplete#enable_at_startup = 1 
+    let g:deoplete#enable_at_startup = 1
     let g:deoplete#ignore_sources = {}
     let g:deoplete#ignore_sources._ = ['buffer', 'around']
-    let g:deoplete#sources#clang#libclang_path='/usr/local/lib/cquery/lib/clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-14.04/lib/libclang.so.5'
-    let g:deoplete#sources#clang#clang_header='/usr/local/lib/cquery/lib/clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-14.04/lib/clang'
+    let g:deoplete#sources#clang#libclang_path ='/usr/lib/llvm-5.0/lib/libclang.so'
+    let g:deoplete#sources#clang#clang_header ='/usr/lib/llvm-5.0/lib/clang'
     let g:deoplete#omni#input_patterns={}
-    let g:deoplete#omni#input_patterns.rust='[(\.)(::)]'
     let g:deoplete#omni#input_patterns.ocaml='[^ ,;\t\[()\]]{2,}'
-  "}
-  "
-  Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'} "{
-		let g:LanguageClient_serverCommands = {
-        \ 'c': ['cquery'],
-        \ 'cpp': ['cquery'],
-        \ 'python': ['pyls'],
-        \ 'rust': ['rls'],
-        \ }
-
-    nnoremap <silent> <SPACE>h :call LanguageClient_textDocument_hover()<CR>
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-    nnoremap <silent> <SPACE>r :call LanguageClient_textDocument_rename()<CR>
 	"}
 
   " Utilities (#p.4)
@@ -78,6 +65,12 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'airblade/vim-rooter'
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'sjl/tslime.vim' "{
+    let g:tslime_normal_mapping = '\t'
+    let g:tslime_visual_mapping = '\t'
+    let g:tslime_vars_mapping = '\T'
+    let g:tslime_ensure_trailing_newlines = 2
+  "}
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
@@ -88,21 +81,66 @@ call plug#begin('~/.config/nvim/bundle')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
   "}
-  Plug 'raimondi/delimitmate'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
   Plug 'justinmk/vim-sneak'
+  Plug 'let-def/vimbufsync'
 
   " Linting (#p.5)
 
+  Plug 'w0rp/ale' "{
+    let g:ale_linters = {'rust': ['cargo'], 'haskell': ['stack-ghc', 'ghc-mod']}
+    let g:ale_lint_on_text_changed = "never"
+    let g:ale_lint_delay = 200
+    let g:ale_pattern_options = {
+\   '.*\.mly$': {'ale_enabled': 0},
+\   '.*\.mll$': {'ale_enabled': 0},
+\}
+  "}
+
   " Language-specific (#p.6)
 
-  Plug 'donRaphaco/neotex'  , { 'for': 'tex'  }
-  Plug 'rust-lang/rust.vim' , { 'for': 'rust' } "{
-    let g:rustfmt_fail_silently=1
-  "}
+  Plug 'donRaphaco/neotex', { 'for': 'tex'  }
+  Plug 'rust-lang/rust.vim'
+  Plug 'qnighy/lalrpop.vim'
   Plug 'cespare/vim-toml'
+  Plug 'wlangstroth/vim-racket'
+  Plug 'epdtry/neovim-coq'
+  Plug 'neovimhaskell/haskell-vim' "{
+    let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+    let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+    let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+    let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+    let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+    let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+    let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
+  "}
+  Plug 'alx741/vim-hindent'
+  Plug 'jpalardy/vim-slime' "{
+    let g:slime_target = "tmux"
+  "}
+
+  augroup Scheme
+    autocmd FileType scheme let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": ":.2"}
+    autocmd FileType scheme set commentstring=;\ %s
+    autocmd FileType scheme let b:is_chicken=1
+  augroup end
+
+  augroup Xi
+    autocmd FileType xi set commentstring=//\ %s
+  augroup end
+
+  augroup OCaml
+    autocmd FileType ocaml set commentstring=(*\ %s\ *)
+  augroup end
+
+  augroup LALRPOP
+    autocmd Filetype lalrpop setlocal tabstop=4
+    autocmd Filetype lalrpop setlocal softtabstop=4
+    autocmd Filetype lalrpop setlocal shiftwidth=4
+    autocmd FileType lalrpop set commentstring=//\ %s
+  augroup end
 
   " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
   let s:opam_share_dir = system("opam config var share")
@@ -147,8 +185,10 @@ call plug#end()
 execute "set t_8f=\e[38;2;%lu;%lu;%lum"
 execute "set t_8b=\e[48;2;%lu;%lu;%lum"
 colorscheme gruvbox
-hi EndOfBuffer ctermbg=none ctermfg=none guibg=none guifg=none
-hi Normal guibg=none ctermbg=none
+
+" Transparent background
+" hi EndOfBuffer ctermbg=none ctermfg=none guibg=none guifg=none
+" hi Normal guibg=none ctermbg=none
 
 filetype plugin indent on
 filetype plugin on
@@ -176,6 +216,7 @@ set display=lastline
 set ttyfast
 set lazyredraw
 set incsearch
+set inccommand=nosplit
 set hlsearch
 set sessionoptions-=options
 set background=dark
@@ -184,9 +225,9 @@ set completeopt-=preview
 set updatetime=250
 
 augroup FourSpaces
-  autocmd Filetype java,groovy,c,cpp,makefile setlocal tabstop=4
-  autocmd Filetype java,groovy,c,cpp,makefile setlocal softtabstop=4
-  autocmd Filetype java,groovy,c,cpp,makefile setlocal shiftwidth=4
+  autocmd Filetype java,groovy,c,cpp,make setlocal tabstop=4
+  autocmd Filetype java,groovy,c,cpp,make setlocal softtabstop=4
+  autocmd Filetype java,groovy,c,cpp,make setlocal shiftwidth=4
   autocmd Filetype makefile setlocal noexpandtab
 augroup end
 
@@ -218,16 +259,14 @@ set viewoptions=cursor,folds,slash,unix
 let mapleader = "\<SPACE>"
 
 " Better escaping
+vnoremap jk <esc>
 inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk
 
-" Rebind increment/decrement to avoid conflict with tmux
-nnoremap <M-a> <C-a>
-nnoremap <M-x> <C-x>
-
 " Source .vimrc
-nnoremap \ev :vsplit ~/.config/nvim/init.vim<CR>
+nnoremap \e :vsplit ~/.config/nvim/init.vim<CR>
+nnoremap \r :source ~/.config/nvim/init.vim<CR>
 
 " Clear search
 nnoremap <SPACE>h :nohlsearch<CR>
@@ -302,16 +341,3 @@ nnoremap <silent> \s :call fzf#run({
 nnoremap <silent> \v :call fzf#run({
 \  'right': winwidth('.') / 2,
 \  'sink':  'vertical botright split' })<CR>
-
-" Expand snippets with tab
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
- \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" Expands or completes the selected snippet/item in the popup menu
-imap <expr><silent><CR> pumvisible() ? deoplete#mappings#close_popup() .
-      \ "\<Plug>(neosnippet_jump_or_expand)" : "\<CR>"
-smap <silent><CR> <Plug>(neosnippet_jump_or_expand)
