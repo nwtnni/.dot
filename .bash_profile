@@ -35,6 +35,9 @@ export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/2.0/bin:/opt/ghc/8.2.2/bin"
 # Python
 export PATH="$HOME/.pyenv/bin:$PATH"
 
+# P4
+export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
+
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -51,6 +54,10 @@ export FZF_CTRL_T_COMMAND="$FZF_ALT_C_COMMAND"
 export FZF_TMUX=1
 
 export TERM="xterm-256color-italic"
+
+o () {
+  cd "$1" && ls --group-directories-first --color=auto
+}
 
 setc () {
   printf "\x1b[38;2;%s;%s;%sm" "$1" "$2" "$3"

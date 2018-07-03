@@ -101,6 +101,7 @@ call plug#begin('~/.config/nvim/bundle')
 
   " Language-specific (#p.6)
 
+  Plug 'isRuslan/vim-es6'
   Plug 'donRaphaco/neotex', { 'for': 'tex'  }
   Plug 'rust-lang/rust.vim'
   Plug 'qnighy/lalrpop.vim'
@@ -116,7 +117,6 @@ call plug#begin('~/.config/nvim/bundle')
     let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
     let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
   "}
-  Plug 'alx741/vim-hindent'
   Plug 'jpalardy/vim-slime' "{
     let g:slime_target = "tmux"
   "}
@@ -127,12 +127,25 @@ call plug#begin('~/.config/nvim/bundle')
     autocmd FileType scheme let b:is_chicken=1
   augroup end
 
+  augroup Javascript
+    autocmd Filetype javascript setlocal tabstop=4
+    autocmd Filetype javascript setlocal softtabstop=4
+    autocmd Filetype javascript setlocal shiftwidth=4
+  augroup end
+
   augroup Xi
     autocmd FileType xi set commentstring=//\ %s
   augroup end
 
   augroup OCaml
     autocmd FileType ocaml set commentstring=(*\ %s\ *)
+  augroup end
+
+  augroup P4
+    autocmd FileType p4 set commentstring=//\ %s
+    autocmd Filetype p4 setlocal tabstop=4
+    autocmd Filetype p4 setlocal softtabstop=4
+    autocmd Filetype p4 setlocal shiftwidth=4
   augroup end
 
   augroup LALRPOP
@@ -259,7 +272,6 @@ set viewoptions=cursor,folds,slash,unix
 let mapleader = "\<SPACE>"
 
 " Better escaping
-vnoremap jk <esc>
 inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk

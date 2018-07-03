@@ -16,6 +16,7 @@ shopt -s checkwinsize
 
 set -o vi &> /dev/null
 bind '"jk":vi-movement-mode'
+bind -m vi-insert "\C-l":clear-screen
 bind "set completion-ignore-case on"
 bind "set completion-map-case on"
 bind "set show-all-if-ambiguous on"
@@ -52,3 +53,5 @@ stty -ixon
 [[ -f ~/.rvm/scripts/rvm ]] && source ~/.rvm/scripts/rvm
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 [[ -f ~/.config/up/up.sh ]] && source ~/.config/up/up.sh
+[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)"
+eval "$(direnv hook bash)"
