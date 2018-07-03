@@ -9,7 +9,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-exec_always --no-startup-id "killall -q compton; compton --config ~/.dotfiles/compton.conf"
+exec_always --no-startup-id "killall -q compton; compton --config ~/.config/compton/compton.conf"
 force_xinerama yes
 
 # Photo by Chris Lawton on Unsplash

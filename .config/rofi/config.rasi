@@ -4,7 +4,7 @@ configuration {
   	case-sensitive: false;
     levenshtein-sort: true;
   	modi: "window,run,ssh,combi";
-  	combi-modi: "drun,window";
+  	combi-modi: "drun,run,window";
 	  terminal: "alacritty";
 /*	run-shell-command: "{terminal} -e {cmd}";*/
 /*	run-list-command: "";*/
