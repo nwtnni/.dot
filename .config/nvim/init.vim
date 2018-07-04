@@ -195,8 +195,9 @@ call plug#end()
 "----------------------------------------"
 
 " Terminal true color
-execute "set t_8f=\e[38;2;%lu;%lu;%lum"
-execute "set t_8b=\e[48;2;%lu;%lu;%lum"
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
 colorscheme gruvbox
 
 " Transparent background
@@ -233,7 +234,6 @@ set inccommand=nosplit
 set hlsearch
 set sessionoptions-=options
 set background=dark
-set termguicolors
 set completeopt-=preview
 set updatetime=250
 
