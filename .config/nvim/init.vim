@@ -43,14 +43,14 @@ call plug#begin('~/.config/nvim/bundle')
 
   " Autocompletion (#p.3)
 
-  Plug 'zchee/deoplete-clang'
   Plug 'eagletmt/neco-ghc' "{
     let g:necoghc_enable_detailed_browse=1
     let g:necoghc_use_stack=1
   "}
   Plug 'Shougo/neoinclude.vim'
+  Plug 'zchee/deoplete-clang'
+  Plug 'copy/deoplete-ocaml'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
-    autocmd FileType java setlocal omnifunc=javacomplete#Complete
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#ignore_sources = {}
     let g:deoplete#ignore_sources._ = ['buffer', 'around']
@@ -58,7 +58,7 @@ call plug#begin('~/.config/nvim/bundle')
     let g:deoplete#sources#clang#clang_header ='/usr/lib/llvm-5.0/lib/clang'
     let g:deoplete#omni#input_patterns={}
     let g:deoplete#omni#input_patterns.ocaml='[^ ,;\t\[()\]]{2,}'
-	"}
+"}
 
   " Utilities (#p.4)
 
@@ -86,6 +86,9 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'tpope/vim-repeat'
   Plug 'justinmk/vim-sneak'
   Plug 'let-def/vimbufsync'
+  Plug 'jpalardy/vim-slime' "{
+    let g:slime_target = "tmux"
+  "}
 
   " Linting (#p.5)
 
@@ -94,98 +97,30 @@ call plug#begin('~/.config/nvim/bundle')
     let g:ale_lint_on_text_changed = "never"
     let g:ale_lint_delay = 200
     let g:ale_pattern_options = {
-\   '.*\.mly$': {'ale_enabled': 0},
-\   '.*\.mll$': {'ale_enabled': 0},
+    \ '.*\.mly$': {'ale_enabled': 0},
+    \ '.*\.mll$': {'ale_enabled': 0},
 \}
   "}
 
   " Language-specific (#p.6)
 
   Plug 'isRuslan/vim-es6'
-  Plug 'donRaphaco/neotex', { 'for': 'tex'  }
+  Plug 'donRaphaco/neotex'
   Plug 'rust-lang/rust.vim'
+  Plug 'dan-t/rusty-tags'
   Plug 'qnighy/lalrpop.vim'
   Plug 'cespare/vim-toml'
-  Plug 'wlangstroth/vim-racket'
   Plug 'epdtry/neovim-coq'
   Plug 'neovimhaskell/haskell-vim' "{
-    let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-    let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-    let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-    let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-    let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-    let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
-    let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
-  "}
-  Plug 'jpalardy/vim-slime' "{
-    let g:slime_target = "tmux"
+    let g:haskell_enable_quantification = 1
+    let g:haskell_enable_recursivedo = 1
+    let g:haskell_enable_arrowsyntax = 1
+    let g:haskell_enable_pattern_synonyms = 1
+    let g:haskell_enable_typeroles = 1
+    let g:haskell_enable_static_pointers = 1
+    let g:haskell_backpack = 1
   "}
 
-  augroup Scheme
-    autocmd FileType scheme let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": ":.2"}
-    autocmd FileType scheme set commentstring=;\ %s
-    autocmd FileType scheme let b:is_chicken=1
-  augroup end
-
-  augroup Javascript
-    autocmd Filetype javascript setlocal tabstop=4
-    autocmd Filetype javascript setlocal softtabstop=4
-    autocmd Filetype javascript setlocal shiftwidth=4
-  augroup end
-
-  augroup Xi
-    autocmd FileType xi set commentstring=//\ %s
-  augroup end
-
-  augroup OCaml
-    autocmd FileType ocaml set commentstring=(*\ %s\ *)
-  augroup end
-
-  augroup P4
-    autocmd FileType p4 set commentstring=//\ %s
-    autocmd Filetype p4 setlocal tabstop=4
-    autocmd Filetype p4 setlocal softtabstop=4
-    autocmd Filetype p4 setlocal shiftwidth=4
-  augroup end
-
-  augroup LALRPOP
-    autocmd Filetype lalrpop setlocal tabstop=4
-    autocmd Filetype lalrpop setlocal softtabstop=4
-    autocmd Filetype lalrpop setlocal shiftwidth=4
-    autocmd FileType lalrpop set commentstring=//\ %s
-  augroup end
-
-  " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-  let s:opam_share_dir = system("opam config var share")
-  let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-  let s:opam_configuration = {}
-
-  function! OpamConfOcpIndent()
-    execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-  endfunction
-  let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-  function! OpamConfOcpIndex()
-    execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-  endfunction
-  let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-  function! OpamConfMerlin()
-    let l:dir = s:opam_share_dir . "/merlin/vim"
-    execute "set rtp+=" . l:dir
-  endfunction
-  let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-  let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-  let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
-  let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
-  for tool in s:opam_packages
-    " Respect package order (merlin should be after ocp-index)
-    if count(s:opam_available_tools, tool) > 0
-      call s:opam_configuration[tool]()
-    endif
-  endfor
-  " ## end of OPAM user-setup addition for vim / base ## keep this line
 call plug#end()
 
 "----------------------------------------"
@@ -194,64 +129,68 @@ call plug#end()
 "                                        "
 "----------------------------------------"
 
+filetype plugin indent on
+filetype plugin on
+syntax on
+
+let g:python_host_prog="/home/nwtnni/.pyenv/versions/neovim2/bin/python"
+let g:python3_host_prog="/home/nwtnni/.pyenv/versions/neovim3/bin/python3"
+
 " Terminal true color
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
+set background=dark
 colorscheme gruvbox
 
 " Transparent background
 " hi EndOfBuffer ctermbg=none ctermfg=none guibg=none guifg=none
 " hi Normal guibg=none ctermbg=none
 
-filetype plugin indent on
-filetype plugin on
-syntax on
-set autoindent
-set autoread
+" Indentation
 set smartindent
-set scrolloff=5
 set expandtab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set shiftround
-set nonumber
-set norelativenumber
-set mouse=
-set splitright
-set backspace=indent,eol,start
+
+" Status
 set hidden
 set noshowmode
-set noruler
-set laststatus=0
 set noshowcmd
+set noruler
+set nonumber
+set norelativenumber
 set display=lastline
+set laststatus=0
+set completeopt-=preview
+set scrolloff=5
+
+" Disable mouse
+set mouse=
+
+" Perforamnce
 set ttyfast
 set lazyredraw
+
+" Search
+set smartcase
+set hlsearch
 set incsearch
 set inccommand=nosplit
-set hlsearch
+
+" Session related
+set autoread
 set sessionoptions-=options
-set background=dark
-set completeopt-=preview
-set updatetime=250
+set viewoptions=cursor,folds,slash,unix
 
-augroup FourSpaces
-  autocmd Filetype java,groovy,c,cpp,make setlocal tabstop=4
-  autocmd Filetype java,groovy,c,cpp,make setlocal softtabstop=4
-  autocmd Filetype java,groovy,c,cpp,make setlocal shiftwidth=4
-  autocmd Filetype makefile setlocal noexpandtab
-augroup end
-
-let g:python_host_prog="/home/nwtnni/.pyenv/versions/neovim2/bin/python"
-let g:python3_host_prog="/home/nwtnni/.pyenv/versions/neovim3/bin/python3"
-
-" Tags options
+" Tags
 set cpoptions+=d
 set tags=./.tags
 
-" Backup options
+" Backup
+set updatetime=250
 set backupdir=~/.config/nvim/temp
 set directory=~/.config/nvim/temp
 set undodir=~/.config/nvim/temp
@@ -261,7 +200,11 @@ set undofile
 set foldenable
 set foldlevel=99
 set foldnestmax=5
-set viewoptions=cursor,folds,slash,unix
+
+" Miscellaneous
+set backspace=indent,eol,start
+set splitright
+set splitbelow
 
 "----------------------------------------"
 "                                        "
@@ -353,3 +296,35 @@ nnoremap <silent> \s :call fzf#run({
 nnoremap <silent> \v :call fzf#run({
 \  'right': winwidth('.') / 2,
 \  'sink':  'vertical botright split' })<CR>
+
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+let l:dir = s:opam_share_dir . "/merlin/vim"
+execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+" Respect package order (merlin should be after ocp-index)
+if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
