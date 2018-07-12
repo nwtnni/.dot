@@ -32,6 +32,8 @@ call plug#begin('~/.config/nvim/bundle')
 
   Plug 'airblade/vim-gitgutter' "{
     let g:gitgutter_map_keys=0
+    let g:gitgutter_grep = 'rg'
+    let g:gitgutter_max_signs = 5000
   "}
 
   " Tags (#p.2)
@@ -65,12 +67,6 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'airblade/vim-rooter'
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'sjl/tslime.vim' "{
-    let g:tslime_normal_mapping = '\t'
-    let g:tslime_visual_mapping = '\t'
-    let g:tslime_vars_mapping = '\T'
-    let g:tslime_ensure_trailing_newlines = 2
-  "}
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
@@ -81,6 +77,7 @@ call plug#begin('~/.config/nvim/bundle')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
   "}
+  Plug 'unblevable/quick-scope'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
@@ -88,6 +85,8 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'let-def/vimbufsync'
   Plug 'jpalardy/vim-slime' "{
     let g:slime_target = "tmux"
+    let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
+    let g:slime_dont_ask_default = 1
   "}
 
   " Linting (#p.5)
@@ -288,12 +287,12 @@ inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " Open fzf in horizontal split
-nnoremap <silent> \s :call fzf#run({
+nnoremap <silent> <SPACE>s :call fzf#run({
 \  'down': '40%',
 \  'sink': 'botright split' })<CR>
 
 " Open fzf in horizontal split
-nnoremap <silent> \v :call fzf#run({
+nnoremap <silent> <SPACE>v :call fzf#run({
 \  'right': winwidth('.') / 2,
 \  'sink':  'vertical botright split' })<CR>
 
