@@ -14,16 +14,16 @@ shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
 
+HISTCONTROL=ignoreboth
+HISTSIZE=1000
+HISTFILESIZE=2000
+
 set -o vi &> /dev/null
 bind '"jk":vi-movement-mode'
 bind -m vi-insert "\C-l":clear-screen
 bind "set completion-ignore-case on"
 bind "set completion-map-case on"
 bind "set show-all-if-ambiguous on"
-
-HISTCONTROL=ignoreboth
-HISTSIZE=1000
-HISTFILESIZE=2000
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -55,3 +55,6 @@ stty -ixon
 [[ -f ~/.config/up/up.sh ]] && source ~/.config/up/up.sh
 [[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)"
 eval "$(direnv hook bash)"
+
+bind -x '"\C-x\C-t": fzf-file-widget'
+bind -x '"\C-t": fo'

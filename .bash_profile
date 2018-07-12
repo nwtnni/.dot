@@ -46,14 +46,25 @@ export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
 # Ruby
 export PATH="$PATH:$HOME/.rvm/bin"
 
+# Color
+export TERM="xterm-256color-italic"
+
 export EDITOR="nvim"
 
-export FZF_DEFAULT_COMMAND="fd --type f"
-export FZF_ALT_C_COMMAND="fd --type d"
-export FZF_CTRL_T_COMMAND="$FZF_ALT_C_COMMAND"
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --no-ignore-vcs"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --no-ignore-vcs"
 export FZF_TMUX=1
 
-export TERM="xterm-256color-italic"
+# https://github.com/junegunn/fzf/wiki/Examples#opening-files
+fo() {
+  local out file key
+  IFS=$'\n' out=($(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e))
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [ -n "$file" ]; then
+    [ "$key" = ctrl-o ] && open "$file" || ${EDITOR:-vim} "$file"
+  fi
+}
 
 o () {
   cd "$1" && ls --group-directories-first --color=auto
