@@ -76,6 +76,21 @@ call plug#begin('~/.config/nvim/bundle')
       \   <bang>0 ? fzf#vim#with_preview('up:60%')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
+
+    " Open fzf in horizontal split
+    nnoremap <silent> <SPACE>s :call fzf#run({
+    \  'down': '40%',
+    \  'sink': 'botright split' })<CR>
+
+    " Open fzf in horizontal split
+    nnoremap <silent> <SPACE>v :call fzf#run({
+    \  'right': winwidth('.') / 2,
+    \  'sink':  'vertical botright split' })<CR>
+
+    nnoremap <silent> q: :call fzf#vim#command_history({'down': '40%'})<CR>
+    nnoremap <silent> q/ :call fzf#vim#search_history({'down': '40%'})<CR>
+    nnoremap <silent> <SPACE>b :Buffers<CR>
+      
   "}
   Plug 'unblevable/quick-scope'
   Plug 'tpope/vim-commentary'
@@ -285,16 +300,6 @@ function! s:my_cr_function()
 endfunction
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-" Open fzf in horizontal split
-nnoremap <silent> <SPACE>s :call fzf#run({
-\  'down': '40%',
-\  'sink': 'botright split' })<CR>
-
-" Open fzf in horizontal split
-nnoremap <silent> <SPACE>v :call fzf#run({
-\  'right': winwidth('.') / 2,
-\  'sink':  'vertical botright split' })<CR>
 
 " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
 let s:opam_share_dir = system("opam config var share")

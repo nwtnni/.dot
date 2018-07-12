@@ -56,5 +56,5 @@ stty -ixon
 [[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)"
 eval "$(direnv hook bash)"
 
-bind -x '"\C-x\C-t": fzf-file-widget'
-bind -x '"\C-t": fo'
+bind -x '"\C-o": eval $(__fzf_cd__)'
+bind -x '"\C-e": fe'

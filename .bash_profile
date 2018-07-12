@@ -51,19 +51,17 @@ export TERM="xterm-256color-italic"
 
 export EDITOR="nvim"
 
-export FZF_DEFAULT_COMMAND="fd --type f --hidden --no-ignore-vcs"
-export FZF_ALT_C_COMMAND="fd --type d --hidden --no-ignore-vcs"
-export FZF_TMUX=1
+export FZF_DEFAULT_COMMAND="fd --type f -j 8"
+export FZF_ALT_C_COMMAND="fd --type d -j 8"
 
 # https://github.com/junegunn/fzf/wiki/Examples#opening-files
-fo() {
-  local out file key
-  IFS=$'\n' out=($(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e))
-  key=$(head -1 <<< "$out")
-  file=$(head -2 <<< "$out" | tail -1)
-  if [ -n "$file" ]; then
-    [ "$key" = ctrl-o ] && open "$file" || ${EDITOR:-vim} "$file"
-  fi
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || (/usr/bin/highlight -O ansi -l {} | head -n 500) 2> /dev/null'))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
 o () {
