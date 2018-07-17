@@ -52,6 +52,11 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'Shougo/neoinclude.vim'
   Plug 'zchee/deoplete-clang'
   Plug 'copy/deoplete-ocaml'
+  Plug 'sebastianmarkow/deoplete-rust' "{
+    let g:deoplete#sources#rust#racer_binary='/home/nwtnni/.cargo/bin/racer'
+    let g:deoplete#sources#rust#rust_source_path='$RUST_SRC_PATH'
+  "}
+
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#ignore_sources = {}
@@ -60,6 +65,8 @@ call plug#begin('~/.config/nvim/bundle')
     let g:deoplete#sources#clang#clang_header ='/usr/lib/llvm-5.0/lib/clang'
     let g:deoplete#omni#input_patterns={}
     let g:deoplete#omni#input_patterns.ocaml='[^ ,;\t\[()\]]{2,}'
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 "}
 
   " Utilities (#p.4)
@@ -96,7 +103,12 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
-  Plug 'justinmk/vim-sneak'
+  Plug 'justinmk/vim-sneak' "{
+    augroup Sneak
+        autocmd ColorScheme * hi! link Sneak Normal
+        autocmd ColorScheme * hi SneakLabel guifg=white guibg=magenta ctermfg=white ctermbg=magenta
+    augroup end
+  "}
   Plug 'let-def/vimbufsync'
   Plug 'jpalardy/vim-slime' "{
     let g:slime_target = "tmux"
@@ -121,6 +133,9 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'isRuslan/vim-es6'
   Plug 'donRaphaco/neotex'
   Plug 'rust-lang/rust.vim'
+  Plug 'rhysd/rust-doc.vim' "{
+    let g:rust_doc#downloaded_rust_doc_dir = '$RUST_DOC_PATH'
+  "}
   Plug 'dan-t/rusty-tags'
   Plug 'qnighy/lalrpop.vim'
   Plug 'cespare/vim-toml'
@@ -234,7 +249,7 @@ nnoremap j gj
 nnoremap k gk
 
 " Source .vimrc
-nnoremap \e :vsplit ~/.config/nvim/init.vim<CR>
+nnoremap \e :split ~/.config/nvim/init.vim<CR>
 nnoremap \r :source ~/.config/nvim/init.vim<CR>
 
 " Clear search
@@ -293,13 +308,6 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 nnoremap <F2> :call TrimWhitespace()<CR>
-
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-endfunction
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
 let s:opam_share_dir = system("opam config var share")
