@@ -41,6 +41,7 @@ export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
 
 # Ruby
@@ -60,7 +61,7 @@ export FZF_ALT_C_COMMAND="fd --type d -j 8"
 #   - Exit if there's no match (--exit-0)
 fe() {
   local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || (/usr/bin/highlight -O ansi -l {} | head -n 500) 2> /dev/null'))
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || (hicat {} | head -n 501) 2> /dev/null'))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
