@@ -74,6 +74,15 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'airblade/vim-rooter'
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'junegunn/vim-easy-align' "{
+
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
+
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
+
+  "}
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
@@ -105,8 +114,8 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'tpope/vim-repeat'
   Plug 'justinmk/vim-sneak' "{
     augroup Sneak
+        autocmd!
         autocmd ColorScheme * hi! link Sneak Normal
-        autocmd ColorScheme * hi SneakLabel guifg=white guibg=magenta ctermfg=white ctermbg=magenta
     augroup end
   "}
   Plug 'let-def/vimbufsync'
