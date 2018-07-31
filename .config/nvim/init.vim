@@ -253,6 +253,7 @@ set splitbelow
 let mapleader = "\<SPACE>"
 
 " Better escaping
+inoremap jf <esc>
 inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk

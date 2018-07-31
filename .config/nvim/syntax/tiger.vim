@@ -36,7 +36,7 @@ syn keyword	tigerConditional	if then else
 syn keyword	tigerLoop		for to do while
 syn keyword	tigerTodo		contained TODO FIXME XXX
 
-syn keyword	tigerFunctions		print print_int flush getchar
+syn keyword	tigerFunctions		prints printi flush getchar
 syn keyword	tigerFunctions		ord chr size substring not exit
 
 syn region	tigerComment		start="/\*" end="\*/" contains=tigerTodo
