@@ -50,7 +50,6 @@ stty -ixon
 
 # rvm, fzf, up
 [[ -x /usr/bin/dircolors ]] && eval "$(dircolors -b ~/.dircolors)"
-[[ -f ~/.rvm/scripts/rvm ]] && source ~/.rvm/scripts/rvm
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 [[ -f ~/.config/up/up.sh ]] && source ~/.config/up/up.sh
 [[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)"

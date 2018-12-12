@@ -17,6 +17,7 @@ force_xinerama yes
 exec_always --no-startup-id feh --bg-scale ~/.dotfiles/resources/nier.png
 
 for_window [class="^.*"] border pixel 0
+for_window [class="feh"] floating enable
 hide_edge_borders smart
 gaps inner 20
 gaps outer 0
@@ -47,7 +48,7 @@ floating_modifier $mod
 focus_follows_mouse no
 
 # start a terminal
-bindsym $mod+Return exec "env WAYLAND_DISPLAY= alacritty"
+bindsym $mod+Return exec "env WAYLAND_DISPLAY= ~/.local/bin/alacritty"
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume

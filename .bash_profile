@@ -44,9 +44,6 @@ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
 
-# Ruby
-export PATH="$PATH:$HOME/.rvm/bin"
-
 # Color
 export TERM="xterm-256color-italic"
 
@@ -55,13 +52,26 @@ export EDITOR="nvim"
 export FZF_DEFAULT_COMMAND="fd --type f -j 8"
 export FZF_ALT_C_COMMAND="fd --type d -j 8"
 
+# Graphics
+export LD_LIBRARY_PATH="$HOME/Dropbox/school/cs/classes/4620/a2/deps/native/linux:$LD_LIBRARY_PATH"
+
+# Mirror displays
+mirror() {
+    xrandr --output HDMI-0 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-2 --off --output DP-1 --off --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal
+}
+
+# External display on right
+right() {
+    xrandr --output HDMI-0 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP-2 --off --output DP-1 --off --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal
+}
+
 # https://github.com/junegunn/fzf/wiki/Examples#opening-files
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
 fe() {
   local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || (hicat {} | head -n 501) 2> /dev/null'))
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
