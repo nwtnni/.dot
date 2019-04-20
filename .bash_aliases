@@ -1,10 +1,10 @@
 alias e="nvim"
-alias l='ls --group-directories-first --color=auto'
-alias p="cd .. && ls --group-directories-first --color=auto"
+alias l='exa --group-directories-first --color=auto'
+alias p="cd .. && exa --group-directories-first --color=auto"
 
-alias ll='ls -alF'
-alias la='ls -A'
-alias ls='ls --group-directories-first --color=auto'
+alias ll='exa --group-directories-first -alF'
+alias la='exa --group-directories-first -a'
+alias ls='exa --group-directories-first --color=auto'
 
 alias open="xdg-open"
 alias eclipse="~/eclipse/java-oxygen/eclipse/eclipse > /dev/null 2>&1 &"

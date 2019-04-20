@@ -44,6 +44,9 @@ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
 
+# Ruby
+export PATH="$HOME/.rbenv/bin:$PATH"
+
 # Color
 export TERM="xterm-256color-italic"
 

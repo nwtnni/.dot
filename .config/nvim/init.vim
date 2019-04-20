@@ -54,7 +54,6 @@ call plug#begin('~/.config/nvim/bundle')
     let g:deoplete#sources#clang#libclang_path ='/usr/lib/llvm-6.0/lib/libclang.so'
     let g:deoplete#sources#clang#clang_header ='/usr/lib/llvm-6.0/lib/clang'
     let g:deoplete#omni#input_patterns={}
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
   "}
   Plug 'eagletmt/neco-ghc' "{
@@ -65,6 +64,15 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'Shougo/neosnippet.vim' "{
     let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
     let g:neosnippet#snippets_directory = '~/.config/nvim/snippets'
+    " SuperTab like snippets behavior.
+    " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+    imap <expr><TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ (neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>")
+    smap <expr><TAB>
+    \ neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
   "}
   Plug 'lervag/vimtex' "{
     let g:deoplete#omni#input_patterns.tex = '\\(?:'
@@ -90,7 +98,9 @@ call plug#begin('~/.config/nvim/bundle')
 
   " Utilities (#p.4)
 
-  Plug 'airblade/vim-rooter'
+  Plug 'airblade/vim-rooter' "{
+    let g:rooter_patterns = ['Makefile', '.git/']
+  "}
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'junegunn/vim-easy-align' "{
@@ -126,7 +136,6 @@ call plug#begin('~/.config/nvim/bundle')
     nnoremap <silent> q/ :call fzf#vim#search_history({'down': '40%'})<CR>
     nnoremap <silent> <SPACE>b :Buffers<CR>
   "}
-  Plug 'unblevable/quick-scope'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
@@ -146,7 +155,11 @@ call plug#begin('~/.config/nvim/bundle')
   " Linting (#p.5)
 
   Plug 'w0rp/ale' "{
-    let g:ale_linters = {'rust': ['cargo'], 'haskell': ['stack-ghc', 'ghc-mod']}
+    let g:ale_linters = {
+    \ 'rust': ['cargo'],
+    \ 'haskell': ['hlint', 'stack-ghc', 'ghc-mod'],
+    \ 'lhaskell': ['hlint', 'stack-ghc', 'ghc-mod'],
+    \}
     let g:ale_lint_on_text_changed = "never"
     let g:ale_lint_delay = 200
     let g:ale_pattern_options = {
@@ -164,14 +177,14 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'donRaphaco/neotex' "{
     let g:neotex_enabled = 2
     let g:neotex_pdflatex_alternative = "xelatex"
+    let g:neotex_pdflatex_add_options = "-shell-escape"
     let g:tex_flavor = "latex"
   "}
   Plug 'rust-lang/rust.vim'
   Plug 'dan-t/rusty-tags'
   Plug 'qnighy/lalrpop.vim'
   Plug 'cespare/vim-toml'
-  Plug 'epdtry/neovim-coq'
-  Plug 'the-lambda-church/coquille' "{
+  Plug 'bluelightning32/coquille' "{
     nnoremap <SPACE>] :CoqNext<CR>
     nnoremap <SPACE>[ :CoqUndo<CR>
     nnoremap <SPACE>\ :CoqToCursor<CR>
