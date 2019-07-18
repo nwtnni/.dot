@@ -1,0 +1,7 @@
+[cargo-new]
+name = "Newton Ni"
+email = "nwtnni@gmail.com"
+vcs = "none"
+
+[build]
+rustflags = "-C target-cpu=native"
