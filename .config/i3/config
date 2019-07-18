@@ -14,28 +14,28 @@ force_xinerama yes
 
 # Photo by Chris Lawton on Unsplash
 # exec_always --no-startup-id feh --bg-scale ~/.dotfiles/resources/chris-lawton-154388.jpg
-exec_always --no-startup-id feh --bg-scale ~/.dotfiles/resources/nier.png
+exec_always --no-startup-id feh --bg-scale ~/.dotfiles/resources/blank.png
 
-for_window [class="^.*"] border pixel 0
+for_window [class="^.*"] border pixel 1
 for_window [class="feh"] floating enable
-hide_edge_borders smart
-gaps inner 20
+# hide_edge_borders smart
+gaps inner 10
 gaps outer 0
 
 set $mod Control+Shift
 
 # Colors
-# set $blank #ffffff
-# set_from_resource $red         i3wm.color1     #cc241d
-# set_from_resource $green       i3wm.color2     #98971a
-# set_from_resource $blue        i3wm.color4     #458588
-# set_from_resource $background  i3wm.background #1d2021
-# set_from_resource $foreground  i3wm.foreground #ebdbb2
+set $blank #ffffff
+set_from_resource $red         i3wm.color1     #cc241d
+set_from_resource $green       i3wm.color2     #98971a
+set_from_resource $blue        i3wm.color4     #458588
+set_from_resource $background  i3wm.background #1d2021
+set_from_resource $foreground  i3wm.foreground #ebdbb2
 
 # class                 border      backgr text        indicator   child_border
-# client.focused          $foreground $blank $foreground $green      $foreground
-# client.focused_inactive $background $blank $foreground $background $background
-# client.unfocused        $background $blank $foreground $background $background
+client.focused          $foreground $blank $foreground $green      $green
+client.focused_inactive $background $blank $foreground $background $background
+client.unfocused        $background $blank $foreground $background $background
 # client.urgent           $red        $blank $foreground $background $red
 # client.placeholder      $background $blank $foreground $background $background
 
@@ -87,9 +87,9 @@ bindsym $mod+minus split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+# bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+braceleft floating toggle
@@ -170,7 +170,7 @@ mode "resize" {
         bindsym Escape mode "default"
         bindsym $mod+r mode "default"
 }
-bindsym $mod+r mode "resize"
 
+bindsym $mod+r mode "resize"
 bindsym $mod+mod1+braceleft gaps inner all set 0; gaps outer all set 0
-bindsym $mod+mod1+braceright gaps inner all set 20; gaps outer all set 55
+bindsym $mod+mod1+braceright gaps inner all set 10; gaps outer all set 0
