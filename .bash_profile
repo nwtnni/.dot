@@ -40,6 +40,7 @@ export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+export RUSTC_WRAPPER="$HOME/.cargo/bin/sccache"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
