@@ -1,2 +1,4 @@
 .rusty-tags/cache
 .rusty-tags/locks
+
+.DS_Store
