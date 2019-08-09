@@ -136,7 +136,7 @@ font:
     style: Italic
 
   # Point size
-  size: 7.0
+  size: 14.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -531,6 +531,40 @@ key_bindings:
   #- { key: H,      mods: Command, action: Hide             }
   #- { key: Q,      mods: Command, action: Quit             }
   #- { key: W,      mods: Command, action: Quit             }
+
+  - { key: A, mods: Command, chars: "\x01" }
+  - { key: B, mods: Command, chars: "\x02" }
+  - { key: C, mods: Command, chars: "\x03" }
+  - { key: D, mods: Command, chars: "\x04" }
+  - { key: E, mods: Command, chars: "\x05" }
+  - { key: F, mods: Command, chars: "\x06" }
+  - { key: G, mods: Command, chars: "\x07" }
+  - { key: H, mods: Command, chars: "\x08" }
+  - { key: I, mods: Command, chars: "\x09" }
+  - { key: J, mods: Command, chars: "\x0A" }
+  - { key: K, mods: Command, chars: "\x0B" }
+  - { key: L, mods: Command, chars: "\x0C" }
+  - { key: M, mods: Command, chars: "\x0D" }
+  - { key: N, mods: Command, chars: "\x0E" }
+  - { key: O, mods: Command, chars: "\x0F" }
+  - { key: P, mods: Command, chars: "\x10" }
+  - { key: Q, mods: Command, chars: "\x11" }
+  - { key: R, mods: Command, chars: "\x12" }
+  - { key: S, mods: Command, chars: "\x13" }
+  - { key: T, mods: Command, chars: "\x14" }
+  - { key: U, mods: Command, chars: "\x15" }
+  - { key: V, mods: Command, chars: "\x16" }
+  - { key: W, mods: Command, chars: "\x17" }
+  - { key: X, mods: Command, chars: "\x18" }
+  - { key: Y, mods: Command, chars: "\x19" }
+  - { key: Z, mods: Command, chars: "\x1A" }
+
+  - { key: V, mods: Command|Shift, action: Paste }
+
+  - { key: LBracket, mods: Command, chars: "\x1B" }
+  - { key: RBracket, mods: Command, chars: "\x1D" }
+
+  - { key: Return, mods: Command|Shift, action: SpawnNewInstance }
 
   - { key: Paste,                   action: Paste                            }
   - { key: Copy,                    action: Copy                             }
