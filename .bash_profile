@@ -3,61 +3,23 @@
 # Initial setup
 PATH="$HOME/bin:$HOME/local/bin:$HOME/.local/bin:$PATH:/usr/local/bin"
 
-export RANGER_LOAD_DEFAULT_RC="FALSE"
-
-# C
-export PATH="$PATH:/usr/local/lib/cquery/bin"
-export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig"
-
-# Go
-export PATH="$PATH:/usr/lib/go-1.9/bin"
-export GOPATH="$HOME/go"
-export PATH="$PATH:$GOPATH/bin"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/nwtnni/.google/google-cloud-sdk/path.bash.inc' ]; then source '/home/nwtnni/.google/google-cloud-sdk/path.bash.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/nwtnni/.google/google-cloud-sdk/completion.bash.inc' ]; then source '/home/nwtnni/.google/google-cloud-sdk/completion.bash.inc'; fi
-
-# JS
-export NPM_PACKAGES="/home/nwtnni/.npm-packages"
-export NODE_PATH="$NPM_PACKAGES/lib/node_modules${NODE_PATH:+:$NODE_PATH}"
-export PATH="$NPM_PACKAGES/bin:$PATH"
-# Unset manpath so we can inherit from /etc/manpath via the `manpath`
-# command
-unset MANPATH  # delete if you already modified MANPATH elsewhere in your config
-export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
-
-# Haskell
-export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/2.0/bin:/opt/ghc/8.2.2/bin"
-
-# Python
-export PATH="$HOME/.pyenv/bin:$PATH"
-
-# P4
-export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
-
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
-export RUSTC_WRAPPER="$HOME/.cargo/bin/sccache"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
+export OPENSSL_DIR="/usr/local/opt/openssl"
 
 # Ruby
 export PATH="$HOME/.rbenv/bin:$PATH"
 
-# Color
-export TERM="xterm-256color-italic"
-
 export EDITOR="nvim"
+
+export fend="$HOME/commure/fend"
+export PATH="$HOME/commure/fend/bin:$PATH"
 
 export FZF_DEFAULT_COMMAND="fd --type f -j 8"
 export FZF_ALT_C_COMMAND="fd --type d -j 8"
-
-# Graphics
-export LD_LIBRARY_PATH="$HOME/Dropbox/school/cs/classes/4620/a2/deps/native/linux:$LD_LIBRARY_PATH"
 
 # Mirror displays
 mirror() {
@@ -80,7 +42,7 @@ fe() {
 }
 
 o () {
-  cd "$1" && ls --group-directories-first --color=auto
+  cd "$1" && exa
 }
 
 setc () {
@@ -117,7 +79,7 @@ last () {
   fi
 }
 
-export PS1='\[$(last)\]λ \[$(clear)$(branch)\]→ \[$(clear)\]'
+export PS1='\[$(last)\]>\[$(clear)$(branch)\]> \[$(clear)\]'
 
 export PS2='>>>> '
 
