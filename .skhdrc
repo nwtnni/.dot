@@ -90,8 +90,8 @@ shift + ctrl + cmd - n : yabai -m space --padding rel:-5:-5:-5:-5
 # ctrl + alt - x  : yabai -m display --focus recent
 # ctrl + alt - z  : yabai -m display --focus prev
 # ctrl + alt - c  : yabai -m display --focus next
-cmd + shift - 1  : yabai -m display --focus 1
-cmd + shift - 2  : yabai -m display --focus 2
+cmd + shift - 1  : yabai -m display --focus 2
+cmd + shift - 2  : yabai -m display --focus 1
 cmd + shift - 3  : yabai -m display --focus 3
 
 # send window to monitor and follow focus
