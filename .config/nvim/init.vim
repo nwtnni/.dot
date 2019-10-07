@@ -26,7 +26,6 @@ call plug#begin('~/.config/nvim/bundle')
     let g:gruvbox_number_column="dark0_soft"
     let g:gruvbox_contrast_dark='soft'
   "}
-  Plug 'chrisbra/Colorizer'
 
   " Status Line (#p.1)
 
@@ -36,64 +35,13 @@ call plug#begin('~/.config/nvim/bundle')
     let g:gitgutter_max_signs = 5000
   "}
 
-  " Tags (#p.2)
-
-  Plug 'ludovicchabant/vim-gutentags' "{
-    let g:gutentags_cache_dir='~/.config/nvim/tags'
-  "}
-  Plug 'majutsushi/tagbar'
-
   " Autocompletion (#p.3)
 
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "{
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#ignore_sources = {}
-    let g:deoplete#ignore_sources._ = ['buffer', 'around']
-    let g:deoplete#sources#clang#libclang_path ='/usr/lib/llvm-6.0/lib/libclang.so'
-    let g:deoplete#sources#clang#clang_header ='/usr/lib/llvm-6.0/lib/clang'
-    let g:deoplete#omni#input_patterns={}
+  Plug 'neoclide/coc.nvim', {'branch': 'release'} "{
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  "}
-  Plug 'eagletmt/neco-ghc' "{
-    let g:necoghc_enable_detailed_browse=1
-    let g:necoghc_use_stack=1
-  "}
-  Plug 'Shougo/neoinclude.vim'
-  Plug 'Shougo/neosnippet.vim' "{
-    let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
-    let g:neosnippet#snippets_directory = '~/.config/nvim/snippets'
-    " SuperTab like snippets behavior.
-    " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-    imap <expr><TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ (neosnippet#expandable_or_jumpable() ?
-    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>")
-    smap <expr><TAB>
-    \ neosnippet#expandable_or_jumpable() ?
-    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  "}
-  Plug 'lervag/vimtex' "{
-    let g:deoplete#omni#input_patterns.tex = '\\(?:'
-        \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
-        \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
-        \ . '|hyperref\s*\[[^]]*'
-        \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-        \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
-        \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-        \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
-        \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
-        \ .')'
-  "}
-  Plug 'zchee/deoplete-clang'
-  Plug 'mhartington/nvim-typescript'
-  Plug 'copy/deoplete-ocaml' "{
-    let g:deoplete#omni#input_patterns.ocaml='[^ ,;\t\[()\]]{2,}'
-  "}
-  Plug 'sebastianmarkow/deoplete-rust' "{
-    let g:deoplete#sources#rust#racer_binary='/home/nwtnni/.cargo/bin/racer'
-    let g:deoplete#sources#rust#rust_source_path='$RUST_SRC_PATH'
   "}
 
   " Utilities (#p.4)
@@ -145,60 +93,15 @@ call plug#begin('~/.config/nvim/bundle')
         autocmd ColorScheme * hi! link Sneak Normal
     augroup end
   "}
-  Plug 'let-def/vimbufsync'
-  Plug 'jpalardy/vim-slime' "{
-    let g:slime_target = "tmux"
-    let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
-    let g:slime_dont_ask_default = 1
-  "}
-
-  " Linting (#p.5)
-
-  Plug 'w0rp/ale' "{
-    let g:ale_linters = {
-    \ 'rust': ['cargo'],
-    \ 'haskell': ['hlint', 'stack-ghc', 'ghc-mod'],
-    \ 'lhaskell': ['hlint', 'stack-ghc', 'ghc-mod'],
-    \}
-    let g:ale_lint_on_text_changed = "never"
-    let g:ale_lint_delay = 200
-    let g:ale_pattern_options = {
-    \ '.*\.mly$': {'ale_enabled': 0},
-    \ '.*\.mll$': {'ale_enabled': 0},
-\}
-  "}
 
   " Language-specific (#p.6)
 
   Plug 'isRuslan/vim-es6'
   Plug 'HerringtonDarkholme/yats.vim'
-  Plug 'tikhomirov/vim-glsl'
-  Plug 'JuliaEditorSupport/julia-vim'
-  Plug 'donRaphaco/neotex' "{
-    let g:neotex_enabled = 2
-    let g:neotex_pdflatex_alternative = "xelatex"
-    let g:neotex_pdflatex_add_options = "-shell-escape"
-    let g:tex_flavor = "latex"
-  "}
   Plug 'rust-lang/rust.vim'
-  Plug 'dan-t/rusty-tags'
   Plug 'qnighy/lalrpop.vim'
+  Plug 'pest-parser/pest.vim'
   Plug 'cespare/vim-toml'
-  Plug 'bluelightning32/coquille' "{
-    nnoremap <SPACE>] :CoqNext<CR>
-    nnoremap <SPACE>[ :CoqUndo<CR>
-    nnoremap <SPACE>\ :CoqToCursor<CR>
-  "}
-  Plug 'jvoorhis/coq.vim'
-  Plug 'neovimhaskell/haskell-vim' "{
-    let g:haskell_enable_quantification = 1
-    let g:haskell_enable_recursivedo = 1
-    let g:haskell_enable_arrowsyntax = 1
-    let g:haskell_enable_pattern_synonyms = 1
-    let g:haskell_enable_typeroles = 1
-    let g:haskell_enable_static_pointers = 1
-    let g:haskell_backpack = 1
-  "}
 
 call plug#end()
 
@@ -212,8 +115,8 @@ filetype plugin indent on
 filetype plugin on
 syntax on
 
-let g:python_host_prog="/home/nwtnni/.pyenv/versions/neovim2/bin/python"
-let g:python3_host_prog="/home/nwtnni/.pyenv/versions/neovim3/bin/python3"
+let g:python_host_prog="/usr/local/bin/python2"
+let g:python3_host_prog="/usr/local/bin/python3"
 
 " Terminal true color
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
@@ -247,7 +150,7 @@ set completeopt-=preview
 set scrolloff=5
 
 " Disable mouse
-set mouse=
+set mouse=a
 
 " Perforamnce
 set ttyfast
@@ -315,15 +218,14 @@ nnoremap <S-H> ^
 vnoremap <S-H> ^
 
 " Split line
-nnoremap <SPACE>k 080lBi<CR><ESC>
-nnoremap <S-K> i<CR><ESC>l
+nnoremap <S-K> 80\|Bi<CR><ESC>
 
 " Insert space before
 nnoremap <SPACE><SPACE> i<SPACE><ESC>
 
 " Write
-nnoremap \w :w<CR>
-nnoremap \q :wq<CR>
+nnoremap <SPACE>w :w<CR>
+nnoremap <SPACE>q :wq<CR>
 
 " Yank to system buffer
 vnoremap \y "+y
@@ -331,7 +233,6 @@ vnoremap \d "+d
 nnoremap \p "+p
 nnoremap \<S-p> "+P
 
-nnoremap <SPACE>- :TagbarToggle<CR>
 nnoremap <SPACE>t :Files<CR>
 
 let s:hidden_all = 1
@@ -360,36 +261,3 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 nnoremap <F2> :call TrimWhitespace()<CR>
-
-" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-let s:opam_share_dir = system("opam config var share")
-let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-let s:opam_configuration = {}
-
-function! OpamConfOcpIndent()
-  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-function! OpamConfMerlin()
-  let l:dir = s:opam_share_dir . "/merlin/vim"
-  execute "set rtp+=" . l:dir
-endfunction
-let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
-let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
-for tool in s:opam_packages
-  " Respect package order (merlin should be after ocp-index)
-  if count(s:opam_available_tools, tool) > 0
-    call s:opam_configuration[tool]()
-  endif
-endfor
-" ## end of OPAM user-setup addition for vim / base ## keep this line

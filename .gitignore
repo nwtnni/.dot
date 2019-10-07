@@ -1,4 +1,8 @@
 .rusty-tags/cache
 .rusty-tags/locks
 
+.config/nvim/bundle
+.config/nvim/tags
+.config/nvim/temp
+
 .DS_Store
