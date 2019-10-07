@@ -8,8 +8,6 @@ case $- in
       *) return;;
 esac
 
-shopt -s autocd
-shopt -s dirspell
 shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
@@ -17,6 +15,7 @@ shopt -s checkwinsize
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
+HISTIGNORE="l:la:ls:p:gs"
 
 set -o vi &> /dev/null
 bind '"jk":vi-movement-mode'
@@ -37,14 +36,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# opam
-. /home/nwtnni/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
-eval "$(opam config env)"
-
-# pyenv configuration
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
 # Prevent C-s from causing vim to hang
 stty -ixon
 
@@ -57,3 +48,7 @@ eval "$(direnv hook bash)"
 
 bind -x '"\C-o": eval $(__fzf_cd__)'
 bind -x '"\C-e": fe'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
