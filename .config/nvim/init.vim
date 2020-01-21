@@ -87,12 +87,7 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
-  Plug 'justinmk/vim-sneak' "{
-    augroup Sneak
-        autocmd!
-        autocmd ColorScheme * hi! link Sneak Normal
-    augroup end
-  "}
+  Plug 'justinmk/vim-sneak'
 
   " Language-specific (#p.6)
 
@@ -102,6 +97,11 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'qnighy/lalrpop.vim'
   Plug 'pest-parser/pest.vim'
   Plug 'cespare/vim-toml'
+  Plug 'plasticboy/vim-markdown' "{
+    let g:vim_markdown_auto_insert_bullets = 0
+    let g:vim_markdown_new_list_item_indent = 0
+    let g:vim_markdown_frontmatter = 1
+  "}
 
 call plug#end()
 
@@ -149,6 +149,19 @@ set laststatus=0
 set completeopt-=preview
 set scrolloff=5
 
+" Whitespace
+set listchars=trail:•
+set list
+highlight ExtraWhitespace ctermbg=gray guibg=gray
+match ExtraWhitespace /\s\+$/
+augroup Whitespace
+  autocmd!
+  autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+  autocmd BufWinLeave * call clearmatches()
+augroup end
+
 " Disable mouse
 set mouse=a
 
@@ -182,6 +195,8 @@ set undofile
 set foldenable
 set foldlevel=99
 set foldnestmax=5
+au BufWinLeave ?* mkview
+au BufWinEnter ?* silent! loadview
 
 " Miscellaneous
 set backspace=indent,eol,start
@@ -261,3 +276,36 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 nnoremap <F2> :call TrimWhitespace()<CR>
+
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
