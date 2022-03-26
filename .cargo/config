@@ -5,3 +5,6 @@ vcs = "none"
 
 [build]
 rustflags = "-C target-cpu=native"
+
+[target.armv7-unknown-linux-gnueabihf]
+linker = "arm-linux-gnueabihf-gcc"
