@@ -35,14 +35,13 @@ call plug#begin('~/.config/nvim/bundle')
     let g:gitgutter_max_signs = 5000
   "}
 
-  " Autocompletion (#p.3)
-
-  Plug 'neoclide/coc.nvim', {'branch': 'release'} "{
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gy <Plug>(coc-type-definition)
-    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  "}
+  " Language Server (#p.3)
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/vim-vsnip'
 
   " Utilities (#p.4)
 
@@ -51,15 +50,6 @@ call plug#begin('~/.config/nvim/bundle')
   "}
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'junegunn/vim-easy-align' "{
-
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
-
-  "}
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
@@ -99,6 +89,7 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'isRuslan/vim-es6'
   Plug 'HerringtonDarkholme/yats.vim'
   Plug 'rust-lang/rust.vim'
+  Plug 'simrat39/rust-tools.nvim'
   Plug 'qnighy/lalrpop.vim'
   Plug 'pest-parser/pest.vim'
   Plug 'cespare/vim-toml'
@@ -146,8 +137,9 @@ set nonumber
 set norelativenumber
 set display=lastline
 set laststatus=0
-set completeopt-=preview
+set completeopt=menuone,noinsert,noselect
 set scrolloff=5
+set signcolumn=yes:2
 
 " Disable mouse
 set mouse=a
@@ -204,6 +196,7 @@ inoremap jf <esc>
 inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk
+nnoremap <CR> :update<CR>
 
 " Source .vimrc
 nnoremap \e :split ~/.config/nvim/init.vim<CR>
@@ -225,10 +218,6 @@ nnoremap <S-K> 80\|Bi<CR><ESC>
 
 " Insert space before
 nnoremap <SPACE><SPACE> i<SPACE><ESC>
-
-" Write
-nnoremap <SPACE>w :w<CR>
-nnoremap <SPACE>q :wq<CR>
 
 " Yank to system buffer
 vnoremap <SPACE>y "+y
@@ -264,3 +253,68 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 nnoremap <F2> :call TrimWhitespace()<CR>
+
+" https://sharksforarms.dev/posts/neovim-rust/
+nnoremap <silent> ga <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gt <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
+
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)
+
+lua <<EOF
+require("rust-tools").setup({
+  -- rust-tools
+  tools = {
+    inlay_hints = {
+      show_variable_name = true,
+      parameter_hints_prefix = "",
+      other_hints_prefix = "",
+    },
+  },
+  server = {
+    settings = {
+      ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy",
+        },
+        importGranularity = "item",
+        joinLines = {
+          joinElseIf = false,
+        },
+      },
+    },
+  },
+})
+
+local cmp = require("cmp")
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<TAB>'] = cmp.mapping.select_next_item(),
+    ['<S-TAB>'] = cmp.mapping.select_prev_item(),
+    ['<C-D>'] = cmp.mapping.scroll_docs(4),
+    ['<C-U>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-SPACE>'] = cmp.mapping.complete(),
+    ['<C-E>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+  },
+})
+EOF
