@@ -41,8 +41,34 @@ fe() {
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
+gri() {
+  if [ ! -z "$1" ]; then
+    git rebase -i "HEAD~$1"
+  fi
+}
+
+e () {
+  if [ -z "$1" ]; then
+    file=$(goldfish -cfiles get | fzf)
+    if [ ! -z "$file" ]; then
+      goldfish -cfiles put -tf "$file"
+      nvim "$file" > /dev/tty
+    fi
+  else
+    goldfish -cfiles put -tf "$1"
+    nvim "$1" > /dev/tty
+  fi
+}
+
 o () {
-  cd "$1" && exa
+  if [ -z "$1" ]; then
+    dir=$(goldfish -cdirectories get | fzf)
+    if [ ! -z "$dir" ]; then o "$dir"; fi
+  else
+    goldfish -cdirectories put -td "$1" \
+        && cd "$1" \
+        && exa --group-directories-first --color=auto
+  fi
 }
 
 setc () {
