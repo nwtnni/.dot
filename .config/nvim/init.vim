@@ -169,7 +169,6 @@ set viewoptions=cursor,folds,slash,unix
 
 " Tags
 set cpoptions+=d
-set tags=./.tags
 
 " Backup
 set updatetime=250
@@ -187,6 +186,10 @@ set foldnestmax=5
 set backspace=indent,eol,start
 set splitright
 set splitbelow
+set list
+set listchars=trail:·
+highlight TrailingWhitespace ctermbg=red guibg=#592929
+match TrailingWhitespace /\s\+$/
 
 "----------------------------------------"
 "                                        "
@@ -228,9 +231,9 @@ nnoremap <SPACE>w :w<CR>
 nnoremap <SPACE>q :wq<CR>
 
 " Yank to system buffer
-vnoremap \y "+y
-vnoremap \d "+d
-nnoremap \p "+p
+vnoremap <SPACE>y "+y
+vnoremap <SPACE>d "+d
+nnoremap <SPACE>p "+p
 nnoremap \<S-p> "+P
 
 nnoremap <SPACE>t :Files<CR>
