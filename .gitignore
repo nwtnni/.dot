@@ -4,5 +4,6 @@
 .config/nvim/bundle
 .config/nvim/tags
 .config/nvim/temp
+.nvimlog
 
 .DS_Store
