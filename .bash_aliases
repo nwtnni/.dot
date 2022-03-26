@@ -1,4 +1,3 @@
-alias e="nvim"
 alias l='exa --group-directories-first --color=auto'
 alias p="cd .. && exa --group-directories-first --color=auto"
 
@@ -25,6 +24,7 @@ alias gd="git diff"
 alias gl="git log"
 alias gp="git pull --rebase && git push"
 alias gu="git pull --rebase"
+alias gpf="git push --force-with-lease"
 
 gch () {
   git checkout $(git branch -l | fzf)
@@ -44,6 +44,11 @@ alias cbr="cargo build --release"
 alias ct="cargo test"
 alias cr="cargo run"
 alias crr="cargo run --release"
+
+alias cxb="cargo xbuild"
+alias cxc="cargo xcheck"
+alias cxt="cargo xtest"
+alias cxr="cargo xrun"
 
 alias k="kubectl"
 alias ke="kubectl exec"
