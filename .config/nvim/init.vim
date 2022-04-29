@@ -53,25 +53,30 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
-    command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
+    function! RipgrepFzf(query, fullscreen)
+      let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+      let initial_command = printf(command_fmt, shellescape(a:query))
+      let reload_command = printf(command_fmt, '{q}')
+      let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+      call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    endfunction
+
+    command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
     " Open fzf in horizontal split
-    nnoremap <silent> <SPACE>s :call fzf#run({
-    \  'down': '40%',
-    \  'sink': 'botright split' })<CR>
+    nnoremap <silent> <SPACE>s :call fzf#run(fzf#vim#with_preview({
+    \  'down': '50%',
+    \  'sink': 'botright split' }))<CR>
 
-    " Open fzf in horizontal split
-    nnoremap <silent> <SPACE>v :call fzf#run({
-    \  'right': winwidth('.') / 2,
-    \  'sink':  'vertical botright split' })<CR>
+    " Open fzf in vertical split
+    nnoremap <silent> <SPACE>v :call fzf#run(fzf#vim#with_preview({
+    \  'right': '50%',
+    \  'sink':  'vertical botright split' }))<CR>
 
-    nnoremap <silent> q: :call fzf#vim#command_history({'down': '40%'})<CR>
-    nnoremap <silent> q/ :call fzf#vim#search_history({'down': '40%'})<CR>
+    " Open fzf in current buffer
+    nnoremap <silent> <SPACE>e :GFiles<CR>
+    nnoremap <silent> <SPACE>g :Rg<CR>
+    nnoremap <silent> <SPACE>/ :History/<CR>
     nnoremap <silent> <SPACE>b :Buffers<CR>
   "}
   Plug 'tpope/vim-commentary'
@@ -225,8 +230,7 @@ vnoremap <SPACE>d "+d
 nnoremap <SPACE>p "+p
 nnoremap \<S-p> "+P
 
-nnoremap <SPACE>t :Files<CR>
-
+" Show metadata
 let s:hidden_all = 1
 function! ToggleHiddenAll()
     if s:hidden_all == 0
@@ -262,6 +266,7 @@ nnoremap <silent> gt <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <silent> <SPACE>rn <cmd>lua vim.lsp.buf.rename()<CR>
 
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)
