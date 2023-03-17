@@ -4,6 +4,9 @@
 .config/nvim/bundle
 .config/nvim/tags
 .config/nvim/temp
+
+.config/qtile/__pycache__
+
 .nvimlog
 
 .DS_Store
