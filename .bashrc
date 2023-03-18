@@ -43,7 +43,7 @@ stty -ixon
 [[ -x /usr/bin/dircolors ]] && eval "$(dircolors -b ~/.dircolors)"
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 [[ -f ~/.config/up/up.sh ]] && source ~/.config/up/up.sh
-[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)"
+[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s > /dev/null 2>&1)"
 eval "$(direnv hook bash)"
 
 bind -x '"\C-o": eval $(__fzf_cd__)'
