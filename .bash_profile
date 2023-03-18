@@ -4,7 +4,6 @@
 PATH="$HOME/bin:$HOME/local/bin:$HOME/.local/bin:$PATH:/usr/local/bin"
 
 # Rust
-export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
@@ -109,8 +108,8 @@ export PS1='\[$(last)\]>\[$(clear)$(branch)\]> \[$(clear)\]'
 
 export PS2='>>>> '
 
-# If running bash
-if [ -n "$BASH_VERSION" ]; then
+# If running bash or zsh
+if [ -n "$BASH_VERSION" ] || [ "$SHELL" == *zsh ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
 		. "$HOME/.bashrc"
@@ -119,3 +118,6 @@ if [ -n "$BASH_VERSION" ]; then
 		. "$HOME/.bash_aliases"
 	fi
 fi
+
+eval $(opam env)
+source "$HOME/.cargo/env"
