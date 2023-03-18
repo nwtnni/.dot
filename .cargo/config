@@ -6,5 +6,8 @@ vcs = "none"
 [build]
 rustflags = "-C target-cpu=native"
 
+[registries.crates-io]
+protocol = "sparse"
+
 [target.armv7-unknown-linux-gnueabihf]
 linker = "arm-linux-gnueabihf-gcc"
