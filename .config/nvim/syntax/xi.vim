@@ -39,15 +39,15 @@ JavaHiLink javaError2 javaError
 syn keyword javaExternal	native package
 syn match javaExternal		"\<import\>\(\s\+static\>\)\?"
 syn keyword javaConditional	if else
-syn keyword javaRepeat		while
+syn keyword javaRepeat		do while
 syn keyword javaBoolean		true false
 syn keyword javaConstant	null
-syn keyword javaTypedef		this
+syn keyword javaTypedef		this super
 syn keyword javaOperator	new
 syn keyword javaType		bool int
 syn keyword javaType		void
 syn keyword javaStatement	return use
-syn keyword javaClassDecl	extends interface
+syn keyword javaClassDecl	extends interface template final
 " to differentiate the keyword class from MyClass.class we use a match here
 syn match   javaTypedef		"\.\s*\<class\>"ms=s+1
 syn match   javaClassDecl	"^class\>"

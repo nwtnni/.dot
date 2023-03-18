@@ -50,6 +50,7 @@ call plug#begin('~/.config/nvim/bundle')
   "}
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
@@ -98,6 +99,12 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'qnighy/lalrpop.vim'
   Plug 'pest-parser/pest.vim'
   Plug 'cespare/vim-toml'
+  Plug 'lervag/vimtex'
+  Plug 'mlr-msft/vim-loves-dafny'
+  "{
+    let g:vimtex_view_method = 'zathura'
+  "}
+
 
 call plug#end()
 
@@ -185,6 +192,7 @@ set splitright
 set splitbelow
 set list
 set listchars=trail:·
+set isfname+=:
 highlight TrailingWhitespace ctermbg=red guibg=#592929
 match TrailingWhitespace /\s\+$/
 
@@ -269,9 +277,13 @@ nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
 nnoremap <silent> <SPACE>rn <cmd>lua vim.lsp.buf.rename()<CR>
 
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 1000)
+autocmd BufWritePre *.ml lua vim.lsp.buf.format()
+autocmd BufWritePre *.mli lua vim.lsp.buf.format()
+autocmd BufWritePre *.rs lua vim.lsp.buf.format({ async = false })
 
 lua <<EOF
+require"lspconfig".ocamllsp.setup({})
+
 require("rust-tools").setup({
   -- rust-tools
   tools = {
