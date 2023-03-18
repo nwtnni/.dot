@@ -1,21 +1,16 @@
 # Newton Ni
 
-# Initial setup
 PATH="$HOME/bin:$HOME/local/bin:$HOME/.local/bin:$PATH:/usr/local/bin"
 
 # Rust
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export RUST_DOC_PATH="$(rustc --print sysroot)"
 export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH"
-export OPENSSL_DIR="/usr/local/opt/openssl"
 
 # Ruby
 export PATH="$HOME/.rbenv/bin:$PATH"
 
 export EDITOR="nvim"
-
-export fend="$HOME/commure/fend"
-export PATH="$HOME/commure/fend/bin:$PATH"
 
 export FZF_DEFAULT_COMMAND="fd --type f -j 8"
 export FZF_ALT_C_COMMAND="fd --type d -j 8"
