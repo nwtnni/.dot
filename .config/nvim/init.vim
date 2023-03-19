@@ -51,7 +51,7 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'tmux-plugins/vim-tmux-focus-events'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'junegunn/vim-easy-align'
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim' "{
     " Use ripgrep instead of Ag
     function! RipgrepFzf(query, fullscreen)
