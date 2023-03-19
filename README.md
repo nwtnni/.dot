@@ -1,37 +1,20 @@
-## Current Linux Mint Setup
+# .dotfiles
 
-The result of many wasted hours reading man pages and editing config files.
-
-#### Primary Applications
-
-- Shell: Bash
-- Terminal emulator: Alacritty
-- Text editor: neovim
-- Window manager: i3-gaps
-
-#### Miscellaneous Applications
-
-- App launcher: rofi
-- File browser: ranger
-- Music player: cmus
-- Music visualizer: cava
-- PDF viewer: zathura
-- Web browser: Firefox Quantum with Vimium add-on
-
-#### Screenshots
-
-neofetch + cmus + cava:
-
-![Screenshot of neofetch, cmus, and cava](resources/neofetch.png)
-
-neovim + zathura + LaTeX:
-
-![Screenshot of neovim and zathura](resources/tex.png)
-
-neovim:
-
-![Screenshot of neovim](resources/neovim.png)
-
-Wallpaper (credits to Chris Lawton and Unsplash):
-
-![Leaf wallpaper](resources/chris-lawton-154388.jpg)
+- Distribution: [Arch Linux](https://archlinux.org/)
+- Window manager: [qtile](http://www.qtile.org/)
+- Display manager: [lemurs](https://github.com/coastalwhite/lemurs)
+- Shell: [zsh](https://ohmyz.sh/)
+- Terminal emulator: [alacritty](https://alacritty.org/)
+- Terminal multiplexer: [tmux](https://github.com/tmux/tmux)
+- Text editor: [neovim](https://neovim.io/)
+- PDF viewer: [zathura](https://pwmt.org/projects/zathura/)
+- Web browser: [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/) (plus [Tridactyl](https://github.com/tridactyl/tridactyl))
+- Command line utilities:
+  - `grep`: [ripgrep](https://github.com/BurntSushi/ripgrep)
+  - `find`: [fd](https://github.com/sharkdp/fd)
+  - `cat`: [bat](https://github.com/sharkdp/bat)
+  - `wc`: [tokei](https://github.com/XAMPPRocky/tokei)
+  - `ls`: [exa](https://github.com/ogham/exa)
+  - `time`: [hyperfine](https://github.com/sharkdp/hyperfine)
+  - Fuzzy finder: [fzf](https://github.com/junegunn/fzf)
+  - Clock: [tock](https://github.com/nwtnni/tock)
