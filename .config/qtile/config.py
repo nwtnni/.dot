@@ -24,86 +24,98 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import copy
+
 from libqtile import bar, layout, widget
 from libqtile.backend.wayland import InputConfig
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
+import traverse
+
 alt = "mod1"
+ctrl = "control"
 mod = "mod4"
+
 terminal = guess_terminal()
 
+# A list of available commands that can be bound to keys can be found
+# at https://docs.qtile.org/en/latest/manual/config/lazy.html
 keys = [
-    # A list of available commands that can be bound to keys can be found
-    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Switch between windows
-    Key(["control", "shift"], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key(["control", "shift"], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key(["control", "shift"], "j", lazy.layout.down(), desc="Move focus down"),
-    Key(["control", "shift"], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([alt], "h", lazy.function(traverse.left), desc="Move focus to left"),
+    Key([alt], "l", lazy.function(traverse.right), desc="Move focus to right"),
+    Key([alt], "j", lazy.function(traverse.down), desc="Move focus down"),
+    Key([alt], "k", lazy.function(traverse.up), desc="Move focus up"),
+
     # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
-    Key(["control", alt], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key(["control", alt], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
-    Key(["control", alt], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key(["control", alt], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([alt, ctrl], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([alt, ctrl], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key([alt, ctrl], "j", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([alt, ctrl], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key(["control", "shift", alt], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-    Key(["control", "shift", alt], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
-    Key(["control", "shift", alt], "j", lazy.layout.grow_down(), desc="Grow window down"),
-    Key(["control", "shift", alt], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key(["control", "shift", alt], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key(
-        [mod, "shift"],
-        "return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
-    Key(["control", "shift"], "return", lazy.spawn(terminal), desc="Launch terminal"),
-    # Toggle between different layouts as defined below
-    Key([mod], "space", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "tab", lazy.layout.next(), desc="Move window focus to next window"),
+    Key([alt, "shift"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
+    Key([alt, "shift"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key([alt, "shift"], "j", lazy.layout.grow_down(), desc="Grow window down"),
+    Key([alt, "shift"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+    Key([alt, "shift"], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
 
-    Key(["control", "shift"], "d", lazy.window.kill(), desc="Kill focused window"),
-    Key(["control", "shift"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key(["control", "shift"], "escape", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key(["control", "shift"], "space", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod, "shift"], "tab", lazy.prev_layout(), desc="Toggle between layouts"),
+
+    Key([alt], "tab", lazy.layout.next(), desc="Move window focus to next window"),
+    Key([alt, "shift"], "tab", lazy.layout.previous(), desc="Move window focus to previous window"),
+
+    Key([alt], "d", lazy.window.kill(), desc="Kill focused window"),
+    Key([alt], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([alt], "return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([alt], "escape", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([alt], "space", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
 ]
 
-groups = [Group(i) for i in "1234"]
+groups = [Group(i) for i in "1234567890"]
+
+# https://www.reddit.com/r/qtile/comments/ydr1pe/how_to_achieve_i3like_group_behavior_in_qtile/
+@lazy.function
+def focus_group(qtile, name):
+    group = qtile.groups_map[name]
+    if group.screen:
+        qtile.focus_screen(group.screen.index)
+    else:
+        group.cmd_toscreen()
 
 for i in groups:
     keys.extend(
         [
-            # mod1 + letter of group = switch to group
             Key(
-                ["control", "shift"],
+                [alt],
                 i.name,
-                lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
+                focus_group(i.name),
+                desc="Focus group {}".format(i.name),
             ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
             Key(
-                ["control", "shift", alt],
+                [alt, ctrl],
                 i.name,
-                lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
+                lazy.window.togroup(i.name),
+                desc="Move focused window to group {}".format(i.name),
             ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
-            # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-            #     desc="move focused window to group {}".format(i.name)),
         ]
     )
 
 layouts = [
-    layout.Bsp(),
+    layout.Bsp(
+        border_on_single=True,
+        border_width=2,
+        # https://github.com/morhetz/gruvbox/blob/bf2885a95efdad7bd5e4794dd0213917770d79b7/colors/gruvbox.vim#L90
+        border_normal="#282828",
+        # https://github.com/morhetz/gruvbox/blob/bf2885a95efdad7bd5e4794dd0213917770d79b7/colors/gruvbox.vim#L127
+        border_focus="#79740e",
+        ratio=1.0,
+        wrap_clients=True,
+    ),
     layout.Max(),
 ]
 
@@ -115,22 +127,22 @@ widget_defaults = dict(
 
 extension_defaults = widget_defaults.copy()
 
-screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.StatusNotifier(),
-                widget.Spacer(),
-                widget.Spacer(length=10),
-                widget.Volume(fmt='Volume: {}'),
-                widget.Spacer(length=10),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-            ],
-            24,
-        ),
+widgets = [
+    widget.GroupBox(
+        hide_unused=True,
+        highlight_method="line",
     ),
+    widget.Prompt(),
+    widget.Spacer(),
+    widget.Spacer(length=10),
+    widget.Volume(fmt="Volume: {}"),
+    widget.Spacer(length=10),
+    widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+]
+
+screens = [
+    Screen(top=bar.Bar(widgets, 24)),
+    Screen(top=bar.Bar(copy.copy(widgets), 24)),
 ]
 
 # Drag floating layouts.
@@ -144,7 +156,7 @@ dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = False
 bring_front_click = False
-cursor_warp = False
+cursor_warp = True
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
