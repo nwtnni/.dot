@@ -8,11 +8,7 @@ export EDITOR="nvim"
 # https://wiki.archlinux.org/title/SSH_keys#Start_ssh-agent_with_systemd_user
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
-if command -v vivid > /dev/null; then
-    export LS_COLORS=$(vivid generate gruvbox)
-elif command -v dircolors > /dev/null && [[ -x "$HOME/.dircolors" ]]; then
-    eval "$(dircolors -b "$HOME/.dircolors")"
-fi
+[[ -f "$HOME/.ls-colors" ]] && export LS_COLORS=$(cat $HOME/.ls-colors)
 
 if command -v rustc > /dev/null; then
     export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
