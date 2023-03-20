@@ -5,11 +5,41 @@ alias ll='exa --group-directories-first -alF'
 alias la='exa --group-directories-first -a'
 alias ls='exa --group-directories-first --color=auto'
 
-alias eclipse="~/eclipse/java-oxygen/eclipse/eclipse > /dev/null 2>&1 &"
-alias rstudio="/usr/bin/rstudio > /dev/null 2>&1 &"
-alias vpnui="/opt/cisco/anyconnect/bin/vpnui > /dev/null 2>&1 &"
+e () {
+  if [ -z "$1" ]; then
+    file=$(goldfish -cfiles get | fzf)
+    if [ ! -z "$file" ]; then
+      goldfish -cfiles put -tf "$file"
+      nvim "$file" > /dev/tty
+    fi
+  else
+    goldfish -cfiles put -tf "$1"
+    nvim "$1" > /dev/tty
+  fi
+}
+
+o () {
+  if [ -z "$1" ]; then
+    dir=$(goldfish -cdirectories get | fzf)
+    if [ ! -z "$dir" ]; then o "$dir"; fi
+  else
+    goldfish -cdirectories put -td "$1" \
+        && cd "$1" \
+        && exa --group-directories-first --color=auto
+  fi
+}
+
+# https://github.com/junegunn/fzf/wiki/Examples#opening-files
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
 alias vim="nvim"
-alias tmr="tmuxinator"
 alias fzf="fzf-tmux"
 alias keyon="echo 3 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
 alias keyoff="echo 0 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
@@ -34,6 +64,12 @@ gdh () {
   git branch -d $(git branch -l | fzf)
 }
 
+gri() {
+  if [ ! -z "$1" ]; then
+    git rebase -i "HEAD~$1"
+  fi
+}
+
 alias gb="./gradlew build"
 alias gr="./gradlew run"
 alias gj="./gradlew jar"
@@ -56,7 +92,6 @@ alias kg="kubectl get"
 alias kl="kubectl logs"
 alias kd="kubectl describe"
 alias kc="kubectl create"
-alias kp="kubectl get -ndev pods"
 
 kf () {
   kubectl get -ndev $1 | cut -f 1 -d " " | tail -n +2 | fzf
@@ -71,5 +106,4 @@ kdf () {
   kubectl describe -ndev pod $(kf pods)
 }
 
-alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias ssh='TERM=xterm-256color ssh'
+alias ssh="TERM=xterm-256color ssh"
