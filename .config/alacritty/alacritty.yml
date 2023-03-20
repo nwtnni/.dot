@@ -543,6 +543,11 @@ key_bindings:
   - { key: H, mods: Shift, mode: Vi|~Search, action: FirstOccupied }
   - { key: L, mods: Shift, mode: Vi|~Search, action: Last }
 
+  - { key: Y, mode: Vi|~Search, action: None }
+  - { key: Y, mode: Vi|~Search, action: Copy }
+  - { key: Y, mode: Vi|~Search, action: ClearSelection }
+  - { key: Y, mode: Vi|~Search, action: ToggleViMode }
+
   #- { key: Paste,                                       action: Paste          }
   #- { key: Copy,                                        action: Copy           }
   #- { key: L,         mods: Control,                    action: ClearLogNotice }
