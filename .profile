@@ -1,12 +1,18 @@
 # Newton Ni
 
 export PATH="$PATH:$HOME/.local/bin"
-export TZ="America/Chicago"
-export EDITOR="nvim"
+export LANG="en_US.UTF-8"
 
-# Must match ~/.config/systemd/user/ssh-agent.service
-# https://wiki.archlinux.org/title/SSH_keys#Start_ssh-agent_with_systemd_user
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+if [[ -n "$SSH_CONNECTION" ]]; then
+    export EDITOR="vim"
+else
+    export EDITOR="nvim"
+    export TZ="America/Chicago"
+
+    # Must match ~/.config/systemd/user/ssh-agent.service
+    # https://wiki.archlinux.org/title/SSH_keys#Start_ssh-agent_with_systemd_user
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+fi
 
 [[ -f "$HOME/.ls-colors" ]] && export LS_COLORS=$(cat $HOME/.ls-colors)
 
@@ -21,18 +27,12 @@ if command -v opam > /dev/null; then
     eval $(opam env)
 fi
 
-if command -v fzf > /dev/null && command -v fd > /dev/null; then
-    export FZF_DEFAULT_COMMAND="fd --type f -j 8"
-    export FZF_ALT_C_COMMAND="fd --type d -j 8"
-fi
+if command -v fzf > /dev/null; then
+    # https://github.com/junegunn/fzf/blob/master/ADVANCED.md#color-themes
+    export FZF_DEFAULT_OPTS='--color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934'
 
-# If running bash or zsh
-if [ -n "$BASH_VERSION" ] || [ "$SHELL" == *zsh ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-		. "$HOME/.bashrc"
+    if command -v fd > /dev/null; then
+        export FZF_DEFAULT_COMMAND="fd --type f -j 8"
+        export FZF_ALT_C_COMMAND="fd --type d -j 8"
     fi
-	if [ -f "$HOME/.bash_aliases" ]; then
-		. "$HOME/.bash_aliases"
-	fi
 fi

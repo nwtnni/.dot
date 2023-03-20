@@ -5,42 +5,52 @@ alias ll='ls --group-directories-first --color=auto -alF'
 alias la='ls --group-directories-first --color=auto -aF'
 alias ls='ls --group-directories-first --color=auto -F'
 
-e () {
-  if [ -z "$1" ]; then
-    file=$(goldfish -cfiles get | fzf)
-    if [ ! -z "$file" ]; then
-      goldfish -cfiles put -tf "$file"
-      nvim "$file" > /dev/tty
-    fi
-  else
-    goldfish -cfiles put -tf "$1"
-    nvim "$1" > /dev/tty
-  fi
-}
-
-o () {
-  if [ -z "$1" ]; then
-    dir=$(goldfish -cdirectories get | fzf)
-    if [ ! -z "$dir" ]; then o "$dir"; fi
-  else
-    goldfish -cdirectories put -td "$1" \
-        && cd "$1" \
-        && exa --group-directories-first --color=auto
-  fi
-}
-
 # https://github.com/junegunn/fzf/wiki/Examples#opening-files
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
 fe() {
   local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+  IFS=$'\n' files=($(fzf --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
+  [[ -n "$files" ]] && ${EDITOR:-nvim} "${files[@]}"
+}
+
+# https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-between-ripgrep-mode-and-fzf-mode
+# Switch between Ripgrep launcher mode (CTRL-R) and fzf filtering mode (CTRL-F)
+fr() {
+    rm -f /tmp/rg-fzf-{r,f}
+    local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+    local INITIAL_QUERY="${*:-}"
+    FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+    fzf --ansi \
+        --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        --disabled --query "$INITIAL_QUERY" \
+        --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+        --bind "ctrl-t:unbind(change,ctrl-t)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+        --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-t)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
+        --bind "start:unbind(ctrl-r)" \
+        --prompt '1. ripgrep> ' \
+        --delimiter : \
+        --header '╱ CTRL-R (ripgrep mode) ╱ CTRL-T (fzf mode) ╱' \
+        --preview 'bat --color=always {1} --highlight-line {2}' \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+        --bind "enter:become("$EDITOR" {1} +{2})"
+}
+
+pas() {
+    pacman -Slq | fzf --multi --preview "pacman -Si {1}" | xargs -ro sudo pacman -Syu
+}
+par() {
+    pacman -Qq | fzf --multi --preview "pacman -Qi {1}" | xargs -ro sudo pacman -Rns
+}
+yas() {
+    yay -Slq | fzf --multi --preview "yay -Si {1}" | xargs -ro yay -Syu
+}
+yar() {
+    yay -Qq | fzf --multi --preview "yay -Qi {1}" | xargs -ro yay -Rns
 }
 
 alias vim="nvim"
-alias fzf="fzf-tmux"
 alias keyon="echo 3 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
 alias keyoff="echo 0 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
 alias battery="upower -i $(upower -e | rg battery) | rg percentage | rg -o '[0-9]*%'"

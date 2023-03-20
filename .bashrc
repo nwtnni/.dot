@@ -68,10 +68,11 @@ export PROMPT_COMMAND='[[ ${__prompt_wd:=$PWD} != $PWD ]] && ls; __prompt_wd=$PW
 export PS1='\[$(__prompt_last)\]>\[$(__prompt_clear)$(__prompt_branch)\]> \[$(__prompt_clear)\]'
 export PS2='>> '
 
-# rvm, fzf, up
-[[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
+[[ -f /usr/share/fzf/completion.bash ]] && source /usr/share/fzf/completion.bash
+[[ -f /usr/share/fzf/key-bindings.bash ]] && source /usr/share/fzf/key-bindings.bash
+[[ -f "$HOME/.bash_aliases" ]] && source "$HOME/.bash_aliases"
 
-bind -x '"\C-o": eval $(__fzf_cd__)'
+bind '"\C-o": "\ec"'
 bind -x '"\C-e": fe'
 
 eval "$(direnv hook bash)"
