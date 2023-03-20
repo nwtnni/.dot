@@ -8,21 +8,14 @@ case $- in
       *) return;;
 esac
 
+shopt -s autocd
 shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
 
 HISTCONTROL=ignoreboth
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=65536
 HISTIGNORE="l:la:ls:p:gs"
-
-set -o vi &> /dev/null
-bind '"jk":vi-movement-mode'
-bind -m vi-insert "\C-l":clear-screen
-bind "set completion-ignore-case on"
-bind "set completion-map-case on"
-bind "set show-all-if-ambiguous on"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -31,7 +24,6 @@ if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion &> /dev/null
   elif [ -f /etc/bash_completion ]; then
-    echo "eslse"
     . /etc/bash_completion
   fi
 fi
