@@ -16,5 +16,6 @@
   - `wc`: [tokei](https://github.com/XAMPPRocky/tokei)
   - `ls`: [exa](https://github.com/ogham/exa)
   - `time`: [hyperfine](https://github.com/sharkdp/hyperfine)
+  - `dircolors`: [vivid](https://github.com/sharkdp/vivid)
   - Fuzzy finder: [fzf](https://github.com/junegunn/fzf)
   - Clock: [tock](https://github.com/nwtnni/tock)

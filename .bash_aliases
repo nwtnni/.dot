@@ -1,9 +1,9 @@
-alias l='exa --group-directories-first --color=auto'
-alias p="cd .. && exa --group-directories-first --color=auto"
+alias l="ls --group-directories-first --color=auto -F"
+alias p="cd .."
 
-alias ll='exa --group-directories-first -alF'
-alias la='exa --group-directories-first -a'
-alias ls='exa --group-directories-first --color=auto'
+alias ll='ls --group-directories-first --color=auto -alF'
+alias la='ls --group-directories-first --color=auto -aF'
+alias ls='ls --group-directories-first --color=auto -F'
 
 e () {
   if [ -z "$1" ]; then

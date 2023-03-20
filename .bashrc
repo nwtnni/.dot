@@ -64,13 +64,14 @@ __prompt_last () {
   fi
 }
 
+export PROMPT_COMMAND='[[ ${__prompt_wd:=$PWD} != $PWD ]] && ls; __prompt_wd=$PWD'
 export PS1='\[$(__prompt_last)\]>\[$(__prompt_clear)$(__prompt_branch)\]> \[$(__prompt_clear)\]'
 export PS2='>> '
 
 # rvm, fzf, up
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
-[[ -f ~/.config/up/up.sh ]] && source ~/.config/up/up.sh
-eval "$(direnv hook bash)"
 
 bind -x '"\C-o": eval $(__fzf_cd__)'
 bind -x '"\C-e": fe'
+
+eval "$(direnv hook bash)"
