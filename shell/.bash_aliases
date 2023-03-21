@@ -50,11 +50,13 @@ yar() {
     yay -Qq | fzf --multi --preview "yay -Qi {1}" | xargs -ro yay -Rns
 }
 
-alias vim="nvim"
 alias keyon="echo 3 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
 alias keyoff="echo 0 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
-alias battery="upower -i $(upower -e | rg battery) | rg percentage | rg -o '[0-9]*%'"
 alias dim="xbacklight -set 10"
+
+battery() {
+    upower -i $(upower -e | rg battery) | rg percentage | rg -o '[0-9]*%'
+}
 
 alias gs="git status"
 alias ga="git add ."

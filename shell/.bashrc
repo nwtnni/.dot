@@ -75,4 +75,6 @@ export PS2='>> '
 bind '"\C-o": "\ec"'
 bind -x '"\C-e": fe'
 
-eval "$(direnv hook bash)"
+if command -v direnv > /dev/null; then
+    eval "$(direnv hook bash)"
+fi
