@@ -1,12 +1,9 @@
-.rusty-tags/cache
-.rusty-tags/locks
+editor/.config/nvim/bundle
+editor/.config/nvim/tags
+editor/.config/nvim/temp
 
-.config/nvim/bundle
-.config/nvim/tags
-.config/nvim/temp
+wm/.config/qtile/__pycache__
 
-.config/qtile/__pycache__
+systemd/.config/systemd/user/*.wants
 
 .nvimlog
-
-.DS_Store
