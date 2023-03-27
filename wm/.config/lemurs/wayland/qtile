@@ -13,5 +13,5 @@ env \
     WLR_DRM_NO_ATOMIC=1 \
     WLR_NO_HARDWARE_CURSORS=1 \
     WLR_RENDERER=vulkan \
-    XDG_CURRENT_DESKTOP=qtile \
+    XDG_CURRENT_DESKTOP=wlroots \
     qtile start -n -b wayland -c ~/.config/qtile/config.py

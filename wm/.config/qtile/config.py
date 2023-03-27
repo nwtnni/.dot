@@ -25,12 +25,16 @@
 # SOFTWARE.
 
 import copy
+import os
+import subprocess
 
 from libqtile import bar, layout, widget
 from libqtile.backend.wayland import InputConfig
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile import hook
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from libqtile.log_utils import logger
 
 import traverse
 
@@ -65,6 +69,7 @@ keys = [
 
     Key([mod], "tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "tab", lazy.prev_layout(), desc="Toggle between layouts"),
+    Key([mod], "grave", lazy.window.toggle_floating(), desc="Toggle floating"),
 
     Key([alt], "tab", lazy.layout.next(), desc="Move window focus to next window"),
     Key([alt, "shift"], "tab", lazy.layout.previous(), desc="Move window focus to previous window"),
@@ -78,14 +83,16 @@ keys = [
 
 groups = [Group(i) for i in "1234567890"]
 
-# https://www.reddit.com/r/qtile/comments/ydr1pe/how_to_achieve_i3like_group_behavior_in_qtile/
+
 @lazy.function
 def focus_group(qtile, name):
+    # https://www.reddit.com/r/qtile/comments/ydr1pe/how_to_achieve_i3like_group_behavior_in_qtile/
     group = qtile.groups_map[name]
     if group.screen:
         qtile.focus_screen(group.screen.index)
     else:
         group.cmd_toscreen()
+
 
 for i in groups:
     keys.extend(
@@ -132,9 +139,9 @@ widgets = [
         hide_unused=True,
         highlight_method="line",
     ),
+    widget.WindowName(for_current_screen=True),
     widget.Prompt(),
     widget.Spacer(),
-    widget.Spacer(length=10),
     widget.Volume(fmt="Volume: {}"),
     widget.Spacer(length=10),
     widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
@@ -161,12 +168,12 @@ floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
-        Match(wm_class="confirmreset"),  # gitk
-        Match(wm_class="makebranch"),  # gitk
-        Match(wm_class="maketag"),  # gitk
-        Match(wm_class="ssh-askpass"),  # ssh-askpass
-        Match(title="branchdialog"),  # gitk
-        Match(title="pinentry"),  # GPG key password entry
+        # Firefox permissions popup
+        Match(func=lambda window: window.name ==
+              "Firefox Developer Edition — Sharing Indicator"),
+        # Google Calendar notification
+        Match(func=lambda window: window.name ==
+              "<no name>"),
     ]
 )
 auto_fullscreen = True
@@ -181,6 +188,16 @@ auto_minimize = True
 wl_input_rules = {
     "type:keyboard": InputConfig(kb_options="ctrl:nocaps")
 }
+
+
+@hook.subscribe.startup
+def autostart():
+    # https://wiki.archlinux.org/title/Qtile#Startup
+    home = os.path.expanduser("~")
+    path = home + "/.config/qtile/autostart.sh"
+    logger.warn(f"Running startup script: {path}")
+    subprocess.Popen([path])
+
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
