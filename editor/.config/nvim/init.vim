@@ -279,10 +279,44 @@ nnoremap <silent> <SPACE>rn <cmd>lua vim.lsp.buf.rename()<CR>
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 autocmd BufWritePre *.ml lua vim.lsp.buf.format()
 autocmd BufWritePre *.mli lua vim.lsp.buf.format()
+autocmd BufWritePre *.py lua vim.lsp.buf.format()
 autocmd BufWritePre *.rs lua vim.lsp.buf.format({ async = false })
 
 lua <<EOF
-require"lspconfig".ocamllsp.setup({})
+require("lspconfig").ocamllsp.setup({})
+
+-- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+require("lspconfig").pylsp.setup({})
+
+-- https://github.com/latex-lsp/texlab/wiki/Configuration
+require("lspconfig").texlab.setup {
+  settings = {
+    texlab = {
+      auxDirectory = ".",
+      bibtexFormatter = "texlab",
+      build = {
+        args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+        executable = "latexmk",
+        forwardSearchAfter = false,
+        onSave = true
+      },
+      chktex = {
+        onEdit = false,
+        onOpenAndSave = false
+      },
+      diagnosticsDelay = 300,
+      formatterLineLength = 80,
+      forwardSearch = {
+        executable = "zathura",
+        args = { "--synctex-forward", "%l:1:%f", "%p" }
+      },
+      latexFormatter = "latexindent",
+      latexindent = {
+        modifyLineBreaks = false
+      }
+    }
+  }
+}
 
 require("rust-tools").setup({
   -- rust-tools
