@@ -50,6 +50,38 @@ yar() {
     yay -Qq | fzf --multi --preview "yay -Qi {1}" | xargs -ro yay -Rns
 }
 
+ss() {
+    systemctl list-unit-files \
+        | fzf \
+            --nth 1 \
+            --height 50% \
+            --multi \
+            --preview "systemctl status {1}" \
+            --preview-window=wrap \
+        | awk "{print \$1}"
+}
+sd() { systemctl disable $(ss); }
+se() { systemctl enable $(ss); }
+ssta() { systemctl --user start $(ss); }
+ssto() { systemctl --user stop $(ss); }
+sr() { systemctl restart $(ss); }
+
+sus() {
+    systemctl --user list-unit-files \
+        | fzf \
+            --nth 1 \
+            --height 50% \
+            --multi \
+            --preview "systemctl --user status {1}" \
+            --preview-window=wrap \
+        | awk "{print \$1}"
+}
+sud() { systemctl --user disable $(sus); }
+sue() { systemctl --user enable $(sus); }
+susta() { systemctl --user start $(sus); }
+susto() { systemctl --user stop $(sus); }
+sur() { systemctl --user restart $(sus); }
+
 alias keyon="echo 3 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
 alias keyoff="echo 0 | sudo tee /sys/class/leds/asus::kbd_backlight/brightness"
 alias dim="xbacklight -set 10"
