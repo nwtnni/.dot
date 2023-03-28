@@ -16,11 +16,11 @@ fi
 
 [[ -f "$HOME/.ls-colors" ]] && export LS_COLORS=$(cat $HOME/.ls-colors)
 
-if command -v rustc > /dev/null; then
+if [[ -f "$HOME/.cargo/env" ]]; then
+    source "$HOME/.cargo/env"
     export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
     export RUST_DOC_PATH="$(rustc --print sysroot)"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(rustc --print sysroot)"
-    source "$HOME/.cargo/env"
 fi
 
 if command -v opam > /dev/null; then
