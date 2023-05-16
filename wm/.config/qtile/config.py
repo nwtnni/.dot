@@ -142,6 +142,8 @@ widgets = [
     widget.WindowName(for_current_screen=True),
     widget.Prompt(),
     widget.Spacer(),
+    widget.Battery(),
+    widget.Spacer(length=10),
     widget.Volume(fmt="Volume: {}"),
     widget.Spacer(length=10),
     widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
