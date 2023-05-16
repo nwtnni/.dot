@@ -333,7 +333,11 @@ require("rust-tools").setup({
         checkOnSave = {
           command = "clippy",
         },
-        importGranularity = "item",
+        imports = {
+          granularity = {
+            group = "preserve",
+          }
+        },
         joinLines = {
           joinElseIf = false,
         },
