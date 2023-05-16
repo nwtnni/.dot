@@ -75,7 +75,7 @@ call plug#begin('~/.config/nvim/bundle')
     \  'sink':  'vertical botright split' }))<CR>
 
     " Open fzf in current buffer
-    nnoremap <silent> <SPACE>e :GFiles<CR>
+    nnoremap <silent> <SPACE>e :Files<CR>
     nnoremap <silent> <SPACE>g :Rg<CR>
     nnoremap <silent> <SPACE>/ :History/<CR>
     nnoremap <silent> <SPACE>b :Buffers<CR>
