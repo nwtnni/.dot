@@ -13,7 +13,7 @@ shopt -s cdspell
 shopt -s histappend
 shopt -s checkwinsize
 
-HISTCONTROL=ignoreboth
+HISTCONTROL="ignoreboth:erasedups"
 HISTSIZE=65536
 HISTIGNORE="l:la:ls:p:gs"
 
