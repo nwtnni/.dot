@@ -100,10 +100,17 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'pest-parser/pest.vim'
   Plug 'cespare/vim-toml'
   Plug 'lervag/vimtex'
-  Plug 'mlr-msft/vim-loves-dafny'
   "{
     let g:vimtex_view_method = 'zathura'
   "}
+  Plug 'mlr-msft/vim-loves-dafny'
+  Plug 'whonore/Coqtail'
+  "{
+    nnoremap <silent> <SPACE>j :CoqNext<CR>
+    nnoremap <silent> <SPACE>k :CoqUndo<CR>
+    nnoremap <silent> <SPACE>l :CoqToLine<CR>
+  "}
+  Plug 'tomtomjhj/coq-lsp.nvim'
 
 
 call plug#end()
@@ -283,6 +290,10 @@ autocmd BufWritePre *.py lua vim.lsp.buf.format()
 autocmd BufWritePre *.rs lua vim.lsp.buf.format({ async = false })
 
 lua <<EOF
+-- require("coq-lsp").setup({})
+
+require("lspconfig").clangd.setup({})
+
 require("lspconfig").ocamllsp.setup({})
 
 -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
