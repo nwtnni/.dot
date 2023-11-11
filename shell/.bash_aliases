@@ -151,3 +151,6 @@ kdf () {
 }
 
 alias ssh="TERM=xterm-256color ssh"
+alias vi="nvim"
+alias vim="nvim"
+alias z="yazi"
