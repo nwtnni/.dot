@@ -153,7 +153,7 @@ set nonumber
 set norelativenumber
 set display=lastline
 set laststatus=0
-set completeopt=menuone,noinsert,noselect
+set completeopt=menuone
 set scrolloff=5
 set signcolumn=yes:2
 
@@ -231,7 +231,7 @@ nnoremap <S-H> ^
 vnoremap <S-H> ^
 
 " Split line
-nnoremap <S-K> 80\|Bi<CR><ESC>
+" nnoremap <S-K> 80\|Bi<CR><ESC>
 
 " Insert space before
 nnoremap <SPACE><SPACE> i<SPACE><ESC>
@@ -276,6 +276,7 @@ nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gD <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> gt <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> <S-k> <cmd>lua require("rust-tools").hover_actions.hover_actions()<CR>
 nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
 nnoremap <silent> <SPACE>rn <cmd>lua vim.lsp.buf.rename()<CR>
@@ -285,6 +286,10 @@ autocmd BufWritePre *.ml lua vim.lsp.buf.format()
 autocmd BufWritePre *.mli lua vim.lsp.buf.format()
 autocmd BufWritePre *.py lua vim.lsp.buf.format()
 autocmd BufWritePre *.rs lua vim.lsp.buf.format({ async = false })
+" autocmd CursorHold  * lua vim.lsp.buf.document_highlight()
+" autocmd CursorHoldI * lua vim.lsp.buf.document_highlight()
+" autocmd CursorMoved * lua vim.lsp.buf.clear_references()
+
 
 lua <<EOF
 -- require("coq-lsp").setup({})
@@ -336,6 +341,8 @@ require("rust-tools").setup({
     },
   },
   server = {
+    cmd = { "ra-multiplex", "client", "--server-path", "/home/nwtnni/.cargo/bin/rust-analyzer" },
+    standalone = false,
     settings = {
       ["rust-analyzer"] = {
         checkOnSave = {
