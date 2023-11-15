@@ -15,21 +15,8 @@ in
 
   system.stateVersion = "23.05";
 
-  users.mutableUsers = false;
-  users.extraUsers = {
-    root = {
-      initialHashedPassword = "$6$wwAkpT1c0DOGE34/$ssPWCcxWnpjMCikLllHlKCO0HmU03jqg/jR5BKBFzyi3NdP29zXGWTJ6Jo3zarA.4QMZ9OUeqqW8myQxHXPmJ0";
-    };
-
-    nwtnni = {
-      isNormalUser = true;
-      description = "Newton Ni";
-      extraGroups = [ "wheel" "networkmanager" ];
-      initialHashedPassword = "$6$wwAkpT1c0DOGE34/$ssPWCcxWnpjMCikLllHlKCO0HmU03jqg/jR5BKBFzyi3NdP29zXGWTJ6Jo3zarA.4QMZ9OUeqqW8myQxHXPmJ0";
-    };
-  };
-
   nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = [
     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
     "nixos-config=/home/nwtnni/.config/nixos/configuration.nix"
@@ -51,23 +38,38 @@ in
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    git
-    vim
-  ];
-
   services.printing.enable = true;
 
-  environment.persistence."/nix/persist" = { 
-    directories = [
-      "/etc/NetworkManager/system-connections"
-      "/var/log"
-      "/var/lib"
-    ];
+  environment = {
+    persistence."/nix/persist" = {
+      directories = [
+        "/etc/NetworkManager/system-connections"
+        "/var/log"
+        "/var/lib"
+      ];
 
-    files = [
-      "/etc/machine-id"   
+      files = [
+        "/etc/machine-id"
+      ];
+    };
+
+    systemPackages = with pkgs; [
+      git
+      vim
     ];
+  };
+
+  users.mutableUsers = false;
+  users.extraUsers = {
+    root = {
+      initialHashedPassword = "$6$wwAkpT1c0DOGE34/$ssPWCcxWnpjMCikLllHlKCO0HmU03jqg/jR5BKBFzyi3NdP29zXGWTJ6Jo3zarA.4QMZ9OUeqqW8myQxHXPmJ0";
+    };
+
+    nwtnni = {
+      isNormalUser = true;
+      description = "Newton Ni";
+      extraGroups = [ "wheel" "networkmanager" ];
+      initialHashedPassword = "$6$wwAkpT1c0DOGE34/$ssPWCcxWnpjMCikLllHlKCO0HmU03jqg/jR5BKBFzyi3NdP29zXGWTJ6Jo3zarA.4QMZ9OUeqqW8myQxHXPmJ0";
+    };
   };
 }
