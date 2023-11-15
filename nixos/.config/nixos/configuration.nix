@@ -61,14 +61,13 @@ in
 
   environment.persistence."/nix/persist" = { 
     directories = [
-      "/etc/NetworkManager"
+      "/etc/NetworkManager/system-connections"
       "/var/log"
       "/var/lib"
     ];
 
     files = [
       "/etc/machine-id"   
-      "/etc/nix/id_rsa"
     ];
   };
 }
