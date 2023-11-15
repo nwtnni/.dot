@@ -31,8 +31,8 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nix.nixPath = [
-    "nixos-config=${users.extraUsers.nwtnni.home}/.config/nixos/configuration.nix"
     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+    "nixos-config=/home/nwtnni/.config/nixos/configuration.nix"
     "/nix/var/nix/profiles/per-user/root/channels"
   ];
 
