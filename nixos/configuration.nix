@@ -63,6 +63,13 @@
     };
   };
 
+  fonts.packages = with pkgs; [
+    iosevka
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+  ];
+
   users.defaultUserShell = pkgs.bash;
   users.mutableUsers = false;
   users.extraUsers = {
