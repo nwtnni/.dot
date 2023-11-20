@@ -28,20 +28,36 @@
   time.hardwareClockInLocalTime = true;
   time.timeZone = "America/Chicago";
 
-  sound.enable = true;
+  hardware.opengl.enable = true;
   hardware.pulseaudio.enable = true;
+  nixpkgs.config.pulseaudio = true;
+  security.polkit.enable = true;
+  services.greetd = {
+    enable = true;
+    settings.default_session.command = ''
+      ${pkgs.greetd.tuigreet}/bin/tuigreet \
+        --asterisks \
+        --remember \
+        --remember-session \
+        --time \
+        --cmd sway
+      '';
+  };
   services.printing.enable = true;
   services.udev.extraHwdb = "evdev:name:Asus Keyboard:*\n KEYBOARD_KEY_70039=leftctrl";
+  sound.enable = true;
 
   environment = {
     persistence."/nix/persist" = {
       directories = [
         "/etc/NetworkManager/system-connections"
+        "/var/cache/tuigreet"
         "/var/log"
         "/var/lib"
       ];
 
       files = [
+        "/etc/greetd/environments"
         "/etc/machine-id"
       ];
     };
@@ -70,7 +86,7 @@
 
     git.enable = true;
 
-    vim.defaultEditor = true;
+    sway.enable = true;
 
     tmux = {
       enable = true;
@@ -79,5 +95,7 @@
       customPaneNavigationAndResize = true;
       historyLimit = 10000;
     };
+
+    vim.defaultEditor = true;
   };
 }

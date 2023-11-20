@@ -20,4 +20,11 @@
     userName = "Newton Ni";
     userEmail = "nwtnni@gmail.com";
   };
+
+  wayland.windowManager.sway = {
+    enable = true;
+    config = rec {
+      modifier = "Mod1";
+    };
+  };
 }
