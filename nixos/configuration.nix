@@ -19,6 +19,7 @@
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 4;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostId = "20ae29ac";
   networking.hostName = "nwtnni-g16";
@@ -29,9 +30,8 @@
   time.timeZone = "America/Chicago";
 
   hardware.opengl.enable = true;
-  hardware.pulseaudio.enable = true;
-  nixpkgs.config.pulseaudio = true;
   security.polkit.enable = true;
+  security.rtkit.enable = true;
   services.greetd = {
     enable = true;
     settings.default_session.command = ''
@@ -45,7 +45,13 @@
   };
   services.printing.enable = true;
   services.udev.extraHwdb = "evdev:name:Asus Keyboard:*\n KEYBOARD_KEY_70039=leftctrl";
-  sound.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    audio.enable = true;
+    pulse.enable = true;
+  };
 
   environment = {
     persistence."/nix/persist" = {
