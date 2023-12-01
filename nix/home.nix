@@ -17,6 +17,7 @@
     shotman
     tmux
     wl-clipboard
+    zathura
   ];
 
   programs.git = {
