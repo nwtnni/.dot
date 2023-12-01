@@ -8,10 +8,6 @@ if [[ -n "$SSH_CONNECTION" ]]; then
 else
     export EDITOR="nvim"
     export TZ="America/Chicago"
-
-    # Must match ~/.config/systemd/user/ssh-agent.service
-    # https://wiki.archlinux.org/title/SSH_keys#Start_ssh-agent_with_systemd_user
-    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 fi
 
 [[ -f "$HOME/.ls-colors" ]] && export LS_COLORS=$(cat $HOME/.ls-colors)

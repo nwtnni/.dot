@@ -99,6 +99,8 @@
 
     git.enable = true;
 
+    ssh.startAgent = true;
+
     sway.enable = true;
 
     tmux = {
