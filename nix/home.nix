@@ -14,7 +14,6 @@
     htop
     neovim
     ripgrep
-    rustup
     shotman
     tmux
     wl-clipboard

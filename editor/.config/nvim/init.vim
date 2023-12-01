@@ -341,7 +341,6 @@ require("rust-tools").setup({
     },
   },
   server = {
-    cmd = { "ra-multiplex", "client", "--server-path", "/home/nwtnni/.cargo/bin/rust-analyzer" },
     standalone = false,
     settings = {
       ["rust-analyzer"] = {
