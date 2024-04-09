@@ -1,5 +1,6 @@
 alias l="ls --group-directories-first --color=auto -F"
 alias p="cd .."
+alias g="git"
 
 alias ll='ls --group-directories-first --color=auto -alF'
 alias la='ls --group-directories-first --color=auto -aF'
@@ -13,28 +14,6 @@ fe() {
   local files
   IFS=$'\n' files=($(fzf --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
   [[ -n "$files" ]] && ${EDITOR:-nvim} "${files[@]}"
-}
-
-# https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-between-ripgrep-mode-and-fzf-mode
-# Switch between Ripgrep launcher mode (CTRL-R) and fzf filtering mode (CTRL-F)
-fr() {
-    rm -f /tmp/rg-fzf-{r,f}
-    local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-    local INITIAL_QUERY="${*:-}"
-    FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
-    fzf --ansi \
-        --color "hl:-1:underline,hl+:-1:underline:reverse" \
-        --disabled --query "$INITIAL_QUERY" \
-        --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-        --bind "ctrl-t:unbind(change,ctrl-t)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
-        --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-t)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
-        --bind "start:unbind(ctrl-r)" \
-        --prompt '1. ripgrep> ' \
-        --delimiter : \
-        --header '╱ CTRL-R (ripgrep mode) ╱ CTRL-T (fzf mode) ╱' \
-        --preview 'bat --color=always {1} --highlight-line {2}' \
-        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-        --bind "enter:become("$EDITOR" {1} +{2})"
 }
 
 pas() {
@@ -114,10 +93,6 @@ gri() {
   fi
 }
 
-alias gb="./gradlew build"
-alias gr="./gradlew run"
-alias gj="./gradlew jar"
-
 alias cc="cargo check"
 alias cb="cargo build"
 alias cbr="cargo build --release"
@@ -129,26 +104,6 @@ alias cxb="cargo xbuild"
 alias cxc="cargo xcheck"
 alias cxt="cargo xtest"
 alias cxr="cargo xrun"
-
-alias k="kubectl"
-alias ke="kubectl exec"
-alias kg="kubectl get"
-alias kl="kubectl logs"
-alias kd="kubectl describe"
-alias kc="kubectl create"
-
-kf () {
-  kubectl get -ndev $1 | cut -f 1 -d " " | tail -n +2 | fzf
-}
-kef () {
-  kubectl exec -ndev -it $(kf pods) /bin/bash
-}
-klf () {
-  kubectl logs -ndev $(kf pods) --follow
-}
-kdf () {
-  kubectl describe -ndev pod $(kf pods)
-}
 
 alias ssh="TERM=xterm-256color ssh"
 alias vi="nvim"
