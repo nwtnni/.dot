@@ -1,6 +1,7 @@
 alias l="ls --group-directories-first --color=auto -F"
 alias p="cd .."
 alias g="git"
+alias cat="bat"
 
 alias ll='ls --group-directories-first --color=auto -alF'
 alias la='ls --group-directories-first --color=auto -aF'
@@ -70,21 +71,32 @@ battery() {
 }
 
 alias gs="git status"
-alias ga="git add ."
-alias gc="git commit -m"
+alias ga="git add"
+alias gaa="git add --all"
+alias gap="git add -p"
+alias gc="git commit"
 alias gca="git commit --amend"
+alias gh="git checkout"
+alias ghp="git checkout -p"
 alias gd="git diff"
+alias gf="git fetch"
 alias gl="git log"
-alias gp="git pull --rebase && git push"
-alias gu="git pull --rebase"
+alias glp="git log -p"
+alias gp="git push"
 alias gpf="git push --force-with-lease"
+alias gr="git reset"
+alias grp="git reset -p"
+alias gt="git stash"
+alias gtp="git stash pop"
+alias gu="git pull --rebase"
+alias guu="git add --all && git stash && git pull --rebase && git stash pop"
 
-gch () {
-  git checkout $(git branch -l | fzf)
+gbc () {
+  git checkout $(git branch --list | fzf)
 }
 
-gdh () {
-  git branch -d $(git branch -l | fzf)
+gbd () {
+  git branch -d $(git branch --list | fzf)
 }
 
 gri() {
