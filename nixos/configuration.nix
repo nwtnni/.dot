@@ -94,9 +94,6 @@
   programs = {
     direnv.enable = true;
 
-    fzf.keybindings = true;
-    fzf.fuzzyCompletion = true;
-
     git.enable = true;
 
     ssh.startAgent = true;
