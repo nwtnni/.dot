@@ -135,6 +135,7 @@ colorscheme gruvbox
 " hi Normal guibg=none ctermbg=none
 
 " Indentation
+set autoindent
 set smartindent
 set expandtab
 set tabstop=4
@@ -143,16 +144,15 @@ set shiftwidth=4
 set shiftround
 
 " Status
-set hidden
-set noshowmode
-set noshowcmd
-set noruler
-set nonumber
-set norelativenumber
+set completeopt=menuone
 set display=lastline
 set laststatus=0
-set completeopt=menuone
+set laststatus=2
+set number
+set ruler
 set scrolloff=5
+set showcmd
+set showmode
 set signcolumn=yes:2
 
 " Disable mouse
@@ -192,6 +192,7 @@ set foldnestmax=5
 set backspace=indent,eol,start
 set splitright
 set splitbelow
+set virtualedit=block
 set list
 set listchars=trail:·
 set isfname+=:
@@ -204,14 +205,12 @@ match TrailingWhitespace /\s\+$/
 "                                        "
 "----------------------------------------"
 
-let mapleader = "\<SPACE>"
-
 " Better escaping
-inoremap jf <esc>
-inoremap jk <esc>
+inoremap jf <ESC>
+inoremap fj <ESC>
+inoremap jk <ESC>
 nnoremap j gj
 nnoremap k gk
-nnoremap <CR> :update<CR>
 
 " Source .vimrc
 nnoremap \e :split ~/.config/nvim/init.vim<CR>
@@ -231,42 +230,15 @@ vnoremap <S-H> ^
 " Split line
 " nnoremap <S-K> 80\|Bi<CR><ESC>
 
-" Insert space before
-nnoremap <SPACE><SPACE> i<SPACE><ESC>
-
 " Yank to system buffer
 vnoremap <SPACE>y "+y
 vnoremap <SPACE>d "+d
 nnoremap <SPACE>p "+p
 nnoremap \<S-p> "+P
 
-" Show metadata
-let s:hidden_all = 1
-function! ToggleHiddenAll()
-    if s:hidden_all == 0
-        let s:hidden_all = 1
-        set noshowmode
-        set noruler
-        set laststatus=0
-        set noshowcmd
-        set nonumber
-    else
-        let s:hidden_all = 0
-        set showmode
-        set ruler
-        set laststatus=2
-        set showcmd
-        set number
-    endif
-endfunction
-nnoremap <SPACE>0 :call ToggleHiddenAll()<CR>
-
-fun! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
-endfun
-nnoremap <F2> :call TrimWhitespace()<CR>
+" https://vi.stackexchange.com/questions/454/whats-the-simplest-way-to-strip-trailing-whitespace-from-all-lines-in-a-file
+nnoremap <silent> <SPACE>t :let _s=@/<BAR>:%s/\s\+$//e<BAR>:let @/=_s<BAR><CR>
+nnoremap <silent> <SPACE>w :w<CR>
 
 " https://sharksforarms.dev/posts/neovim-rust/
 nnoremap <silent> ga <cmd>lua vim.lsp.buf.code_action()<CR>
