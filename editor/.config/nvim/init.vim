@@ -100,10 +100,8 @@ call plug#begin('~/.config/nvim/bundle')
   Plug 'pest-parser/pest.vim'
   Plug 'cespare/vim-toml'
   Plug 'lervag/vimtex'
-  "{
-    let g:vimtex_view_method = 'zathura'
-  "}
   Plug 'mlr-msft/vim-loves-dafny'
+  Plug 'runoshun/vim-alloy'
   Plug 'whonore/Coqtail'
   "{
     nnoremap <silent> <SPACE>j :CoqNext<CR>
@@ -308,7 +306,7 @@ require("lspconfig").texlab.setup {
       auxDirectory = ".",
       bibtexFormatter = "texlab",
       build = {
-        args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+        args = { "-shell-escape", "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
         executable = "latexmk",
         forwardSearchAfter = false,
         onSave = true
