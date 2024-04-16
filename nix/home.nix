@@ -7,10 +7,12 @@
     username = "nwtnni";
     homeDirectory = "/home/nwtnni";
     stateVersion = "23.05";
+
     packages = with pkgs; [
       alacritty
       bat
       delta
+      eza
       fd
       firefox-wayland
       fzf
@@ -27,9 +29,173 @@
       wl-clipboard
       zathura
     ];
+
+    shellAliases = {
+      cat = "bat";
+      l = "eza --classify";
+      ll = "eza --long --classify";
+      p = "cd ..";
+      vi = "nvim";
+      vim = "nvim";
+
+      g = "git";
+      gs = "git status";
+      ga = "git add";
+      gaa = "git add :/";
+      gap = "git add -p";
+      gc = "git commit";
+      gca = "git commit --amend";
+      gh = "git checkout";
+      ghp = "git checkout -p";
+      gd = "git diff";
+      gds = "DELTA_FEATURES=+side-by-side git diff";
+      gdc = "git diff --cached";
+      gdcs = "DELTA_FEATURES=+side-by-side git diff --cached";
+      gf = "git fetch";
+      gl = "git log";
+      glp = "git log -p";
+      glps = "DELTA_FEATURES=+side-by-side git log -p";
+      gp = "git push";
+      gpf = "git push --force-with-lease";
+      gr = "git reset";
+      gra = "git reset :/";
+      grp = "git reset -p";
+      gt = "git stash";
+      gtp = "git stash pop";
+      gu = "git pull";
+
+      cc = "cargo check";
+      cb = "cargo build";
+      cbr = "cargo build --release";
+      ct = "cargo test";
+      cr = "cargo run";
+      crr = "cargo run --release";
+    };
   };
 
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+    enableVteIntegration = true;
+    historyControl = [ "ignoredups" "ignorespace" "erasedups" ];
+    historyIgnore = [ "l" "ls" "p" "gs" "pwd" ];
+    shellOptions = [
+      "autocd"
+      "cdspell"
+      "checkwinsize"
+      "globstar"
+      "histappend"
+    ];
+    initExtra = ''
+      __prompt_setc() {
+        printf "\x1b[38;2;%s;%s;%sm" "$1" "$2" "$3"
+      }
+
+      __prompt_clear() {
+        printf "\x1b[0m"
+      }
+
+      __prompt_branch() {
+        if git rev-parse --git-dir > /dev/null 2>&1; then
+          if [[ -z $(git status --porcelain) ]]; then
+            # Blue for git branch
+            __prompt_setc 131 165 152
+          else
+            # Orange for dirty
+            __prompt_setc 254 128 25
+          fi
+        else
+          # White for no version control
+          __prompt_setc 235 219 178
+        fi
+      }
+
+      __prompt_last() {
+        if [[ "$?" -eq 0 ]]; then
+          # Green for good
+          __prompt_setc 152 151 26
+        else
+          # Red for bad
+          __prompt_setc 251 73 52
+        fi
+      }
+
+      export PROMPT_COMMAND='[[ ''${__prompt_wd:=$PWD} != $PWD ]] && ls; __prompt_wd=$PWD'
+      export PS1='\[$(__prompt_last)\]>\[$(__prompt_clear)$(__prompt_branch)\]> \[$(__prompt_clear)\]'
+      export PS2='>> '
+
+      # https://github.com/junegunn/fzf/wiki/Examples#opening-files
+      # fe [FUZZY PATTERN] - Open the selected file with the default editor
+      #   - Bypass fuzzy finder if there's only one match (--select-1)
+      #   - Exit if there's no match (--exit-0)
+      fe() {
+        local files
+        IFS=$'\n' files=($(fzf --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
+        [[ -n "$files" ]] && ''${EDITOR:-nvim} "''${files[@]}"
+      }
+
+      pas() {
+          pacman -Slq | fzf --multi --preview "pacman -Si {1}" | xargs -ro sudo pacman -Syu
+      }
+      par() {
+          pacman -Qq | fzf --multi --preview "pacman -Qi {1}" | xargs -ro sudo pacman -Rns
+      }
+      yas() {
+          yay -Slq | fzf --multi --preview "yay -Si {1}" | xargs -ro yay -Syu
+      }
+      yar() {
+          yay -Qq | fzf --multi --preview "yay -Qi {1}" | xargs -ro yay -Rns
+      }
+
+      ss() {
+          systemctl list-unit-files \
+              | fzf \
+                  --nth 1 \
+                  --height 50% \
+                  --multi \
+                  --preview "systemctl status {1}" \
+                  --preview-window=wrap \
+              | awk "{print \$1}"
+      }
+      sd() { systemctl disable $(ss); }
+      se() { systemctl enable $(ss); }
+      ssta() { systemctl --user start $(ss); }
+      ssto() { systemctl --user stop $(ss); }
+      sr() { systemctl restart $(ss); }
+
+      sus() {
+          systemctl --user list-unit-files \
+              | fzf \
+                  --nth 1 \
+                  --height 50% \
+                  --multi \
+                  --preview "systemctl --user status {1}" \
+                  --preview-window=wrap \
+              | awk "{print \$1}"
+      }
+      sud() { systemctl --user disable $(sus); }
+      sue() { systemctl --user enable $(sus); }
+      susta() { systemctl --user start $(sus); }
+      susto() { systemctl --user stop $(sus); }
+      sur() { systemctl --user restart $(sus); }
+
+      gbc () {
+        git checkout $(git branch --list | fzf)
+      }
+
+      gbd () {
+        git branch -d $(git branch --list | fzf)
+      }
+
+      gri() {
+        if [ ! -z "$1" ]; then
+          git rebase -i "HEAD~$1"
+        fi
+      }
+
+      bind '"\C-o": "\ec"'
+      bind -x '"\C-e": fe'
+    '';
+  };
 
   programs.fzf = {
     enable = true;
