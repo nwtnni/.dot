@@ -41,7 +41,7 @@
         --remember-session \
         --time \
         --cmd sway
-      '';
+    '';
   };
   services.printing.enable = true;
   services.udev.extraHwdb = "evdev:name:Asus Keyboard:*\n KEYBOARD_KEY_70039=leftctrl";

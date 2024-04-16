@@ -3,24 +3,33 @@
 {
   programs.home-manager.enable = true;
 
-  home.username = "nwtnni";
-  home.homeDirectory = "/home/nwtnni";
-  home.stateVersion = "23.05";
-  home.packages = with pkgs; [
-    alacritty
-    bat
-    delta
-    fd
-    firefox-wayland
-    fzf
-    htop
-    neovim
-    ripgrep
-    shotman
-    tmux
-    wl-clipboard
-    zathura
-  ];
+  home = {
+    username = "nwtnni";
+    homeDirectory = "/home/nwtnni";
+    stateVersion = "23.05";
+    packages = with pkgs; [
+      alacritty
+      bat
+      delta
+      fd
+      firefox-wayland
+      fzf
+      git
+      gthumb
+      htop
+      inkscape
+      neovim
+      nil
+      nixpkgs-fmt
+      ripgrep
+      shotman
+      tmux
+      wl-clipboard
+      zathura
+    ];
+  };
+
+  programs.bash.enable = true;
 
   programs.fzf = {
     enable = true;
@@ -35,74 +44,74 @@
     userEmail = "nwtnni@gmail.com";
     # https://jvns.ca/blog/2024/02/16/popular-git-config-options/#rebase-autostash-true
     extraConfig = {
-        branch.sort = "-commiterdate";
-        commit.verbose = true;
-        core.editor = "vim";
-        diff.algorithm = "histogram";
-        diff.colorMoved = "default";
-        diff.colorMovedWS = "allow-indentation-change";
-        fetch.prune = true;
-        fetch.pruneTags = true;
-        merge.conflictStyle = "zdiff3";
-        pull.rebase = true;
-        push.autoSetupRemote = true;
-        push.followTags = true;
-        rebase.autoSquash = true;
-        rebase.autoStash = true;
-        rerere.enabled = true;
-        tag.sort = "-taggerdate";
+      branch.sort = "-commiterdate";
+      commit.verbose = true;
+      core.editor = "vim";
+      diff.algorithm = "histogram";
+      diff.colorMoved = "default";
+      diff.colorMovedWS = "allow-indentation-change";
+      fetch.prune = true;
+      fetch.pruneTags = true;
+      merge.conflictStyle = "zdiff3";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
+      push.followTags = true;
+      rebase.autoSquash = true;
+      rebase.autoStash = true;
+      rerere.enabled = true;
+      tag.sort = "-taggerdate";
     };
 
     delta = {
-        enable = true;
-        options = {
-            dark = true;
-            hyperlinks = true;
-            line-numbers = true;
-            navigate = true;
-            syntax-theme = "gruvbox";
+      enable = true;
+      options = {
+        dark = true;
+        hyperlinks = true;
+        line-numbers = true;
+        navigate = true;
+        syntax-theme = "gruvbox";
 
-            blame-code-style = "syntax";
-            blame-palette = "#161617 #1b1b1d #2a2a2d #3e3e43";
+        blame-code-style = "syntax";
+        blame-palette = "#161617 #1b1b1d #2a2a2d #3e3e43";
 
-            file-style = "brightwhite";
-            file-decoration-style = "ol ul";
+        file-style = "brightwhite";
+        file-decoration-style = "ol ul";
 
-            hunk-header-decoration-style = "#3e3e43 box ul";
+        hunk-header-decoration-style = "#3e3e43 box ul";
 
-            line-numbers-minus-style = "brightred";
-            line-numbers-plus-style = "brightgreen";
-            line-numbers-left-style = "#3e3e43";
-            line-numbers-right-style = "#3e3e43";
-            line-numbers-zero-style = "#57575f";
+        line-numbers-minus-style = "brightred";
+        line-numbers-plus-style = "brightgreen";
+        line-numbers-left-style = "#3e3e43";
+        line-numbers-right-style = "#3e3e43";
+        line-numbers-zero-style = "#57575f";
 
-            minus-style = "brightred black";
-            minus-emph-style = "black red";
-            plus-style = "brightgreen black";
-            plus-emph-style = "black green";
+        minus-style = "brightred black";
+        minus-emph-style = "black red";
+        plus-style = "brightgreen black";
+        plus-emph-style = "black green";
 
-            map-styles = "\
-                bold purple => syntax purple, \
-                bold blue => syntax blue, \
-                bold cyan => syntax cyan, \
-                bold yellow => syntax yellow";
+        map-styles = "\
+          bold purple => syntax purple, \
+          bold blue => syntax blue, \
+          bold cyan => syntax cyan, \
+          bold yellow => syntax yellow";
 
-            file-added-label = "added:";
-            file-modified-label = "modified:";
-            file-removed-label = "removed:";
-            file-renamed-label = "renamed:";
-            merge-conflict-begin-symbol = "~";
-            merge-conflict-end-symbol = "~";
-            right-arrow = "-> ";
+        file-added-label = "added:";
+        file-modified-label = "modified:";
+        file-removed-label = "removed:";
+        file-renamed-label = "renamed:";
+        merge-conflict-begin-symbol = "~";
+        merge-conflict-end-symbol = "~";
+        right-arrow = "-> ";
 
-            merge-conflict-ours-diff-header-style = "blue bold";
-            merge-conflict-ours-diff-header-decoration-style = "#3e3e43 box";
-            merge-conflict-theirs-diff-header-style = "yellow bold";
-            merge-conflict-theirs-diff-header-decoration-style = "#3e3e43 box";
+        merge-conflict-ours-diff-header-style = "blue bold";
+        merge-conflict-ours-diff-header-decoration-style = "#3e3e43 box";
+        merge-conflict-theirs-diff-header-style = "yellow bold";
+        merge-conflict-theirs-diff-header-decoration-style = "#3e3e43 box";
 
-            whitespace-error-style = "black bold";
-            zero-style = "syntax";
-        };
+        whitespace-error-style = "black bold";
+        zero-style = "syntax";
+      };
     };
   };
 

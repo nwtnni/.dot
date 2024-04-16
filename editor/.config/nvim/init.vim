@@ -283,7 +283,8 @@ autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 autocmd BufWritePre *.ml lua vim.lsp.buf.format()
 autocmd BufWritePre *.mli lua vim.lsp.buf.format()
 autocmd BufWritePre *.py lua vim.lsp.buf.format()
-autocmd BufWritePre *.rs lua vim.lsp.buf.format({ async = false })
+autocmd BufWritePre *.rs lua vim.lsp.buf.format()
+autocmd BufWritePre *.nix lua vim.lsp.buf.format()
 " autocmd CursorHold  * lua vim.lsp.buf.document_highlight()
 " autocmd CursorHoldI * lua vim.lsp.buf.document_highlight()
 " autocmd CursorMoved * lua vim.lsp.buf.clear_references()
@@ -293,6 +294,23 @@ lua <<EOF
 -- require("coq-lsp").setup({})
 
 require("lspconfig").clangd.setup({})
+
+-- https://github.com/oxalica/nil/blob/059d33a24bb76d2048740bcce936362bf54b5bc9/dev/nvim-lsp.nix
+require("lspconfig").nil_ls.setup({
+  settings = {
+    ["nil"] = {
+      formatting = {
+        command = { "nixpkgs-fmt" }
+      },
+      nix = {
+        maxMemoryMB = 16384,
+        flake = {
+          autoEvalInputs = true
+        }
+      }
+    }
+  }
+})
 
 require("lspconfig").ocamllsp.setup({})
 

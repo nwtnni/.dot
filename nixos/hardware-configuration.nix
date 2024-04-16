@@ -14,25 +14,29 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "none";
+    {
+      device = "none";
       fsType = "tmpfs";
       options = [ "defaults" "size=4G" "mode=755" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-label/SYSTEM";
+    {
+      device = "/dev/disk/by-label/SYSTEM";
       fsType = "vfat";
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-label/NIXOS-STORE";
+    {
+      device = "/dev/disk/by-label/NIXOS-STORE";
       fsType = "ext4";
       neededForBoot = true;
       options = [ "noatime" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-label/NIXOS-HOME";
+    {
+      device = "/dev/disk/by-label/NIXOS-HOME";
       fsType = "ext4";
     };
 
