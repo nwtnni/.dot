@@ -15,17 +15,13 @@
       eza
       fd
       firefox-wayland
-      fzf
-      git
       gthumb
       htop
       inkscape
-      neovim
       nil
       nixpkgs-fmt
       ripgrep
       shotman
-      tmux
       wl-clipboard
       zathura
     ];
@@ -212,7 +208,6 @@
     extraConfig = {
       branch.sort = "-commiterdate";
       commit.verbose = true;
-      core.editor = "vim";
       diff.algorithm = "histogram";
       diff.colorMoved = "default";
       diff.colorMovedWS = "allow-indentation-change";
@@ -331,6 +326,11 @@
       bind-key -T copy-mode-vi 'C-l' select-pane -R
       bind-key -T copy-mode-vi 'C-\' select-pane -l
     '';
+  };
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
   };
 
   wayland.windowManager.sway = {

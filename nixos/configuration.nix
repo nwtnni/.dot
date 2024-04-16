@@ -108,7 +108,5 @@
       customPaneNavigationAndResize = true;
       historyLimit = 10000;
     };
-
-    vim.defaultEditor = true;
   };
 }
