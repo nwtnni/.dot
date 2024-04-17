@@ -45,7 +45,7 @@ TERM = "xterm-256color"
 size = 10.0
 
 [font.bold]
-family = "Iosevka"
+family = "Iosevka Nerd Font"
 style = "Bold"
 
 [font.glyph_offset]
@@ -53,11 +53,11 @@ x = 0
 y = 0
 
 [font.italic]
-family = "Iosevka"
+family = "Iosevka Nerd Font"
 style = "Italic"
 
 [font.normal]
-family = "Iosevka"
+family = "Iosevka Nerd Font"
 style = "Regular"
 
 [font.offset]

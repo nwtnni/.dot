@@ -22,6 +22,11 @@
       shotman
       wl-clipboard
       zathura
+      (nerdfonts.override { fonts = [ "Iosevka" ]; })
+      liberation_ttf
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
     ];
 
     shellAliases = {
@@ -65,6 +70,8 @@
       crr = "cargo run --release";
     };
   };
+
+  fonts.fontconfig.enable = true;
 
   programs.bash = {
     enable = true;
@@ -206,6 +213,7 @@
       "--git"
       "--group-directories-first"
       "--header"
+      "--icons"
       "--mounts"
       "--smart-group"
     ];
