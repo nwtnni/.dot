@@ -370,6 +370,7 @@
     config = {
       modifier = "Mod1";
       terminal = "alacritty";
+      defaultWorkspace = "workspace number 1";
     };
 
     extraConfig = ''
