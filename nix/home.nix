@@ -249,6 +249,14 @@
       tag.sort = "-taggerdate";
     };
 
+    ignores = [
+      ".DS_Store"
+      ".direnv"
+      ".envrc"
+      "*.tags"
+      "*.swp"
+    ];
+
     delta = {
       enable = true;
       options = {
