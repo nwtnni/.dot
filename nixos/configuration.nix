@@ -77,7 +77,6 @@
     noto-fonts-emoji
   ];
 
-  users.defaultUserShell = pkgs.bash;
   users.mutableUsers = false;
   users.extraUsers = {
     root = {
@@ -89,24 +88,6 @@
       description = "Newton Ni";
       extraGroups = [ "wheel" "networkmanager" ];
       initialHashedPassword = "$6$wwAkpT1c0DOGE34/$ssPWCcxWnpjMCikLllHlKCO0HmU03jqg/jR5BKBFzyi3NdP29zXGWTJ6Jo3zarA.4QMZ9OUeqqW8myQxHXPmJ0";
-    };
-  };
-
-  programs = {
-    direnv.enable = true;
-
-    git.enable = true;
-
-    ssh.startAgent = true;
-
-    sway.enable = true;
-
-    tmux = {
-      enable = true;
-      shortcut = "a";
-      keyMode = "vi";
-      customPaneNavigationAndResize = true;
-      historyLimit = 10000;
     };
   };
 }

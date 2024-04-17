@@ -193,6 +193,11 @@
     '';
   };
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   programs.fzf = {
     enable = true;
     defaultCommand = "fd --type f";
@@ -278,6 +283,7 @@
 
   programs.tmux = {
     enable = true;
+    customPaneNavigationAndResize = true;
     historyLimit = 10000;
     keyMode = "vi";
     mouse = true;
@@ -331,6 +337,10 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+  };
+
+  services.ssh-agent = {
+    enable = true;
   };
 
   wayland.windowManager.sway = {
