@@ -11,8 +11,6 @@
     packages = with pkgs; [
       alacritty
       bat
-      delta
-      eza
       fd
       firefox-wayland
       gthumb
@@ -28,8 +26,7 @@
 
     shellAliases = {
       cat = "bat";
-      l = "eza --classify";
-      ll = "eza --long --classify";
+      l = "eza";
       p = "cd ..";
       vi = "nvim";
       vim = "nvim";
@@ -115,7 +112,7 @@
         fi
       }
 
-      export PROMPT_COMMAND='[[ ''${__prompt_wd:=$PWD} != $PWD ]] && ls; __prompt_wd=$PWD'
+      export PROMPT_COMMAND='[[ ''${__prompt_wd:=$PWD} != $PWD ]] && shopt -sq expand_aliases && ls; __prompt_wd=$PWD'
       export PS1='\[$(__prompt_last)\]>\[$(__prompt_clear)$(__prompt_branch)\]> \[$(__prompt_clear)\]'
       export PS2='>> '
 
@@ -191,11 +188,27 @@
       bind '"\C-o": "\ec"'
       bind -x '"\C-e": fe'
     '';
+
+    profileExtra = ''
+      export LS_COLORS="${builtins.readFile ../shell/.ls-colors}";
+    '';
   };
 
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  programs.eza = {
+    enable = true;
+    extraOptions = [
+      "--classify"
+      "--git"
+      "--group-directories-first"
+      "--header"
+      "--mounts"
+      "--smart-group"
+    ];
   };
 
   programs.fzf = {
