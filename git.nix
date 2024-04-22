@@ -97,7 +97,7 @@
         hyperlinks = true;
         line-numbers = true;
         navigate = true;
-        syntax-theme = lib.optionalAttrs (config.programs.bat.enable) "gruvbox";
+        syntax-theme = lib.optionalAttrs config.programs.bat.enable config.programs.bat.config.theme;
 
         blame-code-style = "syntax";
         blame-palette = "#161617 #1b1b1d #2a2a2d #3e3e43";

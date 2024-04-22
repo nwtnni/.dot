@@ -3,6 +3,7 @@
 {
   imports = [
     ./git.nix
+    ./bat.nix
   ];
 
   programs.home-manager.enable = true;
