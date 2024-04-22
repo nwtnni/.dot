@@ -4,6 +4,7 @@
   imports = [
     ./git.nix
     ./bat.nix
+    ./eza.nix
   ];
 
   programs.home-manager.enable = true;
@@ -170,18 +171,6 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-  };
-
-  programs.eza = {
-    enable = true;
-    extraOptions = [
-      "--classify"
-      "--group-directories-first"
-      "--header"
-      "--icons"
-      "--mounts"
-      "--smart-group"
-    ];
   };
 
   programs.fzf = {
