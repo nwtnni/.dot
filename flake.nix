@@ -16,7 +16,7 @@
         ./nixos/configuration.nix
         home-manager.nixosModules.home-manager
         {
-          home-manager.users.nwtnni = import ./nix/home.nix;
+          home-manager.users.nwtnni = import ./home.nix;
         }
       ];
     };

@@ -197,7 +197,7 @@
     '';
 
     profileExtra = ''
-      export LS_COLORS="${builtins.readFile ../shell/.ls-colors}";
+      export LS_COLORS="${builtins.readFile shell/.ls-colors}";
     '';
   };
 
