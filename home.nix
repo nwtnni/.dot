@@ -26,7 +26,6 @@
       inkscape
       nil
       nixpkgs-fmt
-      ripgrep
       shotman
       wl-clipboard
       zathura
