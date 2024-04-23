@@ -4,6 +4,7 @@
   imports = [
     ./bat.nix
     ./eza.nix
+    ./fd.nix
     ./fzf.nix
     ./git.nix
   ];
@@ -17,7 +18,6 @@
 
     packages = with pkgs; [
       alacritty
-      fd
       file
       firefox-wayland
       gthumb
