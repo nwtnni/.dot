@@ -2,9 +2,10 @@
 
 {
   imports = [
-    ./git.nix
     ./bat.nix
     ./eza.nix
+    ./fzf.nix
+    ./git.nix
   ];
 
   programs.home-manager.enable = true;
@@ -104,16 +105,6 @@
       export PS1='\[$(__prompt_last)\]>\[$(__prompt_clear)$(__prompt_branch)\]> \[$(__prompt_clear)\]'
       export PS2='>> '
 
-      # https://github.com/junegunn/fzf/wiki/Examples#opening-files
-      # fe [FUZZY PATTERN] - Open the selected file with the default editor
-      #   - Bypass fuzzy finder if there's only one match (--select-1)
-      #   - Exit if there's no match (--exit-0)
-      fe() {
-        local files
-        IFS=$'\n' files=($(fzf --query="$1" --select-1 --exit-0 --preview '[[ $(file --mime {}) =~ binary ]] && echo "" || bat --theme gruvbox --style full --color always {} 2> /dev/null'))
-        [[ -n "$files" ]] && ''${EDITOR:-nvim} "''${files[@]}"
-      }
-
       pas() {
           pacman -Slq | fzf --multi --preview "pacman -Si {1}" | xargs -ro sudo pacman -Syu
       }
@@ -158,9 +149,6 @@
       susta() { systemctl --user start $(sus); }
       susto() { systemctl --user stop $(sus); }
       sur() { systemctl --user restart $(sus); }
-
-      bind '"\C-o": "\ec"'
-      bind -x '"\C-e": fe'
     '';
 
     profileExtra = ''
@@ -171,13 +159,6 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-  };
-
-  programs.fzf = {
-    enable = true;
-    defaultCommand = "fd --type f";
-    changeDirWidgetCommand = "fd --type d";
-    fileWidgetCommand = "fd --type f";
   };
 
   programs.tmux = {
