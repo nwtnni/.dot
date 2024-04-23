@@ -17,10 +17,11 @@
 
     packages = with pkgs; [
       alacritty
-      bat
       fd
+      file
       firefox-wayland
       gthumb
+      hexyl
       htop
       inkscape
       nil
