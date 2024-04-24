@@ -7,6 +7,8 @@
     ./fd.nix
     ./fzf.nix
     ./git.nix
+    ./neovim.nix
+    ./ripgrep.nix
   ];
 
   programs.home-manager.enable = true;
@@ -212,11 +214,6 @@
       bind-key -T copy-mode-vi 'C-l' select-pane -R
       bind-key -T copy-mode-vi 'C-\' select-pane -l
     '';
-  };
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
   };
 
   services.ssh-agent = {
