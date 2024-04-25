@@ -47,8 +47,8 @@ in
   xdg.configFile."nvim/init.lua" = {
     text = ''
       -- Include tree-sitter and lazy-nvim in runtimepath
-      vim.opt.rtp:append([[${parsers}]])
-      vim.opt.rtp:append([[${pkgs.vimPlugins.lazy-nvim}]])
+      vim.opt.rtp:prepend([[${parsers}]])
+      vim.opt.rtp:prepend([[${pkgs.vimPlugins.lazy-nvim}]])
 
       require("lazy").setup(
         {
