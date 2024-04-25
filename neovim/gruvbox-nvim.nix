@@ -6,7 +6,7 @@ inline:
   opts = {
     contrast = "soft";
   };
-  config = inline ''
+  config = inline /* lua */ ''
     function(plugin, opts)
       require(plugin.main).setup(opts)
       vim.cmd("colorscheme gruvbox")

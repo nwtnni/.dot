@@ -24,14 +24,14 @@ let
 	  (indent 4)
           lib.generators.mkLuaInline
         ]);
-        spec = import (root + "/${path}") inline;
         name = (lib.removeSuffix ".nix" path);
         plugin = lib.getAttr name pkgs.vimPlugins;
-        default = { inherit name; dir = plugin; };
+        spec = import (root + "/${path}") inline;
+        specs = lib.generators.toLua { } (spec // { inherit name; dir = plugin; });
       in
       {
         plugins = plugin;
-        specs = lib.generators.toLua { } (spec // default);
+	specs = builtins.replaceStrings [ "<TREE_SITTER_PARSERS>" ] [ "${parsers}" ] specs;
       }
     ))
     lib.zipAttrs
