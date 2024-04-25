@@ -13,6 +13,8 @@
 
   programs.home-manager.enable = true;
 
+  xdg.enable = true;
+
   home = {
     username = "nwtnni";
     homeDirectory = "/home/nwtnni";
