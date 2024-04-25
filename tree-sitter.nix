@@ -1,7 +1,7 @@
-{ symlinkJoin, vimPlugins, ... }:
+{ neovimUtils, pkgs, symlinkJoin, vimPlugins, ... }:
 symlinkJoin {
   name = "tree-sitter-parsers";
-  paths = with vimPlugins.nvim-treesitter.builtGrammars; [
+  paths = builtins.map neovimUtils.grammarToPlugin (with vimPlugins.nvim-treesitter.builtGrammars; [
     asm
     bash
     bibtex
@@ -58,5 +58,5 @@ symlinkJoin {
     vimdoc
     xml
     yaml
-  ];
+  ]);
 }
