@@ -27,7 +27,7 @@ let
         name = (lib.removeSuffix ".nix" path);
         plugin = lib.getAttr name pkgs.vimPlugins;
         spec = import (root + "/${path}") inline;
-        specs = lib.generators.toLua { } (spec // { inherit name; dir = plugin; });
+        specs = lib.generators.toLua { } ({ inherit name; dir = plugin; } // spec);
       in
       {
         plugins = plugin;
@@ -38,17 +38,27 @@ let
   ];
 in
 {
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  };
-
   home.packages = [ pkgs.neovim-unwrapped ];
+  home.sessionVariables.EDITOR = "nvim";
 
   xdg.configFile."nvim/init.lua" = {
     text = ''
-      -- Include tree-sitter and lazy-nvim in runtimepath
-      vim.opt.rtp:prepend([[${parsers}]])
-      vim.opt.rtp:prepend([[${pkgs.vimPlugins.lazy-nvim}]])
+      vim.opt.rtp = {
+        -- Use nvim-treesitter parsers for ABI compatibility
+        [[${parsers}]],
+
+        -- Manage all plugin loading with lazy.nvim
+        [[${pkgs.vimPlugins.lazy-nvim}]],
+
+        -- Include user configuration
+        vim.fn.stdpath("config"),
+
+        -- Include bundled runtime
+        [[${pkgs.neovim-unwrapped}/share/nvim/runtime]],
+      }
+
+      -- Packpath is not used by lazy.nvim
+      vim.opt.packpath = {}
 
       require("lazy").setup(
         {

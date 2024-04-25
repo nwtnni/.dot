@@ -27,9 +27,17 @@ vim.o.incsearch = true
 vim.o.inccommand=nosplit
 
 -- Persistence
-vim.o.backupdir = vim.env.XDG_STATE_HOME .. "/nvim/backup"
-vim.o.directory = vim.env.XDG_STATE_HOME .. "/nvim/swap"
-vim.o.undodir = vim.env.XDG_STATE_HOME .. "/nvim/undo"
+--
+-- > For Unix and Win32, if a directory ends in two path separators "//",
+-- > the swap file name will be built from the complete path to the file
+-- > with all path separators replaced by percent '%' signs (including
+-- > the colon following the drive letter on Win32). This will ensure
+-- > file name uniqueness in the preserve directory.
+-- >
+-- > - :help 'directory'
+vim.o.backupdir = vim.env.XDG_STATE_HOME .. "/nvim/backup//"
+vim.o.directory = vim.env.XDG_STATE_HOME .. "/nvim/swap//"
+vim.o.undodir = vim.env.XDG_STATE_HOME .. "/nvim/undo//"
 vim.o.undofile = true;
 
 -- Miscellaneous
