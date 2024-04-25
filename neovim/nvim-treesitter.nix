@@ -1,7 +1,7 @@
 inline:
 {
   main = "nvim-treesitter.configs";
-  lazy = false; 
+  lazy = false;
   opts = {
     auto_install = false;
     # Hack: need to inject nix store path here

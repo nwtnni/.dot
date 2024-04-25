@@ -20,8 +20,8 @@ let
     (builtins.map (path:
       let
         inline = expr: (lib.pipe expr [
-	  (expr: "\n" + expr)
-	  (indent 4)
+          (expr: "\n" + expr)
+          (indent 4)
           lib.generators.mkLuaInline
         ]);
         name = (lib.removeSuffix ".nix" path);
@@ -31,7 +31,7 @@ let
       in
       {
         plugins = plugin;
-	specs = builtins.replaceStrings [ "<TREE_SITTER_PARSERS>" ] [ "${parsers}" ] specs;
+        specs = builtins.replaceStrings [ "<TREE_SITTER_PARSERS>" ] [ "${parsers}" ] specs;
       }
     ))
     lib.zipAttrs
