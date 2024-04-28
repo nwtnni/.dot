@@ -3,11 +3,16 @@ return {
   main = "gruvbox",
   lazy = false,
   priority = 1000,
-  opts = {
-    contrast = "soft",
-  },
   config = function(plugin, opts)
-    require(plugin.main).setup(opts)
+    local gruvbox = require(plugin.main)
+    local bg = gruvbox.palette["dark0"]
+    gruvbox.setup({
+      overrides = {
+        SignColumn = {
+          bg = bg
+        },
+      },
+    })
     vim.cmd("colorscheme gruvbox")
   end,
 }
