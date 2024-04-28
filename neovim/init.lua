@@ -1,3 +1,38 @@
+vim.opt.packpath = {}
+vim.opt.rtp = {
+  vim.fn.stdpath("config"),
+  vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
+  vim.fn.stdpath("data") .. "/lazy/tree-sitter-parsers",
+  vim.env.VIMRUNTIME,
+}
+
+require("lazy").setup(
+  "plugins",
+  {
+    change_detection = {
+      enabled = true,
+    },
+    checker = {
+      enabled = false,
+    },
+    defaults = {
+      lazy = true,
+    },
+    install = {
+      missing = false,
+    },
+    performance = {
+      reset_packpath = false,
+      rtp = {
+        reset = false,
+      },
+    },
+    readme = {
+      enabled = false,
+    },
+  }
+)
+
 vim.o.compatible = false
 
 -- Indentation

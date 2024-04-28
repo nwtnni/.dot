@@ -1,0 +1,16 @@
+diff --git a/lua/lazy/core/util.lua b/lua/lazy/core/util.lua
+index e51e670..4dc4588 100644
+--- a/lua/lazy/core/util.lua
++++ b/lua/lazy/core/util.lua
+@@ -187,7 +187,10 @@ function M.ls(path, fn)
+     -- HACK: type is not always returned due to a bug in luv,
+     -- so fecth it with fs_stat instead when needed.
+     -- see https://github.com/folke/lazy.nvim/issues/306
+-    if fn(fname, name, t or vim.uv.fs_stat(fname).type) == false then
++    if not t or t == "link" then
++      t = vim.uv.fs_stat(fname).type
++    end
++    if fn(fname, name, t) == false then
+       break
+     end
+   end

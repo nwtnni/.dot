@@ -1,7 +1,6 @@
-{ neovimUtils, pkgs, symlinkJoin, vimPlugins, ... }:
-symlinkJoin {
-  name = "tree-sitter-parsers";
-  paths = builtins.map neovimUtils.grammarToPlugin (with vimPlugins.nvim-treesitter.builtGrammars; [
+{ lib, runCommandLocal, vimPlugins, ... }:
+let
+  parserDerivations = with vimPlugins.nvim-treesitter.builtGrammars; [
     asm
     bash
     bibtex
@@ -58,5 +57,20 @@ symlinkJoin {
     vimdoc
     xml
     yaml
-  ]);
-}
+  ];
+
+  parserNames = lib.pipe parserDerivations [
+    (builtins.map lib.getName)
+    (builtins.map (lib.removeSuffix "-grammar"))
+  ];
+in
+runCommandLocal "tree-sitter-parsers" {
+  inherit parserDerivations parserNames;
+  __structuredAttrs = true;
+} /* bash */ ''
+  local directory="$out/parser"
+  mkdir -p "$directory"
+  for i in "''${!parserDerivations[@]}"; do
+    ln -s "''${parserDerivations[i]}/parser" "$directory/''${parserNames[i]}.so"
+  done
+''

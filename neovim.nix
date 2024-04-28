@@ -1,82 +1,49 @@
 { config, lib, pkgs, ... }:
 let
-  parsers = pkgs.callPackage (import ./tree-sitter.nix) { };
-
-  space = n: lib.strings.replicate n " ";
-  indent = n: s: lib.pipe s [
-    (builtins.split "\n")
-    (builtins.filter builtins.isString)
-    (builtins.map (line: (space n) + line))
-    (builtins.concatStringsSep "\n")
+  # Replace upstream bundled tree-sitter parsers with nvim-treesitter
+  # Also remove support for NVIM_SYSTEM_RPLUGIN_MANIFEST.
+  neovim = lib.pipe pkgs.neovim-unwrapped [
+      (neovim: neovim.override { treesitter-parsers = { }; })
+      (neovim: neovim.overrideAttrs ({ patches = [ ]; }))
   ];
 
-  root = ./neovim;
-
-  # Convert each .nix file into (1) a nixpkgs package and (2) a lazy.nvim spec.
-  data = lib.pipe (builtins.readDir root) [
-    (lib.filterAttrs (_: kind: kind == "regular"))
+  # Convert each .lua file into a nixpkgs package
+  plugins = lib.pipe (builtins.readDir ./neovim/lua/plugins) [
     builtins.attrNames
-    (builtins.filter (lib.hasSuffix "nix"))
-    (builtins.map (path:
-      let
-        inline = expr: (lib.pipe expr [
-          (expr: "\n" + expr)
-          (indent 4)
-          lib.generators.mkLuaInline
-        ]);
-        name = (lib.removeSuffix ".nix" path);
-        plugin = lib.getAttr name pkgs.vimPlugins;
-        spec = import (root + "/${path}") inline;
-        specs = lib.generators.toLua { } ({ inherit name; dir = plugin; } // spec);
-      in
-      {
-        plugins = plugin;
-        specs = builtins.replaceStrings [ "<TREE_SITTER_PARSERS>" ] [ "${parsers}" ] specs;
-      }
-    ))
-    lib.zipAttrs
+    (builtins.map (lib.removeSuffix ".lua"))
+    (builtins.map (name: {
+      name = builtins.replaceStrings [ "-nvim" ] [".nvim" ] name;
+      path = lib.getAttr name pkgs.vimPlugins;
+    }))
+  ] ++ [
+    {
+      name = "lazy.nvim";
+      path = pkgs.vimPlugins.lazy-nvim.overrideAttrs (prevAttrs: {
+        patches = prevAttrs.patches ++ [ ./neovim/lazy-nvim.patch ];
+      });
+    }
+    {
+      name = "tree-sitter-parsers";
+      path = pkgs.callPackage (import ./neovim/tree-sitter.nix) {};
+    }
   ];
 in
 {
-  home.packages = [ pkgs.neovim-unwrapped ];
+  home.packages = [ neovim ];
   home.sessionVariables.EDITOR = "nvim";
 
-  xdg.configFile."nvim/init.lua" = {
-    text = ''
-      vim.opt.rtp = {
-        -- Use nvim-treesitter parsers for ABI compatibility
-        [[${parsers}]],
+  xdg.configFile.nvim-init = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/init.lua";
+    target = "nvim/init.lua";
+  };
 
-        -- Manage all plugin loading with lazy.nvim
-        [[${pkgs.vimPlugins.lazy-nvim}]],
+  xdg.configFile.nvim-lazy-configuration = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/lua";
+    target = "nvim/lua";
+  };
 
-        -- Include user configuration
-        vim.fn.stdpath("config"),
-
-        -- Include bundled runtime
-        [[${pkgs.neovim-unwrapped}/share/nvim/runtime]],
-      }
-
-      -- Packpath is not used by lazy.nvim
-      vim.opt.packpath = {}
-
-      require("lazy").setup(
-        {
-      ${builtins.concatStringsSep ",\n" (builtins.map (indent 4) data.specs) }
-        },
-        {
-          change_detection = { enabled = false },
-          defaults = { lazy = true },
-          install = { missing = false },
-          performance = {
-            reset_packpath = false,
-            rtp = { reset = false },
-          },
-          readme = { enabled = false },
-        }
-      )
-
-      ${builtins.readFile ./neovim/init.lua}
-    '';
+  xdg.dataFile.nvim-lazy-plugins = {
+    source = pkgs.linkFarm "nvim-lazy" (builtins.trace (builtins.typeOf (builtins.elemAt plugins 0)) plugins);
+    target = "nvim/lazy";
   };
 }
