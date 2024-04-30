@@ -13,7 +13,7 @@ return {
     "InsertEnter",
     "CmdlineEnter",
   },
-  config = function(plugin, opts)
+  config = function(plugin)
     local cmp = require(plugin.main)
     local snippy = require("snippy")
 
