@@ -29,6 +29,13 @@ return {
             callSnippet = "Replace",
             keywordSnippet = "Replace",
           },
+          format = {
+            enable = true,
+            defaultConfig = {
+              indent_style = "space",
+              indent_size = "2",
+            },
+          },
           diagnostics = {
             libraryFiles = "Disable",
           },

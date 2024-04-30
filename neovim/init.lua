@@ -33,8 +33,6 @@ require("lazy").setup(
   }
 )
 
-vim.o.compatible = false
-
 -- Disable provider warnings
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
@@ -42,13 +40,29 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 
 -- Indentation
+local function set_indent(width)
+  vim.o.tabstop = width
+  vim.o.softtabstop = width
+  vim.o.shiftwidth = width
+end
+
 vim.o.autoindent = true
 vim.o.smartindent = true
 vim.o.expandtab = true
-vim.o.tabstop = 4
-vim.o.softtabstop = 4
-vim.o.shiftwidth = 4
 vim.o.shiftround = true
+set_indent(4)
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("indent-two", { clear = true }),
+  callback = function()
+    set_indent(2)
+  end,
+  pattern = {
+    "lua",
+    "nix",
+    "vim",
+  },
+})
 
 -- Status
 vim.o.completeopt = "menu,menuone,preview"
@@ -65,7 +79,7 @@ vim.o.signcolumn = "auto:3"
 vim.o.smartcase = true
 vim.o.hlsearch = true
 vim.o.incsearch = true
-vim.o.inccommand="nosplit"
+vim.o.inccommand = "nosplit"
 
 -- Persistence
 --

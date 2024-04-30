@@ -45,7 +45,7 @@ return {
       lspconfig[server].setup(configuration)
     end
 
-    local pattern = {}
+    local pattern = { "*.lua" }
     for _, ft in ipairs(plugin.ft) do
       table.insert(pattern, "*." .. ft)
     end
