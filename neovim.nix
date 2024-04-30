@@ -12,7 +12,7 @@ let
     builtins.attrNames
     (builtins.map (lib.removeSuffix ".lua"))
     (builtins.map (name: {
-      name = builtins.replaceStrings [ "-nvim" ] [".nvim" ] name;
+      name = if lib.hasSuffix "-nvim" name then builtins.replaceStrings [ "-nvim" ] [".nvim" ] name else name;
       path = lib.getAttr name pkgs.vimPlugins;
     }))
   ] ++ [
@@ -29,7 +29,10 @@ let
   ];
 in
 {
-  home.packages = [ neovim ];
+  home.packages = with pkgs; [
+    nixd
+    nixpkgs-fmt
+  ] ++ [ neovim ];
   home.sessionVariables.EDITOR = "nvim";
 
   xdg.configFile.nvim-init = {

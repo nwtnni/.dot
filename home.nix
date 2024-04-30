@@ -28,8 +28,6 @@
       hexyl
       htop
       inkscape
-      nil
-      nixpkgs-fmt
       shotman
       wl-clipboard
       zathura

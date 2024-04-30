@@ -51,7 +51,7 @@ vim.o.shiftwidth = 4
 vim.o.shiftround = true
 
 -- Status
-vim.o.completeopt = "menuone"
+vim.o.completeopt = "menu,menuone,preview"
 vim.o.display = "lastline"
 vim.o.laststatus = 2
 vim.o.number = true
