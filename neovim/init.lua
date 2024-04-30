@@ -65,7 +65,7 @@ vim.o.signcolumn = "auto:3"
 vim.o.smartcase = true
 vim.o.hlsearch = true
 vim.o.incsearch = true
-vim.o.inccommand=nosplit
+vim.o.inccommand="nosplit"
 
 -- Persistence
 --
