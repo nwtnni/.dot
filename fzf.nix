@@ -21,9 +21,9 @@
       };
     }
     (lib.mkIf config.programs.fd.enable {
-      defaultCommand = "fd --type f";
-      changeDirWidgetCommand = "fd --type d";
-      fileWidgetCommand = "fd --type f";
+      defaultCommand = "fd --type f --hidden";
+      changeDirWidgetCommand = "fd --type d --hidden";
+      fileWidgetCommand = "fd --type f --hidden";
     })
   ];
 
