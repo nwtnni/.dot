@@ -2,6 +2,7 @@ return {
   "hrsh7th/nvim-cmp",
   main = "cmp",
   dependencies = {
+    "cmp-buffer",
     "cmp-nvim-lsp",
     "cmp-snippy",
   },

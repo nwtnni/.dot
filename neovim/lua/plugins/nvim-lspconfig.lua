@@ -1,11 +1,12 @@
 return {
   "neovim/nvim-lspconfig",
   lazy = false,
+  main = "lspconfig",
   dependencies = {
     "cmp-nvim-lsp",
   },
   config = function(plugin)
-    local lspconfig = require("lspconfig")
+    local lspconfig = require(plugin.main)
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
     lspconfig["nixd"].setup({
