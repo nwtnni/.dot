@@ -10,7 +10,7 @@ require("lazy").setup(
   "plugins",
   {
     change_detection = {
-      enabled = true,
+      enabled = false,
     },
     checker = {
       enabled = false,

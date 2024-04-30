@@ -1,10 +1,18 @@
 return {
   "neovim/nvim-lspconfig",
-  lazy = false,
   main = "lspconfig",
+  ft = {
+    "nix",
+  },
+  cmd = {
+    "LspInfo",
+    "LspLog",
+    "LspStart",
+    "LspStop",
+    "LspRestart",
+  },
   dependencies = {
     "cmp-nvim-lsp",
-    "neodev.nvim",
   },
   config = function(plugin)
     local configurations = {
@@ -23,32 +31,7 @@ return {
           }
         end
       },
-      lua_ls = {
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = "Replace",
-              keywordSnippet = "Replace",
-            },
-            diagnostics = {
-              libraryFiles = "Disable",
-            },
-          },
-        },
-      },
     }
-
-    -- Configure Lua language server for Neovim configuration
-    require("neodev").setup({
-      override = function(root_dir, library)
-        if root_dir:match(".*/.dot/neovim/.*") == 1 then
-          library.enabled = true
-          library.runtime = true
-          library.types = true
-          library.plugins = true
-        end
-      end,
-    })
 
     local lspconfig = require(plugin.main)
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
