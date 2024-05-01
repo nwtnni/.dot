@@ -53,7 +53,7 @@ vim.o.shiftround = true
 set_indent(4)
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("indent-two", { clear = true }),
+  group = vim.api.nvim_create_augroup("lsp-indent", { clear = true }),
   callback = function()
     set_indent(2)
   end,
@@ -65,15 +65,23 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Status
+local function toggle_status()
+  if vim.o.number then
+    vim.o.laststatus = 0
+    vim.o.number = false
+    vim.o.ruler = false
+  else
+    vim.o.laststatus = 2
+    vim.o.number = true
+    vim.o.ruler = true
+  end
+end
+
 vim.o.completeopt = "menu,menuone,preview"
-vim.o.display = "lastline"
-vim.o.laststatus = 2
-vim.o.number = true
-vim.o.ruler = true
 vim.o.scrolloff = 5
 vim.o.showcmd = true
 vim.o.showmode = true
-vim.o.signcolumn = "auto:3"
+vim.o.signcolumn = "yes:1"
 
 -- Search
 vim.o.smartcase = true
@@ -105,3 +113,17 @@ vim.o.list = true;
 vim.o.listchars = "trail:·";
 vim.cmd("highlight TrailingWhitespace ctermbg=red guibg=#592929")
 vim.cmd("match TrailingWhitespace /\\s\\+$/")
+
+-- Keybindings
+vim.keymap.set("n", "<SPACE>w", "<CMD>update<CR>", { silent = true, unique = true })
+vim.keymap.set("n", "<SPACE>s", toggle_status, { silent = true, unique = true })
+vim.keymap.set("n", "<SPACE>n", "<CMD>set nohlsearch<CR>", { silent = true, unique = true })
+
+vim.keymap.set("i", "jf", "<ESC>", { silent = true, unique = true })
+vim.keymap.set("i", "fj", "<ESC>", { silent = true, unique = true })
+
+vim.keymap.del("n", "<C-l>")
+vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true, unique = true })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true, unique = true })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true, unique = true })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true, unique = true })
