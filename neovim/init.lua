@@ -128,17 +128,13 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Status
 local function toggle_status()
-  if vim.o.number then
-    vim.o.laststatus = 0
-    vim.o.number = false
-    vim.o.ruler = false
-  else
-    vim.o.laststatus = 2
-    vim.o.number = true
-    vim.o.ruler = true
-  end
+  vim.o.laststatus = 2 - vim.o.laststatus
+  vim.o.number = not vim.o.number
+  vim.o.ruler = not vim.o.ruler
 end
 
+vim.o.laststatus = 0
+vim.o.ruler = false
 vim.o.completeopt = "menu,menuone,preview"
 vim.o.scrolloff = 5
 vim.o.showcmd = true
@@ -146,6 +142,10 @@ vim.o.showmode = true
 vim.o.signcolumn = "yes:1"
 
 -- Search
+local function toggle_search()
+  vim.o.hlsearch = not vim.o.hlsearch
+end
+
 vim.o.smartcase = true
 vim.o.hlsearch = true
 vim.o.incsearch = true
@@ -177,9 +177,10 @@ vim.cmd("highlight TrailingWhitespace ctermbg=red guibg=#592929")
 vim.cmd("match TrailingWhitespace /\\s\\+$/")
 
 -- Keybindings
-vim.keymap.set("n", "<SPACE>w", "<CMD>update<CR>", { silent = true, unique = true })
+vim.keymap.set("n", "<CR>", "<CMD>update<CR>", { silent = true, unique = true })
+
 vim.keymap.set("n", "<SPACE>s", toggle_status, { silent = true, unique = true })
-vim.keymap.set("n", "<SPACE>n", "<CMD>set nohlsearch<CR>", { silent = true, unique = true })
+vim.keymap.set("n", "<SPACE>n", toggle_search, { silent = true, unique = true })
 
 vim.keymap.set("i", "jf", "<ESC>", { silent = true, unique = true })
 vim.keymap.set("i", "fj", "<ESC>", { silent = true, unique = true })
