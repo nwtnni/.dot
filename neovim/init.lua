@@ -6,6 +6,68 @@ vim.opt.rtp = {
   vim.env.VIMRUNTIME,
 }
 
+Personal = {}
+
+-- Hijack nvim-lspconfig's global on_setup hook:
+--
+-- https://github.com/neovim/nvim-lspconfig/blob/aa5f4f4ee10b2688fb37fa46215672441d5cd5d9/lua/lspconfig/configs.lua#L94-L96
+---@param configuration table Server configuration
+function Personal.hook_lspconfig_setup(configuration)
+  local name = configuration.name
+  local pattern = {}
+  for _, filetype in ipairs(configuration) do
+    table.insert(pattern, "*." .. filetype)
+  end
+
+  local function autocmd(event, group, callback)
+    vim.api.nvim_create_autocmd(event, { group = group, pattern = pattern, callback = callback })
+  end
+
+  autocmd(
+    "LspAttach",
+    vim.api.nvim_create_augroup("lsp-" .. name .. "-attach", { clear = true }),
+    function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+      -- Format on BufWritePre
+      if client.supports_method("textDocment/formatting") then
+        local augroup = vim.api.nvim_create_augroup("lsp-" .. name .. "-format", { clear = true })
+        autocmd(
+          "BufWritePre",
+          augroup,
+          function() vim.lsp.buf.format() end
+        )
+      end
+
+      -- Highlight references on CursorHold
+      if client.supports_method("textDocument/documentHighlight") then
+        local highlight = { underline = true }
+        vim.api.nvim_set_hl(0, "LspReferenceText", highlight)
+        vim.api.nvim_set_hl(0, "LspReferenceRead", highlight)
+        highlight.bold = true;
+        vim.api.nvim_set_hl(0, "LspReferenceWrite", highlight)
+
+        local augroup = vim.api.nvim_create_augroup("lsp-" .. name .. "-highlight", { clear = true })
+
+        autocmd("CursorHold", augroup, vim.lsp.buf.document_highlight)
+        autocmd("CursorHoldI", augroup, vim.lsp.buf.document_highlight)
+        autocmd("CursorMoved", augroup, vim.lsp.buf.clear_references)
+      end
+    end
+  )
+
+  if not Personal._capabilities then
+    local cmp = require("cmp_nvim_lsp")
+    Personal._capabilities = vim.tbl_deep_extend(
+      "force",
+      vim.lsp.protocol.make_client_capabilities(),
+      cmp.default_capabilities()
+    )
+  end
+
+  configuration.capabilities = Personal._capabilities
+end
+
 require("lazy").setup(
   "plugins",
   {

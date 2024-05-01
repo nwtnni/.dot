@@ -17,12 +17,7 @@ return {
   },
   config = function(plugin, opts)
     require(plugin.main).setup(opts)
-
-    local lspconfig = require("lspconfig")
-    local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-    lspconfig.lua_ls.setup({
-      capabilities = capabilities,
+    require("lspconfig")["lua_ls"].setup({
       settings = {
         Lua = {
           completion = {

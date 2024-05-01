@@ -15,47 +15,35 @@ return {
     "cmp-nvim-lsp",
   },
   config = function(plugin)
-    local configurations = {
-      nixd = {
-        on_new_config = function(config, root_dir)
-          local flake = root_dir .. "/flake.nix"
+    local lspconfig = require(plugin.main)
 
-          if not vim.loop.fs_stat(flake) then
+    local _on_setup = lspconfig.util.on_setup
+    lspconfig.util.on_setup = function(configuration, user_configuration)
+      if _on_setup then
+        _on_setup(configuration, user_configuration)
+      end
+      Personal.hook_lspconfig_setup(configuration)
+    end
+
+    lspconfig["nixd"].setup({
+        on_new_config = function(config, root_dir)
+          local flake = root_dir
+
+          if not vim.loop.fs_stat(flake .. "/flake.nix") then
             return
           end
 
-          local settings = config.settings
-
-          settings.nixpkgs = {
-            expr = [[(builtins.getFlake "]] .. flake .. [[").inputs.nixpkgs.legacyPackages {}]]
-          }
+          -- local settings = {
+          --   nixd = {
+          --     nixpkgs = {
+          --       expr = [[import (builtins.getFlake "]] .. flake .. [[").inputs.nixpkgs {}]]
+          --     }
+          --   }
+          -- }
+          --
+          -- config.settings = vim.tbl_deep_extend("force", config.settings, settings)
+          -- vim.print(config)
         end
-      },
-    }
-
-    local lspconfig = require(plugin.main)
-    local capabilities = vim.tbl_deep_extend(
-      "force",
-      vim.lsp.protocol.make_client_capabilities(),
-      require("cmp_nvim_lsp").default_capabilities()
-    )
-
-    for server, configuration in pairs(configurations) do
-      configuration.capabilities = capabilities
-      lspconfig[server].setup(configuration)
-    end
-
-    local pattern = { "*.lua" }
-    for _, ft in ipairs(plugin.ft) do
-      table.insert(pattern, "*." .. ft)
-    end
-
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = vim.api.nvim_create_augroup("lsp-format", { clear = true }),
-      pattern = pattern,
-      callback = function()
-        vim.lsp.buf.format()
-      end,
-    })
+      })
   end,
 }
