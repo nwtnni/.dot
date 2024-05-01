@@ -42,7 +42,7 @@ render_timer = false
 TERM = "xterm-256color"
 
 [font]
-size = 10.0
+size = 12.0
 
 [font.bold]
 family = "Iosevka Nerd Font"
