@@ -139,6 +139,7 @@ vim.o.completeopt = "menu,menuone,preview"
 vim.o.scrolloff = 5
 vim.o.showcmd = true
 vim.o.showmode = true
+-- https://github.com/neovim/neovim/issues/13098
 vim.o.signcolumn = "yes:1"
 
 -- Search
@@ -175,6 +176,14 @@ vim.o.list = true;
 vim.o.listchars = "trail:·";
 vim.cmd("highlight TrailingWhitespace ctermbg=red guibg=#592929")
 vim.cmd("match TrailingWhitespace /\\s\\+$/")
+
+-- Folding
+vim.o.foldtext = ""
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldenable = false
+vim.o.foldlevelstart = 99
+vim.o.foldminlines = 16
 
 -- Keybindings
 vim.keymap.set("n", "<CR>", "<CMD>update<CR>", { silent = true, unique = true })
