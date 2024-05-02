@@ -142,6 +142,15 @@ vim.o.showmode = true
 -- https://github.com/neovim/neovim/issues/13098
 vim.o.signcolumn = "yes:1"
 
+-- Diagnostics
+vim.diagnostic.config({
+  signs = false,
+  severity_sort = true,
+  virtual_text = {
+    source = true,
+  },
+})
+
 -- Search
 local function toggle_search()
   vim.o.hlsearch = not vim.o.hlsearch
