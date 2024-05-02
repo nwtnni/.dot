@@ -236,6 +236,8 @@ local function toggle_navigate()
     setn("l", "<C-w>l")
     setn("i", "<C-I>")
     setn("o", "<C-O>")
+    setn("w", "<CMD>update<CR>")
+    setn("q", "<CMD>quit<CR>")
   end
   navigate = not navigate
   update_cursorline(navigate)
