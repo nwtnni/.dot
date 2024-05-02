@@ -223,22 +223,22 @@ local function update_cursorline(value)
 end
 
 local function toggle_navigate()
-  local snippy = require("snippy")
-
-  -- Avoid colliding with snippets
-  if snippy.can_jump(1) then
-    snippy.next()
-    return
-  end
-
   if navigate then
-    for _, key in pairs({ "gg", "G", "u", "d", "h", "j", "k", "l" }) do
+    for _, key in pairs({ "gg", "G", "u", "d", "h", "j", "k", "l", "i", "o" }) do
       vim.keymap.del("n", key)
     end
 
     setn("j", "gj")
     setn("k", "gk")
   else
+    local snippy = require("snippy")
+
+    -- Avoid colliding with snippets
+    if snippy.can_jump(1) then
+      snippy.next()
+      return
+    end
+
     pcall(vim.keymap.del, "n", "j")
     pcall(vim.keymap.del, "n", "k")
 
@@ -250,6 +250,8 @@ local function toggle_navigate()
     setn("j", "<C-w>j")
     setn("k", "<C-w>k")
     setn("l", "<C-w>l")
+    setn("i", "<C-I>")
+    setn("o", "<C-O>")
   end
   navigate = not navigate
   update_cursorline(navigate)
@@ -259,7 +261,7 @@ setn("<TAB>", toggle_navigate)
 
 local navigate_group = vim.api.nvim_create_augroup("navigate", { clear = true })
 
-vim.api.nvim_create_autocmd("WinEnter", {
+vim.api.nvim_create_autocmd("BufEnter", {
   group = navigate_group,
   callback = function() update_cursorline(navigate) end,
 })
