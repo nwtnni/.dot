@@ -195,16 +195,84 @@ vim.o.foldlevelstart = 99
 vim.o.foldminlines = 16
 
 -- Keybindings
-vim.keymap.set("n", "<CR>", "<CMD>update<CR>", { silent = true, unique = true })
+local function set(mode, source, target)
+  vim.keymap.set(mode, source, target, { silent = true, unique = true })
+end
+local setn = function(source, target) set("n", source, target) end
+local seti = function(source, target) set("i", source, target) end
 
-vim.keymap.set("n", "<SPACE>s", toggle_status, { silent = true, unique = true })
-vim.keymap.set("n", "<SPACE>n", toggle_search, { silent = true, unique = true })
+setn("<CR>", "<CMD>update<CR>")
+setn("j", "gj")
+setn("k", "gk")
 
-vim.keymap.set("i", "jf", "<ESC>", { silent = true, unique = true })
-vim.keymap.set("i", "fj", "<ESC>", { silent = true, unique = true })
+setn("<SPACE>s", toggle_status)
+setn("<SPACE>n", toggle_search)
 
-vim.keymap.del("n", "<C-l>")
-vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true, unique = true })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true, unique = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true, unique = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true, unique = true })
+seti("jf", "<ESC>")
+seti("fj", "<ESC>")
+
+-- Navigation
+vim.o.cursorlineopt = "screenline"
+vim.o.cursorline = false
+local navigate = false
+setn("<C-u>", "")
+setn("<C-d>", "")
+
+local function update_cursorline(value)
+  vim.api.nvim_set_option_value("cursorline", value, { scope = "local", win = 0 })
+end
+
+local function toggle_navigate()
+  local snippy = require("snippy")
+
+  -- Avoid colliding with snippets
+  if snippy.can_jump(1) then
+    snippy.next()
+    return
+  end
+
+  if navigate then
+    for _, key in pairs({ "gg", "G", "u", "d", "h", "j", "k", "l" }) do
+      vim.keymap.del("n", key)
+    end
+
+    setn("j", "gj")
+    setn("k", "gk")
+  else
+    pcall(vim.keymap.del, "n", "j")
+    pcall(vim.keymap.del, "n", "k")
+
+    setn("gg", "ggzz")
+    setn("G", "Gzz")
+    setn("u", "<C-u>zz")
+    setn("d", "<C-d>zz")
+    setn("h", "<C-w>h")
+    setn("j", "<C-w>j")
+    setn("k", "<C-w>k")
+    setn("l", "<C-w>l")
+  end
+  navigate = not navigate
+  update_cursorline(navigate)
+end
+
+setn("<TAB>", toggle_navigate)
+
+local navigate_group = vim.api.nvim_create_augroup("navigate", { clear = true })
+
+vim.api.nvim_create_autocmd("WinEnter", {
+  group = navigate_group,
+  callback = function() update_cursorline(navigate) end,
+})
+
+for _, event in ipairs({ "WinLeave", "WinClosed" }) do
+  vim.api.nvim_create_autocmd(event, {
+    group = navigate_group,
+    callback = function() update_cursorline(false) end,
+  })
+end
+
+vim.api.nvim_create_autocmd("ModeChanged", {
+  group = navigate_group,
+  pattern = "n:*",
+  callback = function() if navigate then toggle_navigate() end end,
+})
