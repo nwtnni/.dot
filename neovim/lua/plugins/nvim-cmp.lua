@@ -25,6 +25,17 @@ return {
       completion = {
         completeopt = "menu,menuone,preview",
       },
+      formatting = {
+        format = function(entry, item)
+          -- https://www.reddit.com/r/neovim/comments/wuqr6i/source_of_lsp_suggestion_in_nvimcmp/
+          if entry.source.name == "nvim_lsp" then
+            item.menu = "[" .. entry.source.source.client.name .. "]"
+          else
+            item.menu = "[" .. entry.source.name .. "]"
+          end
+          return item
+        end,
+      },
       mapping = {
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
@@ -53,7 +64,13 @@ return {
         end, { "i", "c" }),
       },
       sources = cmp.config.sources({
-        { name = "nvim_lsp" },
+        {
+          name = "nvim_lsp",
+          entry_filter = function(entry)
+            -- Disable entries of type text
+            return entry:get_kind() ~= 1
+          end
+        },
         { name = "snippy" },
       }),
       view = {
