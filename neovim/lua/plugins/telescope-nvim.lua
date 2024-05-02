@@ -1,4 +1,11 @@
 local fd = "fd,--type=file,--hidden,--follow<CR>"
+
+local mappings = {
+  ["<C-s>"] = "select_horizontal",
+  ["<TAB>"] = "move_selection_worse",
+  ["<S-TAB>"] = "move_selection_better",
+}
+
 return {
   "telescope-nvim/telescope.nvim",
   main = "telescope",
@@ -27,10 +34,9 @@ return {
   opts = {
     defaults = {
       mappings = {
-        i = {
-          ["<C-s>"] = "select_horizontal",
-        },
-      },
+        i = mappings,
+        n = mappings,
+      }
     },
   },
   config = function(plugin, opts)
