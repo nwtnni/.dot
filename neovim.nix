@@ -3,8 +3,8 @@ let
   # Replace upstream bundled tree-sitter parsers with nvim-treesitter
   # Also remove support for NVIM_SYSTEM_RPLUGIN_MANIFEST.
   neovim = lib.pipe pkgs.neovim-unwrapped [
-      (neovim: neovim.override { treesitter-parsers = { }; })
-      (neovim: neovim.overrideAttrs ({ patches = [ ]; }))
+    (neovim: neovim.override { treesitter-parsers = { }; })
+    (neovim: neovim.overrideAttrs ({ patches = [ ]; }))
   ];
 
   # Convert each .lua file into a nixpkgs package
@@ -12,7 +12,7 @@ let
     builtins.attrNames
     (builtins.map (lib.removeSuffix ".lua"))
     (builtins.map (name: {
-      name = if lib.hasSuffix "-nvim" name then builtins.replaceStrings [ "-nvim" ] [".nvim" ] name else name;
+      name = if lib.hasSuffix "-nvim" name then builtins.replaceStrings [ "-nvim" ] [ ".nvim" ] name else name;
       path = lib.getAttr name pkgs.vimPlugins;
     }))
   ] ++ [
@@ -24,7 +24,7 @@ let
     }
     {
       name = "tree-sitter-parsers";
-      path = pkgs.callPackage (import ./neovim/tree-sitter.nix) {};
+      path = pkgs.callPackage (import ./neovim/tree-sitter.nix) { };
     }
   ];
 in
@@ -41,9 +41,14 @@ in
     target = "nvim/init.lua";
   };
 
-  xdg.configFile.nvim-lazy-configuration = {
+  xdg.configFile.nvim-lua = {
     source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/lua";
     target = "nvim/lua";
+  };
+
+  xdg.configFile.nvim-snippets = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/snippets";
+    target = "nvim/snippets";
   };
 
   xdg.dataFile.nvim-lazy-plugins = {
