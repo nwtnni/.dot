@@ -51,13 +51,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.api.nvim_create_autocmd(event, {
         group = augroup_attach,
         buffer = buffer,
-        callback = function() callback() end,
+        callback = callback,
       })
     end
 
     -- Format on BufWritePre
     if client.supports_method("textDocument/formatting") then
-      autocmd("BufWritePre", vim.lsp.buf.format)
+      autocmd("BufWritePre", function()
+        vim.lsp.buf.format()
+        pcall(vim.diagnostic.show)
+      end)
     end
 
     -- Highlight references on CursorHold
@@ -126,9 +129,7 @@ vim.o.signcolumn = "yes:1"
 vim.diagnostic.config({
   signs = false,
   severity_sort = true,
-  virtual_text = {
-    source = true,
-  },
+  virtual_text = true,
 })
 
 -- Search
