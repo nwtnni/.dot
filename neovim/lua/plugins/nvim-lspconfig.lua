@@ -2,8 +2,10 @@ return {
   "neovim/nvim-lspconfig",
   main = "lspconfig",
   ft = {
+    "bib",
     "nix",
     "rust",
+    "tex",
   },
   cmd = {
     "LspInfo",
@@ -63,8 +65,26 @@ return {
           check = {
             command = "clippy",
           },
+          imports = {
+            granularity = {
+              group = "item",
+            },
+          },
         },
       }
+    })
+
+    lspconfig["texlab"].setup({
+      settings = {
+        texlab = {
+          build = {
+            onSave = true,
+          },
+          chktex = {
+            onOpenAndSave = true,
+          },
+        },
+      },
     })
   end,
 }
