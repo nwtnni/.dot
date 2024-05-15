@@ -4,6 +4,8 @@
   home.shellAliases = {
     g = "git";
     gs = "git status";
+    gsh = "git show HEAD";
+    gshs = "DELTA_FEATURES=+side-by-side git show HEAD";
     ga = "git add";
     gaa = "git add :/";
     gap = "git add -p";
