@@ -230,6 +230,8 @@
       defaultWorkspace = "workspace number 1";
     };
 
+    extraOptions = [ "--unsupported-gpu" ];
+
     extraConfig = ''
       bindsym Print exec shotman -c output
       bindsym Print+Shift exec shotman -c region
