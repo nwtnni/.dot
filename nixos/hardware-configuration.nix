@@ -62,10 +62,12 @@
     extraOptions = [ "--unsupported-gpu" ];
 
     # TODO: add specialization for disabling GPU entirely
-    # extraSessionCommands = /* bash */ ''
-    #   gpu_integrated=$(ls -l /dev/dri/by-path/pci-0000:00:02.0-card | grep -o 'card[[:digit:]]$')
-    #   export WLR_DRM_DEVICES="/dev/dri/''${gpu_integrated}"
-    # '';
+    extraSessionCommands = /* bash */ ''
+      # gpu_integrated=$(ls -l /dev/dri/by-path/pci-0000:00:02.0-card | grep -o 'card[[:digit:]]$')
+      # export WLR_DRM_DEVICES="/dev/dri/''${gpu_integrated}"
+      # https://wiki.archlinux.org/title/sway#No_visible_cursor
+      export WLR_NO_HARDWARE_CURSORS=1;
+    '';
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];

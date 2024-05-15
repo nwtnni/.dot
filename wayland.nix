@@ -23,4 +23,30 @@
       focus_follows_mouse no
     '';
   };
+
+  services.kanshi = {
+    enable = true;
+    profiles = {
+      g16 = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+          }
+        ];
+      };
+      g16-gdc = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            position = "0,960";
+          }
+          {
+            criteria = "Dell Inc. DELL U2412M YMYH134F24TS";
+            transform = "90";
+            position = "1920,0";
+          }
+        ];
+      };
+    };
+  };
 }
