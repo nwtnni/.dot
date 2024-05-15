@@ -1,14 +1,12 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ pkgs, impermanence, ... }:
 
 {
   imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
+    "${impermanence}/nixos.nix"
   ];
 
   boot.initrd.availableKernelModules = [ "vmd" "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [ "kvm_intel" ];
 
   fileSystems."/" =
     {
@@ -37,19 +35,32 @@
       fsType = "ext4";
     };
 
-  swapDevices = [ ];
+  environment = {
+    persistence."/nix/persist" = {
+      directories = [
+        "/etc/NetworkManager/system-connections"
+        "/var/cache/tuigreet"
+        "/var/log"
+        "/var/lib"
+      ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp108s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
+      files = [
+        "/etc/greetd/environments"
+        "/etc/machine-id"
+      ];
+    };
+  };
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  networking.hostId = "20ae29ac";
+  networking.hostName = "nwtnni-g16";
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  nixpkgs.hostPlatform = "x86_64-linux";
+
+  powerManagement.cpuFreqGovernor = "powersave";
+
+  programs.sway = {
+    extraOptions = [ "--unsupported-gpu" ];
+  };
 
   services.xserver.videoDrivers = [ "nvidia" ];
 

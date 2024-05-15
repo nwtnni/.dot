@@ -224,13 +224,14 @@
   wayland.windowManager.sway = {
     enable = true;
 
+    # Use NixOS sway package
+    package = null;
+
     config = {
       modifier = "Mod1";
       terminal = "alacritty";
       defaultWorkspace = "workspace number 1";
     };
-
-    extraOptions = [ "--unsupported-gpu" ];
 
     extraConfig = ''
       bindsym Print exec shotman -c output

@@ -7,7 +7,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    "${impermanence}/nixos.nix"
   ];
 
   system.stateVersion = "23.05";
@@ -21,8 +20,6 @@
   boot.loader.systemd-boot.configurationLimit = 4;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostId = "20ae29ac";
-  networking.hostName = "nwtnni-g16";
   networking.networkmanager.enable = true;
 
   # https://nixos.wiki/wiki/Dual_Booting_NixOS_and_Windows#System_time
@@ -30,6 +27,9 @@
   time.timeZone = "America/Chicago";
 
   hardware.opengl.enable = true;
+
+  programs.sway.enable = true;
+
   security.polkit.enable = true;
   security.rtkit.enable = true;
   services.greetd = {
@@ -51,22 +51,6 @@
     alsa.support32Bit = true;
     audio.enable = true;
     pulse.enable = true;
-  };
-
-  environment = {
-    persistence."/nix/persist" = {
-      directories = [
-        "/etc/NetworkManager/system-connections"
-        "/var/cache/tuigreet"
-        "/var/log"
-        "/var/lib"
-      ];
-
-      files = [
-        "/etc/greetd/environments"
-        "/etc/machine-id"
-      ];
-    };
   };
 
   users.mutableUsers = false;
