@@ -4,6 +4,7 @@ return {
   ft = {
     "bib",
     "nix",
+    "python",
     "rust",
     "tex",
   },
@@ -57,6 +58,18 @@ return {
         -- config.settings = vim.tbl_deep_extend("force", config.settings, settings)
         -- vim.print(config)
       end
+    })
+
+    lspconfig["pylsp"].setup({
+      settings = {
+        ["pylsp"] = {
+          plugins = {
+            ruff = {
+              enabled = true,
+            }
+          }
+        }
+      }
     })
 
     lspconfig["rust_analyzer"].setup({
