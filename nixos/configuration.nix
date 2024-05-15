@@ -44,7 +44,7 @@
     '';
   };
   services.printing.enable = true;
-  services.udev.extraHwdb = "evdev:name:Asus Keyboard:*\n KEYBOARD_KEY_70039=leftctrl";
+  services.udev.extraHwdb = "evdev:name:*[Kk]eyboard*:*\n KEYBOARD_KEY_70039=leftctrl";
   services.pipewire = {
     enable = true;
     alsa.enable = true;
