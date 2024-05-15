@@ -67,7 +67,6 @@
 
     # https://jvns.ca/blog/2024/02/16/popular-git-config-options/#rebase-autostash-true
     extraConfig = {
-      core.commentChar = ";";
       branch.sort = "-committerdate";
       commit.verbose = true;
       diff.algorithm = "histogram";
