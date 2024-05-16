@@ -186,8 +186,79 @@ local seti = function(source, target) set("i", source, target) end
 setn("<CR>", "<CMD>update<CR>")
 setn("[d", vim.diagnostic.goto_prev)
 setn("]d", vim.diagnostic.goto_next)
-setn("K", vim.lsp.buf.hover)
 setn("crn", vim.lsp.buf.rename)
+
+-- https://github.com/neovim/neovim/blob/9e2f378b6d255cd4b02a39b1a1dc5aea2df1a84c/runtime/lua/vim/lsp/util.lua#L1197C1-L1203C4
+local function find_window_by_var(name, value)
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local ok, _value = pcall(vim.api.nvim_win_get_var, win, name)
+    if ok and _value == value then
+      return win
+    end
+  end
+end
+
+setn("K", function()
+  local win = vim.api.nvim_get_current_win()
+  local buf = vim.api.nvim_get_current_buf()
+  local float = "textDocument/hover"
+  local split = "hover/split"
+  local response = "hover/response"
+  local context = {
+    bufnr = buf,
+    method = float,
+  }
+
+  vim.lsp.buf_request_all(0, float, vim.lsp.util.make_position_params(), function(responses)
+    assert(#responses == 1, "TODO: support more than one server")
+    if not responses[1].result or not responses[1].result.contents then
+      return
+    end
+
+    local hover_float = find_window_by_var(float, buf)
+    local hover_split = find_window_by_var(split, buf)
+
+    if vim.api.nvim_get_current_buf() ~= buf then
+      pcall(vim.api.nvim_win_close, hover_float, false)
+      pcall(vim.api.nvim_win_close, hover_split, false)
+      return
+    end
+
+    local result = responses[1].result
+    if not hover_float and not hover_split then
+      vim.lsp.handlers.hover(nil, result, context, {})
+      return
+    end
+
+    if hover_split and vim.api.nvim_win_get_var(hover_split, response) == result.contents then
+      vim.api.nvim_win_close(hover_split, false)
+      return
+    end
+
+    if hover_float then
+      vim.api.nvim_win_close(hover_float, false)
+    end
+
+    if hover_split then
+      vim.api.nvim_set_current_win(hover_split)
+    else
+      vim.api.nvim_command("split")
+    end
+
+    hover_split = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_var(hover_split, split, buf)
+    vim.api.nvim_win_set_var(hover_split, response, result.contents)
+
+    buf = vim.api.nvim_create_buf(false, true)
+    local contents = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+    vim.api.nvim_set_current_buf(buf)
+    vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+    vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, contents)
+    vim.api.nvim_buf_set_option(buf, "modifiable", false)
+    vim.api.nvim_set_current_win(win)
+  end)
+end)
 
 setn("<SPACE>s", toggle_status)
 setn("<SPACE>h", toggle_search)
