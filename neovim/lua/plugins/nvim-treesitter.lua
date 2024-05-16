@@ -6,7 +6,7 @@ return {
     auto_install = false,
     highlight = {
       enable = true,
-      disable = function(lang, buf)
+      disable = function(_, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local uv = vim.uv or vim.loop
         local ok, stats = pcall(uv.fs_stat, vim.api.nvim_buf_get_name(buf))
@@ -14,15 +14,6 @@ return {
           return true
         end
       end
-    },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = "gs",
-        node_decremental = "-",
-        node_incremental = "=",
-        scope_incremental = "+",
-      },
     },
   },
   config = function(plugin, opts)
