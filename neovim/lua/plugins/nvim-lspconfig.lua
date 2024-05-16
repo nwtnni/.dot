@@ -17,6 +17,7 @@ return {
   },
   dependencies = {
     "cmp-nvim-lsp",
+    "fidget.nvim",
   },
   config = function(plugin)
     local lspconfig = require(plugin.main)
