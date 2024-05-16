@@ -186,6 +186,8 @@ local seti = function(source, target) set("i", source, target) end
 setn("<CR>", "<CMD>update<CR>")
 setn("[d", vim.diagnostic.goto_prev)
 setn("]d", vim.diagnostic.goto_next)
+setn("]q", function() if not pcall(vim.cmd.cbelow) then pcall(vim.cmd.cnext) end end)
+setn("[q", function() if not pcall(vim.cmd.cabove) then pcall(vim.cmd.cprevious) end end)
 setn("crn", vim.lsp.buf.rename)
 
 -- https://github.com/neovim/neovim/blob/9e2f378b6d255cd4b02a39b1a1dc5aea2df1a84c/runtime/lua/vim/lsp/util.lua#L1197C1-L1203C4
