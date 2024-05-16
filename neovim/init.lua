@@ -241,7 +241,7 @@ setn("w", toggle_navigate)
 
 local navigate_group = vim.api.nvim_create_augroup("navigate", { clear = true })
 
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("WinEnter", {
   group = navigate_group,
   callback = function() update_cursorline(navigate) end,
 })
@@ -253,12 +253,12 @@ for _, event in ipairs({ "WinLeave", "WinClosed" }) do
   })
 end
 
--- vim.api.nvim_create_autocmd("ModeChanged", {
---   group = navigate_group,
---   -- Everything except for normal submodes
---   pattern = { "n:[ivVsSRt!r]*" },
---   callback = function() if navigate then toggle_navigate() end end,
--- })
+vim.api.nvim_create_autocmd("ModeChanged", {
+  group = navigate_group,
+  -- Disable when editing
+  pattern = { "*:[ivVsSR]*", "*:<CTRL-V>*" },
+  callback = function() if navigate then toggle_navigate() end end,
+})
 
 local win_save
 local function toggle_terminal()
