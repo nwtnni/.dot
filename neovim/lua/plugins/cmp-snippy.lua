@@ -1,6 +1,9 @@
 return {
   "dcampos/cmp-snippy",
   dependencies = {
-    "nvim-snippy",
+    "nvim-cmp",
+  },
+  event = {
+    "InsertEnter *.tex",
   },
 }
