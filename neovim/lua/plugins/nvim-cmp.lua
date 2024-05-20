@@ -17,9 +17,9 @@ return {
         end
       },
       completion = {
-        completeopt = "menu,menuone,preview,noselect",
+        completeopt = "menu,menuone,preview",
       },
-      preselect = cmp.PreselectMode.None,
+      preselect = cmp.PreselectMode.Item,
       formatting = {
         format = function(entry, item)
           -- https://www.reddit.com/r/neovim/comments/wuqr6i/source_of_lsp_suggestion_in_nvimcmp/
@@ -57,7 +57,7 @@ return {
           end
         end, { "i", "s" }),
         ["<CR>"] = cmp.mapping(function(fallback)
-          if cmp.visible() and cmp.get_active_entry() then
+          if cmp.visible() and cmp.get_selected_entry() then
             cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace })
           else
             fallback()
@@ -94,6 +94,10 @@ return {
 
     -- Share configuration between command types
     local cmdline = {
+      completion = {
+        completeopt = "menu,preview,noselect",
+      },
+      preselect = cmp.PreselectMode.None,
       mapping = {
         ["<Tab>"] = cmp.mapping(function()
           if cmp.visible() then
