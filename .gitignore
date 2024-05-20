@@ -1,7 +1,3 @@
-editor/.config/nvim/bundle
-editor/.config/nvim/tags
-editor/.config/nvim/temp
-
 wm/.config/qtile/__pycache__
 
 systemd/.config/systemd/user/*.wants
