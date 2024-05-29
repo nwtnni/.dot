@@ -197,6 +197,10 @@ setn("]q", function() if not pcall(vim.cmd.cbelow) then pcall(vim.cmd.cnext) end
 setn("[q", function() if not pcall(vim.cmd.cabove) then pcall(vim.cmd.cprevious) end end)
 setn("crn", vim.lsp.buf.rename)
 
+-- Override default ]d and [d mappings
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+vim.keymap.set("n", "[d", vim.diagnostic.goto_next)
+
 -- https://github.com/neovim/neovim/blob/9e2f378b6d255cd4b02a39b1a1dc5aea2df1a84c/runtime/lua/vim/lsp/util.lua#L1197C1-L1203C4
 local function find_window_by_var(name, value)
   for _, win in ipairs(vim.api.nvim_list_wins()) do
