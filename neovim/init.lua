@@ -167,6 +167,7 @@ vim.o.undodir = vim.env.XDG_STATE_HOME .. "/nvim/undo//"
 vim.o.undofile = true;
 
 -- Miscellaneous
+vim.o.mouse = "";
 vim.o.updatetime = 250
 vim.o.splitright = true;
 vim.o.splitbelow = true;
