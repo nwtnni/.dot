@@ -3,7 +3,6 @@ let
   # Replace upstream bundled tree-sitter parsers with nvim-treesitter
   # Also remove support for NVIM_SYSTEM_RPLUGIN_MANIFEST.
   neovim = lib.pipe pkgs.neovim-unwrapped [
-    (neovim: neovim.override { treesitter-parsers = { }; })
     (neovim: neovim.overrideAttrs ({ patches = [ ]; }))
   ];
 

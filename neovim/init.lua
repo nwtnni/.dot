@@ -3,6 +3,7 @@ vim.opt.rtp = {
   vim.fn.stdpath("config"),
   vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
   vim.fn.stdpath("data") .. "/lazy/tree-sitter-parsers",
+  vim.env.VIMRUNTIME .. "/../../../lib/nvim",
   vim.env.VIMRUNTIME,
 }
 
@@ -158,7 +159,6 @@ vim.o.undofile = true;
 
 -- Miscellaneous
 vim.o.updatetime = 250
-vim.o.mouse = false
 vim.o.splitright = true;
 vim.o.splitbelow = true;
 vim.o.equalalways = false;
@@ -184,8 +184,6 @@ local setn = function(source, target) set("n", source, target) end
 local seti = function(source, target) set("i", source, target) end
 
 setn("<CR>", "<CMD>update<CR>")
-setn("[d", vim.diagnostic.goto_prev)
-setn("]d", vim.diagnostic.goto_next)
 setn("]q", function() if not pcall(vim.cmd.cbelow) then pcall(vim.cmd.cnext) end end)
 setn("[q", function() if not pcall(vim.cmd.cabove) then pcall(vim.cmd.cprevious) end end)
 setn("crn", vim.lsp.buf.rename)

@@ -2,9 +2,7 @@
 let
   parserDerivations = with vimPlugins.nvim-treesitter.builtGrammars; [
     asm
-    bash
     bibtex
-    c
     cmake
     cpp
     css
@@ -33,17 +31,13 @@ let
     latex
     linkerscript
     llvm
-    lua
     luadoc
     make
-    markdown
-    markdown_inline
     nasm
     ninja
     nix
     ocaml
     objdump
-    python
     rust
     sql
     ssh_config
@@ -53,8 +47,6 @@ let
     toml
     tsv
     typescript
-    vim
-    vimdoc
     xml
     yaml
   ];
@@ -64,7 +56,8 @@ let
     (builtins.map (lib.removeSuffix "-grammar"))
   ];
 in
-runCommandLocal "tree-sitter-parsers" {
+runCommandLocal "tree-sitter-parsers"
+{
   inherit parserDerivations parserNames;
   __structuredAttrs = true;
 } /* bash */ ''
