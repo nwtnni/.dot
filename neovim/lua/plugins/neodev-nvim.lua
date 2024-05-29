@@ -34,6 +34,9 @@ return {
           diagnostics = {
             libraryFiles = "Disable",
           },
+          hint = {
+            enable = true,
+          },
         },
       },
     })

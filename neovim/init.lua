@@ -79,6 +79,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
+-- Inlay hints
+local function toggle_inlay()
+  if vim.lsp.inlay_hint then
+    -- Note: as of 0.10 is_enabled filter parameter is optional
+    ---@diagnostic disable-next-line: missing-parameter
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  end
+end
+
 -- Disable provider warnings
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
@@ -134,7 +143,7 @@ vim.diagnostic.config({
 })
 
 -- Search
-local function toggle_search()
+local function toggle_highlight()
   vim.o.hlsearch = not vim.o.hlsearch
 end
 
@@ -261,7 +270,8 @@ setn("K", function()
 end)
 
 setn("<SPACE>s", toggle_status)
-setn("<SPACE>h", toggle_search)
+setn("<SPACE>h", toggle_highlight)
+setn("<SPACE>i", toggle_inlay)
 
 seti("jf", "<ESC>")
 set("t", "jf", "<C-\\><C-n>")
