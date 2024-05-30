@@ -1,4 +1,4 @@
-{ pkgs, impermanence, ... }:
+{ impermanence, ... }:
 
 {
   imports = [
@@ -61,17 +61,37 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  powerManagement.cpuFreqGovernor = "powersave";
-
   specialisation = {
-    nvidia.configuration = {
+    # https://github.com/NixOS/nixos-hardware/blob/8251761f93d6f5b91cee45ac09edb6e382641009/common/gpu/nvidia/disable.nix
+    gpu-disable.configuration = {
+      boot = {
+        blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+        extraModprobeConfig = ''
+          blacklist nouveau
+          options nouveau modeset=0
+        '';
+      };
+
+      services.udev.extraRules = ''
+        # Remove NVIDIA USB xHCI Host Controller devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+
+        # Remove NVIDIA USB Type-C UCSI devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+
+        # Remove NVIDIA Audio devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+
+        # Remove NVIDIA VGA/3D controller devices
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+      '';
+    };
+
+    gpu-nvidia.configuration = {
       programs.sway = {
         extraOptions = [ "--unsupported-gpu" ];
 
-        # TODO: add specialization for disabling GPU entirely
         extraSessionCommands = /* bash */ ''
-          # gpu_integrated=$(ls -l /dev/dri/by-path/pci-0000:00:02.0-card | grep -o 'card[[:digit:]]$')
-          # export WLR_DRM_DEVICES="/dev/dri/''${gpu_integrated}"
           # https://wiki.archlinux.org/title/sway#No_visible_cursor
           export WLR_NO_HARDWARE_CURSORS=1;
         '';
