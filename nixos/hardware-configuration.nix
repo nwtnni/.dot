@@ -51,6 +51,11 @@
     };
   };
 
+  hardware = {
+    enableAllFirmware = true;
+    cpu.intel.updateMicrocode = true;
+  };
+
   networking.hostId = "20ae29ac";
   networking.hostName = "nwtnni-g16";
 
@@ -58,31 +63,32 @@
 
   powerManagement.cpuFreqGovernor = "powersave";
 
-  programs.sway = {
-    extraOptions = [ "--unsupported-gpu" ];
+  specialisation = {
+    nvidia.configuration = {
+      programs.sway = {
+        extraOptions = [ "--unsupported-gpu" ];
 
-    # TODO: add specialization for disabling GPU entirely
-    extraSessionCommands = /* bash */ ''
-      # gpu_integrated=$(ls -l /dev/dri/by-path/pci-0000:00:02.0-card | grep -o 'card[[:digit:]]$')
-      # export WLR_DRM_DEVICES="/dev/dri/''${gpu_integrated}"
-      # https://wiki.archlinux.org/title/sway#No_visible_cursor
-      export WLR_NO_HARDWARE_CURSORS=1;
-    '';
-  };
+        # TODO: add specialization for disabling GPU entirely
+        extraSessionCommands = /* bash */ ''
+          # gpu_integrated=$(ls -l /dev/dri/by-path/pci-0000:00:02.0-card | grep -o 'card[[:digit:]]$')
+          # export WLR_DRM_DEVICES="/dev/dri/''${gpu_integrated}"
+          # https://wiki.archlinux.org/title/sway#No_visible_cursor
+          export WLR_NO_HARDWARE_CURSORS=1;
+        '';
+      };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+      services.xserver.videoDrivers = [ "nvidia" ];
 
-  hardware = {
-    enableAllFirmware = true;
-    cpu.intel.updateMicrocode = true;
-
-    nvidia = {
-      modesetting.enable = true;
-      prime = {
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-        offload.enable = true;
-        offload.enableOffloadCmd = true;
+      hardware = {
+        nvidia = {
+          modesetting.enable = true;
+          prime = {
+            intelBusId = "PCI:0:2:0";
+            nvidiaBusId = "PCI:1:0:0";
+            offload.enable = true;
+            offload.enableOffloadCmd = true;
+          };
+        };
       };
     };
   };
