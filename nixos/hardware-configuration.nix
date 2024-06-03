@@ -88,12 +88,30 @@
     };
 
     gpu-nvidia.configuration = {
+      boot.kernelParams = [
+        # https://wiki.archlinux.org/title/backlight
+        "acpi_backlight=native"
+
+        # Enable nvidia framebuffer to support booting without integrated GPU
+        "nvidia-drm.fbdev=1"
+      ];
+
       programs.sway = {
         extraOptions = [ "--unsupported-gpu" ];
 
         extraSessionCommands = /* bash */ ''
           # https://wiki.archlinux.org/title/sway#No_visible_cursor
           export WLR_NO_HARDWARE_CURSORS=1;
+
+          # Miscellaneous environment variables for trying to get Vulkan
+          # working with sway + wlroots + nvidia + external monitor.
+          # Could not find a working configuration.
+          #
+          # export WLR_RENDERER="vulkan";
+          # export DRI_PRIME="pci-0000_01_00_0";
+          # export __VK_LAYER_NV_optimus="NVIDIA_only";
+          # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
+          # export VK_DRIVER_FILES="/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
         '';
       };
 
@@ -105,8 +123,6 @@
           prime = {
             intelBusId = "PCI:0:2:0";
             nvidiaBusId = "PCI:1:0:0";
-            offload.enable = true;
-            offload.enableOffloadCmd = true;
           };
         };
       };

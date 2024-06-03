@@ -39,7 +39,7 @@
         profile.name = "g16-gdc";
         profile.outputs = [
           {
-            criteria = "eDP-1";
+            criteria = "Unknown Unknown Unknown";
             position = "0,960";
           }
           {
