@@ -51,7 +51,7 @@ in
   };
 
   xdg.dataFile.nvim-lazy-plugins = {
-    source = pkgs.linkFarm "nvim-lazy" (builtins.trace (builtins.typeOf (builtins.elemAt plugins 0)) plugins);
+    source = pkgs.linkFarm "nvim-lazy" plugins;
     target = "nvim/lazy";
   };
 }
