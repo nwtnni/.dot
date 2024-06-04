@@ -1,4 +1,4 @@
-{ impermanence, ... }:
+{ pkgs, impermanence, ... }:
 
 {
   imports = [
@@ -60,6 +60,36 @@
   networking.hostName = "nwtnni-g16";
 
   nixpkgs.hostPlatform = "x86_64-linux";
+
+  services.udev.extraRules =
+    let
+      tune-cpu = pkgs.writeShellScript "tune-cpu.sh" /* bash */ ''
+        cpu="/sys/devices/system/cpu"
+        intel_pstate="$cpu/intel_pstate"
+
+        # This script assumes that intel_pstate is in active mode.
+        # https://wiki.archlinux.org/title/CPU_frequency_scaling
+        #
+        # Note: for newer Intel CPUs, it seems that energy performance
+        # preference (EPP) takes precedence over energy performance bias (EPB):
+        # https://bbs.archlinux.org/viewtopic.php?id=282383
+        if [[ "''${POWER_SUPPLY_ONLINE:-0}" -eq 1 ]]; then
+          echo 1 > "$intel_pstate/hwp_dynamic_boost"
+          echo 0 > "$intel_pstate/no_turbo"
+          echo performance | tee $cpu/cpu*/cpufreq/scaling_governor
+          echo performance | tee $cpu/cpu*/cpufreq/energy_performance_preference
+        else
+          echo 0 > "$intel_pstate/hwp_dynamic_boost"
+          echo 1 > "$intel_pstate/no_turbo"
+          echo powersave | tee $cpu/cpu*/cpufreq/scaling_governor
+          echo power | tee $cpu/cpu*/cpufreq/energy_performance_preference
+        fi
+      '';
+    in
+    ''
+      # https://bbs.archlinux.org/viewtopic.php?pid=1155492#p1155492
+      SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="ADP0", RUN+="${tune-cpu}"
+    '';
 
   specialisation = {
     # https://github.com/NixOS/nixos-hardware/blob/8251761f93d6f5b91cee45ac09edb6e382641009/common/gpu/nvidia/disable.nix
