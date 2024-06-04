@@ -90,6 +90,9 @@
       # https://bbs.archlinux.org/viewtopic.php?pid=1155492#p1155492
       # Get power supply name from `udevadm monitor --property --udev`.
       SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="ADP0", RUN+="${tune-cpu}"
+
+      # https://wiki.archlinux.org/title/Power_management
+      SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"
     '';
 
   specialisation = {
