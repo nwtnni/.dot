@@ -66,6 +66,7 @@
       tune-cpu = pkgs.writeShellScript "tune-cpu.sh" /* bash */ ''
         cpu="/sys/devices/system/cpu"
         intel_pstate="$cpu/intel_pstate"
+        pcie_aspm="/sys/module/pcie_aspm/parameters/policy"
 
         # This script assumes that intel_pstate is in active mode.
         # https://wiki.archlinux.org/title/CPU_frequency_scaling
@@ -77,12 +78,16 @@
           echo 1 > "$intel_pstate/hwp_dynamic_boost"
           echo 0 > "$intel_pstate/no_turbo"
           echo performance | tee $cpu/cpu*/cpufreq/scaling_governor
-          echo performance | tee $cpu/cpu*/cpufreq/energy_performance_preference
+          echo default | tee $cpu/cpu*/cpufreq/energy_performance_preference
+          echo default > "$pcie_aspm"
         else
           echo 0 > "$intel_pstate/hwp_dynamic_boost"
           echo 1 > "$intel_pstate/no_turbo"
           echo powersave | tee $cpu/cpu*/cpufreq/scaling_governor
           echo power | tee $cpu/cpu*/cpufreq/energy_performance_preference
+          # Enable L1 power mode in addition to L0
+          # https://en.wikipedia.org/wiki/Active_State_Power_Management
+          echo powersupersave > "$pcie_aspm"
         fi
       '';
     in
