@@ -47,6 +47,7 @@ let
     toml
     tsv
     typescript
+    udev
     xml
     yaml
   ];

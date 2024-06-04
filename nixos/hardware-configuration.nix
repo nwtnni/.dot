@@ -86,8 +86,9 @@
         fi
       '';
     in
-    ''
+      /* udev */ ''
       # https://bbs.archlinux.org/viewtopic.php?pid=1155492#p1155492
+      # Get power supply name from `udevadm monitor --property --udev`.
       SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="ADP0", RUN+="${tune-cpu}"
     '';
 
