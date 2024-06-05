@@ -67,7 +67,6 @@
         cpu="/sys/devices/system/cpu"
         intel_pstate="$cpu/intel_pstate"
         nmi_watchdog="/proc/sys/kernel/nmi_watchdog"
-        pcie_aspm="/sys/module/pcie_aspm/parameters/policy"
 
         # This script assumes that intel_pstate is in active mode.
         # https://wiki.archlinux.org/title/CPU_frequency_scaling
@@ -81,16 +80,12 @@
           echo performance | tee $cpu/cpu*/cpufreq/scaling_governor
           echo default | tee $cpu/cpu*/cpufreq/energy_performance_preference
           echo 1 > "$nmi_watchdog"
-          echo default > "$pcie_aspm"
         else
           echo 0 > "$intel_pstate/hwp_dynamic_boost"
           echo 1 > "$intel_pstate/no_turbo"
           echo powersave | tee $cpu/cpu*/cpufreq/scaling_governor
           echo power | tee $cpu/cpu*/cpufreq/energy_performance_preference
           echo 0 > "$nmi_watchdog"
-          # Enable L1 power mode in addition to L0
-          # https://en.wikipedia.org/wiki/Active_State_Power_Management
-          echo powersupersave > "$pcie_aspm"
         fi
       '';
     in
@@ -101,7 +96,8 @@
 
       # Conserve battery lifetime
       # https://wiki.archlinux.org/title/Laptop/ASUS
-      ACTION=="add", KERNEL=="asus_nb_wmi", RUN+="/bin/sh -c 'echo 80 > /sys/class/power_supply/BAT?/charge_control_end_threshold'"
+      # This attrbute is added by the asus-nb-wmi driver
+      SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="BAT0", TEST=="charge_control_end_threshold", ATTR{charge_control_end_threshold}="80"
 
       # https://wiki.archlinux.org/title/Power_management
       SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"
