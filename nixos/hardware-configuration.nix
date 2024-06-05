@@ -99,6 +99,10 @@
       # Get power supply name from `udevadm monitor --property --udev`.
       SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="ADP0", RUN+="${tune-cpu}"
 
+      # Conserve battery lifetime
+      # https://wiki.archlinux.org/title/Laptop/ASUS
+      ACTION=="add", KERNEL=="asus_nb_wmi", RUN+="/bin/sh -c 'echo 80 > /sys/class/power_supply/BAT?/charge_control_end_threshold'"
+
       # https://wiki.archlinux.org/title/Power_management
       SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"
     '';
