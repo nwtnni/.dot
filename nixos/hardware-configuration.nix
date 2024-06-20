@@ -94,11 +94,6 @@
       # Get power supply name from `udevadm monitor --property --udev`.
       SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="ADP0", RUN+="${tune-cpu}"
 
-      # Conserve battery lifetime
-      # https://wiki.archlinux.org/title/Laptop/ASUS
-      # This attrbute is added by the asus-nb-wmi driver
-      SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_NAME}=="BAT0", TEST=="charge_control_end_threshold", ATTR{charge_control_end_threshold}="80"
-
       # https://wiki.archlinux.org/title/Power_management
       SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"
     '';
