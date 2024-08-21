@@ -9,7 +9,7 @@
 
     config = {
       modifier = "Mod1";
-      terminal = "alacritty";
+      terminal = "wezterm";
       defaultWorkspace = "workspace number 1";
     };
 
