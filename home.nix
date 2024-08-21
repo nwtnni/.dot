@@ -10,6 +10,7 @@
     ./neovim.nix
     ./ripgrep.nix
     ./wayland.nix
+    ./wezterm.nix
   ];
 
   programs.home-manager.enable = true;
