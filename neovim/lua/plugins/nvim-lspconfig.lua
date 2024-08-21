@@ -83,6 +83,7 @@ return {
             granularity = {
               group = "item",
             },
+            preferNoStd = true,
           },
         },
       }
