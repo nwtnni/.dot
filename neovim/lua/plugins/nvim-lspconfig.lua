@@ -93,6 +93,7 @@ return {
       settings = {
         texlab = {
           build = {
+            args = { "-pdf", "-shell-escape", "-interaction=nonstopmode", "-synctex=1", "%f" },
             onSave = true,
           },
           chktex = {
