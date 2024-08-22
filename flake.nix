@@ -8,17 +8,29 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, home-manager, impermanence, ... }: {
-    nixosConfigurations."nwtnni-g16" = nixpkgs.lib.nixosSystem {
+  outputs =
+    { nixpkgs, home-manager, impermanence, ... }:
+    let
       system = "x86_64-linux";
-      specialArgs = { inherit impermanence; };
-      modules = [
-        ./nixos/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.users.nwtnni = import ./home.nix;
-        }
-      ];
+      pkgs = import nixpkgs { inherit system; };
+    in
+    {
+      nixosConfigurations."nwtnni-g16" = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit impermanence; };
+        inherit system;
+        modules = [
+          ./nixos/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.users.nwtnni = import ./home.nix;
+          }
+        ];
+      };
+
+      devShells.${system}.default = pkgs.mkShell {
+        nativeBuildInputs = with pkgs; [
+          taplo
+        ];
+      };
     };
-  };
 }

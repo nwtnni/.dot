@@ -7,6 +7,7 @@ return {
     "python",
     "rust",
     "tex",
+    "toml",
   },
   cmd = {
     "LspInfo",
@@ -88,6 +89,8 @@ return {
         },
       }
     })
+
+    lspconfig["taplo"].setup({})
 
     lspconfig["texlab"].setup({
       settings = {
