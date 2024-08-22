@@ -8,6 +8,7 @@
     ./fzf.nix
     ./git.nix
     ./neovim.nix
+    ./readline.nix
     ./ripgrep.nix
     ./starship.nix
     ./wayland.nix
