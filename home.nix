@@ -9,6 +9,7 @@
     ./git.nix
     ./neovim.nix
     ./ripgrep.nix
+    ./starship.nix
     ./wayland.nix
     ./wezterm.nix
   ];
@@ -73,43 +74,6 @@
     ];
 
     initExtra = ''
-      __prompt_setc() {
-        printf "\x1b[38;2;%s;%s;%sm" "$1" "$2" "$3"
-      }
-
-      __prompt_clear() {
-        printf "\x1b[0m"
-      }
-
-      __prompt_branch() {
-        if git rev-parse --git-dir > /dev/null 2>&1; then
-          if [[ -z $(git status --porcelain) ]]; then
-            # Blue for git branch
-            __prompt_setc 131 165 152
-          else
-            # Orange for dirty
-            __prompt_setc 254 128 25
-          fi
-        else
-          # White for no version control
-          __prompt_setc 235 219 178
-        fi
-      }
-
-      __prompt_last() {
-        if [[ "$?" -eq 0 ]]; then
-          # Green for good
-          __prompt_setc 152 151 26
-        else
-          # Red for bad
-          __prompt_setc 251 73 52
-        fi
-      }
-
-      export PROMPT_COMMAND='[[ ''${__prompt_wd:=$PWD} != $PWD ]] && shopt -sq expand_aliases && ls; __prompt_wd=$PWD'
-      export PS1='\[$(__prompt_last)\]>\[$(__prompt_clear)$(__prompt_branch)\]> \[$(__prompt_clear)\]'
-      export PS2='>> '
-
       pas() {
           pacman -Slq | fzf --multi --preview "pacman -Si {1}" | xargs -ro sudo pacman -Syu
       }
