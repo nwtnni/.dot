@@ -11,7 +11,7 @@ end
 -- Appearance
 apply({
   color_scheme = "GruvboxDark",
-  font = wezterm.font("Iosevka Nerd Font"),
+  font = wezterm.font("IosevkaSlabFixed"),
   use_fancy_tab_bar = false,
 })
 

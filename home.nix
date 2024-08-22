@@ -33,10 +33,36 @@
       hexyl
       htop
       inkscape
+      # https://typeof.net/Iosevka/customizer
+      (iosevka.override {
+        set = "SlabFixed";
+        privateBuildPlan = /* toml */ ''
+          [buildPlans.IosevkaSlabFixed]
+          family = "Iosevka Slab Fixed"
+          spacing = "fixed"
+          serifs = "slab"
+          noCvSs = false
+          exportGlyphNames = false
+
+          [buildPlans.IosevkaSlabFixed.ligations]
+          inherits = "dlig"
+
+          [buildPlans.IosevkaSlabFixed.widths.Condensed]
+          shape = 500
+          menu = 3
+          css = "condensed"
+
+          [buildPlans.IosevkaSlabFixed.widths.Normal]
+          shape = 600
+          menu = 5
+          css = "normal"
+        '';
+      })
       shotman
       wl-clipboard
       zathura
-      (nerdfonts.override { fonts = [ "Iosevka" ]; })
+      # https://sw.kovidgoyal.net/kitty/faq/#kitty-is-not-able-to-use-my-favorite-font
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
       liberation_ttf
       noto-fonts
       noto-fonts-cjk
