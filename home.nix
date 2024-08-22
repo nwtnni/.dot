@@ -12,6 +12,7 @@
     ./readline.nix
     ./ripgrep.nix
     ./starship.nix
+    ./vivid.nix
     ./wayland.nix
     ./wezterm.nix
   ];

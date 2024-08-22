@@ -58,11 +58,6 @@
       susta() { systemctl --user start $(sus); }
       susto() { systemctl --user stop $(sus); }
       sur() { systemctl --user restart $(sus); }
-
-      # /etc/bashrc sources `dircolors -b` by default on NixOS,
-      # so we want to overwrite it for all interactive shells.
-      # https://nixos.org/manual/nixos/stable/options#opt-programs.bash.enableLsColors
-      export LS_COLORS="${builtins.readFile shell/.ls-colors}";
     '';
   };
 }
