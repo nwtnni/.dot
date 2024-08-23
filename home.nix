@@ -15,6 +15,7 @@
     ./vivid.nix
     ./wayland.nix
     ./wezterm.nix
+    ./yazi.nix
   ];
 
   programs.home-manager.enable = true;
@@ -33,31 +34,7 @@
       hexyl
       htop
       inkscape
-      # https://typeof.net/Iosevka/customizer
-      (iosevka.override {
-        set = "SlabFixed";
-        privateBuildPlan = /* toml */ ''
-          [buildPlans.IosevkaSlabFixed]
-          family = "Iosevka Slab Fixed"
-          spacing = "fixed"
-          serifs = "slab"
-          noCvSs = false
-          exportGlyphNames = false
-
-          [buildPlans.IosevkaSlabFixed.ligations]
-          inherits = "dlig"
-
-          [buildPlans.IosevkaSlabFixed.widths.Condensed]
-          shape = 500
-          menu = 3
-          css = "condensed"
-
-          [buildPlans.IosevkaSlabFixed.widths.Normal]
-          shape = 600
-          menu = 5
-          css = "normal"
-        '';
-      })
+      iosevka
       shotman
       wl-clipboard
       zathura

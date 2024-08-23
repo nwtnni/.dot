@@ -14,7 +14,7 @@ config.enable_wayland = false
 -- Appearance
 apply({
   color_scheme = "GruvboxDark",
-  font = wezterm.font("IosevkaSlabFixed"),
+  font = wezterm.font("Iosevka"),
   use_fancy_tab_bar = false,
 })
 

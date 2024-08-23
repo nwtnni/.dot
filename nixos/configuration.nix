@@ -33,7 +33,7 @@
     timeZone = "America/Chicago";
   };
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   programs.sway.enable = true;
 
