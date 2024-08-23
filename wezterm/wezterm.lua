@@ -8,6 +8,9 @@ local function apply(table)
   end
 end
 
+-- https://github.com/wez/wezterm/issues/3214
+config.enable_wayland = false
+
 -- Appearance
 apply({
   color_scheme = "GruvboxDark",
