@@ -8,8 +8,8 @@ local function apply(table)
   end
 end
 
--- https://github.com/wez/wezterm/issues/3214
-config.enable_wayland = false
+config.front_end = "WebGpu"
+config.webgpu_power_preference = "HighPerformance"
 
 -- Appearance
 apply({
