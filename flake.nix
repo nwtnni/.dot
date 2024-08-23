@@ -28,6 +28,7 @@
       };
 
       devShells.${system}.default = pkgs.mkShell {
+        name = ".dot";
         nativeBuildInputs = with pkgs; [
           taplo
         ];
