@@ -28,6 +28,7 @@
     stateVersion = "23.05";
 
     packages = with pkgs; [
+      calibre
       file
       firefox-wayland
       gthumb

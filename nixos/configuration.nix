@@ -59,6 +59,9 @@
 
     udev.extraHwdb = "evdev:name:*[Kk]eyboard*:*\n KEYBOARD_KEY_70039=leftctrl";
 
+    # https://nixos.wiki/wiki/Calibre
+    udisks2.enable = true;
+
     pipewire = {
       enable = true;
       alsa.enable = true;
