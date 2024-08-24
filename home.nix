@@ -15,6 +15,7 @@
     ./vivid.nix
     ./wayland.nix
     ./wezterm.nix
+    ./yazi.nix
   ];
 
   programs.home-manager.enable = true;
