@@ -39,11 +39,11 @@
         profile.name = "g16-gdc";
         profile.outputs = [
           {
-            criteria = "Unknown Unknown Unknown";
+            criteria = "eDP-1";
             position = "0,960";
           }
           {
-            criteria = "Dell Inc. DELL U2412M YMYH134F24TS";
+            criteria = "HDMI-A-3";
             transform = "90";
             position = "1920,0";
           }
