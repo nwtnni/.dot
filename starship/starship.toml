@@ -50,15 +50,16 @@ format = '[$hash]($style)'
 style = "color_gray"
 
 [git_status]
-format = '$ahead_behind$untracked$modified$deleted$renamed$staged$conflicted'
-ahead = '[⯅$count](color_green)'
-behind = '[⯆$count](color_red)'
-diverged = '[⯅$ahead_count](color_aqua) [⯆$behind_count](color_aqua)'
-conflicted = ' [C$count](color_purple)'
+format = '$ahead_behind$conflicted$untracked$modified$staged$typechanged$renamed$deleted'
+ahead = '[A$count](color_blue)'
+behind = '[B$count](color_purple)'
+diverged = '[A$ahead_count](color_blue) [B$behind_count](color_purple)'
+conflicted = ' [C$count](color_red)'
 untracked = ' [U$count](color_red)'
-modified = ' [M$count](color_orange)'
-staged = ' [S$count](color_green)'
-renamed = " [R$count](color_green)"
+modified = ' [M$count](color_red)'
+staged = ' [S$count](color_orange)'
+typechanged = " [T$count](color_orange)"
+renamed = " [R$count](color_orange)"
 deleted = " [D$count](color_orange)"
 
 [character]
