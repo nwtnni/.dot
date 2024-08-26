@@ -16,6 +16,7 @@
     ./wayland.nix
     ./wezterm.nix
     ./yazi.nix
+    ./zathura.nix
   ];
 
   programs.home-manager.enable = true;
@@ -38,7 +39,6 @@
       iosevka
       shotman
       wl-clipboard
-      zathura
       # https://sw.kovidgoyal.net/kitty/faq/#kitty-is-not-able-to-use-my-favorite-font
       (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
       liberation_ttf
