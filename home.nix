@@ -17,6 +17,7 @@
     ./wezterm.nix
     ./yazi.nix
     ./zathura.nix
+    ./zoxide.nix
   ];
 
   programs.home-manager.enable = true;
