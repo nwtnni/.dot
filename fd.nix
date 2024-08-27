@@ -7,5 +7,9 @@
       "--follow"
       "--no-require-git"
     ];
+
+    ignores = [
+      ".git/"
+    ];
   };
 }
