@@ -29,7 +29,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    lua-language-server
     nixd
     nixpkgs-fmt
   ] ++ [ neovim ];

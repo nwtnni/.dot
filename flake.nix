@@ -30,6 +30,7 @@
       devShells.${system}.default = pkgs.mkShell {
         name = ".dot";
         nativeBuildInputs = with pkgs; [
+          lua-language-server
           taplo
         ];
       };
