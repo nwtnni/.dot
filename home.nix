@@ -38,15 +38,16 @@
       htop
       inkscape
       iosevka
-      shotman
-      wl-clipboard
+      liberation_ttf
       # https://sw.kovidgoyal.net/kitty/faq/#kitty-is-not-able-to-use-my-favorite-font
       (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-      liberation_ttf
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
+      obsidian
       pavucontrol
+      shotman
+      wl-clipboard
       zotero
     ];
 

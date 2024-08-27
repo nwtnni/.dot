@@ -23,6 +23,7 @@
           home-manager.nixosModules.home-manager
           {
             home-manager.users.nwtnni = import ./home.nix;
+            home-manager.useGlobalPkgs = true;
           }
         ];
       };
