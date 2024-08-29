@@ -125,14 +125,6 @@
     };
 
     gpu-nvidia.configuration = {
-      boot.kernelParams = [
-        # https://wiki.archlinux.org/title/backlight
-        "acpi_backlight=native"
-
-        # Enable nvidia framebuffer to support booting without integrated GPU
-        "nvidia-drm.fbdev=1"
-      ];
-
       programs.sway = {
         extraOptions = [ "--unsupported-gpu" ];
 
