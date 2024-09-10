@@ -36,6 +36,7 @@
       gthumb
       hexyl
       htop
+      hyperfine
       inkscape
       iosevka
       liberation_ttf
