@@ -48,6 +48,7 @@
       obsidian
       pavucontrol
       shotman
+      tmate
       wl-clipboard
       zotero
     ];
