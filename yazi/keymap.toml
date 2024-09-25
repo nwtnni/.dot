@@ -1,4 +1,5 @@
 [manager]
 prepend_keymap = [
     { on = "e", run = "shell --confirm --block nvim", desc = "Open nvim in current directory" },
+    { on = "i", run = "create", desc = "Create file" },
 ]
