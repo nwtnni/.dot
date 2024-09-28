@@ -59,6 +59,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Format on BufWritePre
     if client.supports_method("textDocument/formatting") then
       autocmd("BufWritePre", function()
+        if not vim.g._format then
+          return
+        end
+
         vim.lsp.buf.format()
         pcall(vim.diagnostic.show)
       end)
@@ -86,6 +90,12 @@ local function toggle_inlay()
     ---@diagnostic disable-next-line: missing-parameter
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end
+end
+
+-- Auto formatting
+vim.g._format = true;
+local function toggle_format()
+  vim.g._format = not vim.g._format
 end
 
 -- Disable provider warnings
@@ -277,11 +287,14 @@ end)
 setn("<SPACE>s", toggle_status)
 setn("<SPACE>h", toggle_highlight)
 setn("<SPACE>i", toggle_inlay)
+setn("<SPACE>f", toggle_format)
 
 seti("jf", "<ESC>")
 set("t", "jf", "<C-\\><C-n>")
 
 -- Navigation
+setn("gh", function() pcall(vim.cmd.ClangdSwitchSourceHeader) end)
+
 vim.o.cursorlineopt = "screenline"
 vim.o.cursorline = false
 local navigate = false

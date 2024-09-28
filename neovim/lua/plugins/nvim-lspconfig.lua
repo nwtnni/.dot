@@ -3,6 +3,8 @@ return {
   main = "lspconfig",
   ft = {
     "bib",
+    "c",
+    "cpp",
     "nix",
     "python",
     "rust",
@@ -40,6 +42,8 @@ return {
         vim.lsp.protocol.make_client_capabilities()
       )
     end
+
+    lspconfig["clangd"].setup({})
 
     lspconfig["nixd"].setup({
       on_new_config = function(config, root_dir)
