@@ -31,6 +31,7 @@ apply({
     { key = "-", mods = "LEADER",       action = act.SplitVertical },
     { key = "z", mods = "LEADER",       action = act.TogglePaneZoomState },
     { key = "[", mods = "LEADER",       action = act.ActivateCopyMode },
+    { key = 'f', mods = 'LEADER',       action = act.QuickSelect },
 
     { key = "h", mods = "LEADER",       action = act.ActivatePaneDirection("Left") },
     { key = "l", mods = "LEADER",       action = act.ActivatePaneDirection("Right") },
