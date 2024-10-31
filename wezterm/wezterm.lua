@@ -32,11 +32,17 @@ apply({
     { key = "z", mods = "LEADER",       action = act.TogglePaneZoomState },
     { key = "[", mods = "LEADER",       action = act.ActivateCopyMode },
     { key = 'f', mods = 'LEADER',       action = act.QuickSelect },
+    { key = 'a', mods = 'LEADER|CTRL',  action = act.SendKey { key = 'a', mods = 'CTRL' } },
 
     { key = "h", mods = "LEADER",       action = act.ActivatePaneDirection("Left") },
     { key = "l", mods = "LEADER",       action = act.ActivatePaneDirection("Right") },
     { key = "j", mods = "LEADER",       action = act.ActivatePaneDirection("Down") },
     { key = "k", mods = "LEADER",       action = act.ActivatePaneDirection("Up") },
+
+    { key = "h", mods = "CTRL",         action = act.ActivatePaneDirection("Left") },
+    { key = "l", mods = "CTRL",         action = act.ActivatePaneDirection("Right") },
+    { key = "j", mods = "CTRL",         action = act.ActivatePaneDirection("Down") },
+    { key = "k", mods = "CTRL",         action = act.ActivatePaneDirection("Up") },
 
     { key = "f", mods = "CTRL",         action = act.Search("CurrentSelectionOrEmptyString") },
   },
