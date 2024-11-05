@@ -39,6 +39,8 @@ apply({
     { key = "j", mods = "LEADER",       action = act.ActivatePaneDirection("Down") },
     { key = "k", mods = "LEADER",       action = act.ActivatePaneDirection("Up") },
 
+    { key = "k", mods = "CTRL|SHIFT",       action = act.ClearScrollback "ScrollbackAndViewport" },
+
     { key = "h", mods = "CTRL",         action = act.ActivatePaneDirection("Left") },
     { key = "l", mods = "CTRL",         action = act.ActivatePaneDirection("Right") },
     { key = "j", mods = "CTRL",         action = act.ActivatePaneDirection("Down") },
