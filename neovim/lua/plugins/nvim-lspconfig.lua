@@ -81,6 +81,9 @@ return {
     lspconfig["rust_analyzer"].setup({
       settings = {
         ["rust-analyzer"] = {
+          cargo = {
+            features = "all",
+          },
           check = {
             command = "clippy",
           },

@@ -14,6 +14,7 @@ let
       name = if lib.hasSuffix "-nvim" name then builtins.replaceStrings [ "-nvim" ] [ ".nvim" ] name else name;
       path = lib.getAttr name pkgs.vimPlugins;
     }))
+    (builtins.filter (name: name != "coq-lsp"))
   ] ++ [
     {
       name = "lazy.nvim";
@@ -24,6 +25,18 @@ let
     {
       name = "tree-sitter-parsers";
       path = pkgs.callPackage (import ./neovim/tree-sitter.nix) { };
+    }
+    {
+      name = "coq-lsp.nvim";
+      path = pkgs.vimUtils.buildVimPlugin {
+        name = "coq-lsp.nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "tomtomjhj";
+          repo = "coq-lsp.nvim";
+          rev = "6135ed25fc2a1b4b1b6451ed206dc38b493ff1a2";
+          hash = "sha256-eceyZc9nIbpe1G/kzU3Y61ut+RKfYXI78zALxN4Un+4=";
+        };
+      };
     }
   ];
 in
