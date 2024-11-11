@@ -1,21 +1,6 @@
-# .dotfiles
+# .dot
 
-- Distribution: [Arch Linux](https://archlinux.org/)
-- Window manager: [qtile](http://www.qtile.org/)
-- Display manager: [lemurs](https://github.com/coastalwhite/lemurs)
-- Shell: [zsh](https://ohmyz.sh/)
-- Terminal emulator: [alacritty](https://alacritty.org/)
-- Terminal multiplexer: [tmux](https://github.com/tmux/tmux)
+- Distribution: [NixOS](https://nixos.org/)
+- Window manager: [sway](https://swaywm.org/)
+- Terminal: [wezterm](https://wezfurlong.org/wezterm/index.html)
 - Text editor: [neovim](https://neovim.io/)
-- PDF viewer: [zathura](https://pwmt.org/projects/zathura/)
-- Web browser: [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/) (plus [Tridactyl](https://github.com/tridactyl/tridactyl))
-- Command line utilities:
-  - `grep`: [ripgrep](https://github.com/BurntSushi/ripgrep)
-  - `find`: [fd](https://github.com/sharkdp/fd)
-  - `cat`: [bat](https://github.com/sharkdp/bat)
-  - `wc`: [tokei](https://github.com/XAMPPRocky/tokei)
-  - `ls`: [exa](https://github.com/ogham/exa)
-  - `time`: [hyperfine](https://github.com/sharkdp/hyperfine)
-  - `dircolors`: [vivid](https://github.com/sharkdp/vivid)
-  - Fuzzy finder: [fzf](https://github.com/junegunn/fzf)
-  - Clock: [tock](https://github.com/nwtnni/tock)
