@@ -1,5 +1,11 @@
 { pkgs, ... }:
 {
+  imports = [
+    ./wayland.nix
+    ./wezterm.nix
+    ./zathura.nix
+  ];
+
   fonts.fontconfig.enable = true;
 
   home = {
