@@ -184,7 +184,7 @@ vim.o.splitbelow = true;
 vim.o.equalalways = false;
 vim.o.virtualedit = "block";
 vim.o.list = true;
-vim.o.listchars = "trail:·";
+vim.o.listchars = "trail:·,tab:␉·";
 vim.cmd("highlight TrailingWhitespace ctermbg=red guibg=#592929")
 vim.cmd("match TrailingWhitespace /\\s\\+$/")
 
