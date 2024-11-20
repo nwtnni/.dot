@@ -33,13 +33,14 @@ apply({
     { key = "[", mods = "LEADER",       action = act.ActivateCopyMode },
     { key = 'f', mods = 'LEADER',       action = act.QuickSelect },
     { key = 'a', mods = 'LEADER|CTRL',  action = act.SendKey { key = 'a', mods = 'CTRL' } },
+    { key = "w", mods = "CTRL",         action = act.CloseCurrentTab { confirm = true } },
+    { key = "t", mods = "CTRL",         action = act.SpawnTab("CurrentPaneDomain") },
+    { key = "k", mods = "CTRL|SHIFT",   action = act.ClearScrollback "ScrollbackAndViewport" },
 
     { key = "h", mods = "LEADER",       action = act.ActivatePaneDirection("Left") },
     { key = "l", mods = "LEADER",       action = act.ActivatePaneDirection("Right") },
     { key = "j", mods = "LEADER",       action = act.ActivatePaneDirection("Down") },
     { key = "k", mods = "LEADER",       action = act.ActivatePaneDirection("Up") },
-
-    { key = "k", mods = "CTRL|SHIFT",       action = act.ClearScrollback "ScrollbackAndViewport" },
 
     { key = "h", mods = "CTRL",         action = act.ActivatePaneDirection("Left") },
     { key = "l", mods = "CTRL",         action = act.ActivatePaneDirection("Right") },
