@@ -125,6 +125,11 @@
     };
 
     gpu-nvidia.configuration = {
+      boot = {
+        blacklistedKernelModules = [ "nouveau" ];
+        kernelParams = ["acpi_backlight=nvidia_wmi_ec" ];
+      };
+
       programs.sway = {
         extraOptions = [ "--unsupported-gpu" ];
 
@@ -147,8 +152,14 @@
       services.xserver.videoDrivers = [ "nvidia" ];
 
       hardware = {
+        graphics.enable = true;
+
         nvidia = {
           modesetting.enable = true;
+          powerManagement.enable = false;
+          powerManagement.finegrained = false;
+          nvidiaSettings = true;
+          open = true;
           prime = {
             intelBusId = "PCI:0:2:0";
             nvidiaBusId = "PCI:1:0:0";
