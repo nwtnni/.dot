@@ -3,7 +3,7 @@
   programs.eza = {
     enable = true;
 
-    icons = config.fonts.fontconfig.enable;
+    icons = "auto";
 
     extraOptions = [
       "--classify"

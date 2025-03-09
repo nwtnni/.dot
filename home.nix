@@ -8,6 +8,6 @@
   home = {
     username = "nwtnni";
     homeDirectory = "/home/nwtnni";
-    stateVersion = "23.05";
+    stateVersion = "25.05";
   };
 }
