@@ -58,6 +58,9 @@
       susta() { systemctl --user start $(sus); }
       susto() { systemctl --user stop $(sus); }
       sur() { systemctl --user restart $(sus); }
+
+      # https://superuser.com/questions/555310/bash-save-history-without-exit
+      export PROMPT_COMMAND="''${PROMPT_COMMAND:-:}; history -a; history -c; history -r;";
     '';
   };
 }
