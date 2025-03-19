@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
+    ./atuin.nix
     ./bat.nix
     ./bash.nix
     ./eza.nix
