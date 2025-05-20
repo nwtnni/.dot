@@ -407,15 +407,5 @@ vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
   pattern = "term://*",
   command = "startinsert",
 })
-vim.api.nvim_create_autocmd("TermClose", {
-  group = augroup_term,
-  callback = function(event)
-    if event.buf ~= vim.g._term_buf then
-      return
-    end
-
-    vim.api.nvim_buf_delete(event.buf, { force = true })
-  end
-})
 
 setn("<TAB>", toggle_terminal)
