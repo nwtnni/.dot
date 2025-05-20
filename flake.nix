@@ -28,6 +28,13 @@
         ];
       };
 
+      # https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone
+      # https://www.chrisportela.com/posts/home-manager-flake/
+      homeConfigurations."nwtnni" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [ ./home.nix ];
+      };
+
       devShells.${system}.default = pkgs.mkShell {
         name = ".dot";
         nativeBuildInputs = with pkgs; [
