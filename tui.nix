@@ -32,6 +32,7 @@
 
     shellAliases = {
       cat = "bat";
+      j = "just";
       l = "eza";
       p = "cd ..";
       vi = "nvim";
