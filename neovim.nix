@@ -47,19 +47,9 @@ in
   ] ++ [ neovim ];
   home.sessionVariables.EDITOR = "nvim";
 
-  xdg.configFile.nvim-init = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/init.lua";
-    target = "nvim/init.lua";
-  };
-
-  xdg.configFile.nvim-lua = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/lua";
-    target = "nvim/lua";
-  };
-
-  xdg.configFile.nvim-snippets = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim/snippets";
-    target = "nvim/snippets";
+  xdg.configFile.nvim = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dot/neovim";
+    target = "nvim";
   };
 
   xdg.dataFile.nvim-lazy-plugins = {
