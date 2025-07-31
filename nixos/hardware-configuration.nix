@@ -46,7 +46,6 @@
 
       files = [
         "/etc/greetd/environments"
-        "/etc/machine-id"
       ];
     };
   };
