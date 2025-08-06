@@ -71,6 +71,8 @@
     };
   };
 
+  virtualisation.docker.enable = true;
+
   users.mutableUsers = false;
   users.extraUsers = {
     root = {
