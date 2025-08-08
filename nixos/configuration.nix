@@ -82,7 +82,7 @@
     nwtnni = {
       isNormalUser = true;
       description = "Newton Ni";
-      extraGroups = [ "dialout" "wheel" "networkmanager" ];
+      extraGroups = [ "dialout" "docker" "wheel" "networkmanager" ];
       initialHashedPassword = "$6$wwAkpT1c0DOGE34/$ssPWCcxWnpjMCikLllHlKCO0HmU03jqg/jR5BKBFzyi3NdP29zXGWTJ6Jo3zarA.4QMZ9OUeqqW8myQxHXPmJ0";
     };
   };
