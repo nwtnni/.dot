@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   wayland.windowManager.sway = {
@@ -26,28 +26,40 @@
 
   services.kanshi = {
     enable = true;
-    settings = [
+    settings = let
+      G16_MONITOR = "BOE NE160WUM-NX2 Unknown";
+      GDC_MONITOR =  "Dell Inc. DELL U2412M YMYH134F24TS";
+    in [
       {
-        profile.name = "g16";
-        profile.outputs = [
-          {
-            criteria = "eDP-1";
-          }
-        ];
+        profile = {
+          name = "g16";
+          outputs = [
+            {
+              criteria = G16_MONITOR;
+            }
+          ];
+        };
       }
       {
-        profile.name = "g16-gdc";
-        profile.outputs = [
-          {
-            criteria = "eDP-1";
-            position = "0,960";
-          }
-          {
-            criteria = "HDMI-A-3";
-            transform = "90";
-            position = "1920,0";
-          }
-        ];
+        profile = {
+          name = "g16-gdc";
+          outputs = [
+            {
+              criteria = G16_MONITOR;
+              position = "0,960";
+            }
+            {
+              criteria = GDC_MONITOR;
+              transform = "90";
+              position = "1920,0";
+            }
+          ];
+          # FIXME: sway doesn't seem to recognize vendor name
+          # exec = [
+          #   "${pkgs.sway}/bin/swaymsg workspace 1, move workspace to \"${G16_MONITOR}\""
+          #   "${pkgs.sway}/bin/swaymsg workspace 2, move workspace to \"${GDC_MONITOR}\""
+          # ];
+        };
       }
     ];
   };
