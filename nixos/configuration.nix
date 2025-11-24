@@ -37,6 +37,8 @@
 
   programs.sway.enable = true;
 
+  programs.nix-ld.enable = true;
+
   security = {
     polkit.enable = true;
     rtkit.enable = true;
