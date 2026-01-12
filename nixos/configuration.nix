@@ -33,6 +33,7 @@
     timeZone = "America/Chicago";
   };
 
+  hardware.bluetooth.enable = true;
   hardware.graphics.enable = true;
 
   programs.sway.enable = true;
