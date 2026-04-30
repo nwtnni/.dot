@@ -1,41 +1,3 @@
-vim.opt.packpath = {
-  vim.env.VIMRUNTIME,
-}
-vim.opt.rtp = {
-  vim.fn.stdpath("config"),
-  vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
-  vim.fn.stdpath("data") .. "/lazy/tree-sitter-parsers",
-  vim.env.VIMRUNTIME .. "/../../../lib/nvim",
-  vim.env.VIMRUNTIME,
-}
-
-require("lazy").setup(
-  "plugins",
-  {
-    change_detection = {
-      enabled = false,
-    },
-    checker = {
-      enabled = false,
-    },
-    defaults = {
-      lazy = true,
-    },
-    install = {
-      missing = false,
-    },
-    performance = {
-      reset_packpath = false,
-      rtp = {
-        reset = false,
-      },
-    },
-    readme = {
-      enabled = false,
-    },
-  }
-)
-
 -- Set up LSP-based autocommands
 --
 -- nvim-lspconfig uses the FileType event to start language servers,
@@ -59,7 +21,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- Format on BufWritePre
-    if client.supports_method("textDocument/formatting") then
+    if client:supports_method("textDocument/formatting") then
       autocmd("BufWritePre", function()
         if not vim.g._format then
           return
@@ -71,7 +33,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- Highlight references on CursorHold
-    if client.supports_method("textDocument/documentHighlight") then
+    if client:supports_method("textDocument/documentHighlight") then
       local highlight = { underline = true }
       vim.api.nvim_set_hl(0, "LspReferenceText", highlight)
       vim.api.nvim_set_hl(0, "LspReferenceRead", highlight)
@@ -208,82 +170,6 @@ local seti = function(source, target) set("i", source, target) end
 setn("<CR>", "<CMD>update<CR>")
 setn("crn", vim.lsp.buf.rename)
 
--- Override default ]d and [d mappings
-vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end)
-vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end)
-
--- https://github.com/neovim/neovim/blob/9e2f378b6d255cd4b02a39b1a1dc5aea2df1a84c/runtime/lua/vim/lsp/util.lua#L1197C1-L1203C4
-local function find_window_by_var(name, value)
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local ok, _value = pcall(vim.api.nvim_win_get_var, win, name)
-    if ok and _value == value then
-      return win
-    end
-  end
-end
-
-setn("K", function()
-  local win = vim.api.nvim_get_current_win()
-  local buf = vim.api.nvim_get_current_buf()
-  local float = "textDocument/hover"
-  local split = "hover/split"
-  local response = "hover/response"
-  local context = {
-    bufnr = buf,
-    method = float,
-  }
-
-  vim.lsp.buf_request_all(0, float, vim.lsp.util.make_position_params(), function(responses)
-    assert(#responses == 1, "TODO: support more than one server")
-    if not responses[1].result or not responses[1].result.contents then
-      return
-    end
-
-    local hover_float = find_window_by_var(float, buf)
-    local hover_split = find_window_by_var(split, buf)
-
-    if vim.api.nvim_get_current_buf() ~= buf then
-      pcall(vim.api.nvim_win_close, hover_float, false)
-      pcall(vim.api.nvim_win_close, hover_split, false)
-      return
-    end
-
-    local result = responses[1].result
-    if not hover_float and not hover_split then
-      vim.lsp.handlers.hover(nil, result, context, {})
-      return
-    end
-
-    if hover_split and vim.api.nvim_win_get_var(hover_split, response) == result.contents then
-      vim.api.nvim_win_close(hover_split, false)
-      return
-    end
-
-    if hover_float then
-      vim.api.nvim_win_close(hover_float, false)
-    end
-
-    if hover_split then
-      vim.api.nvim_set_current_win(hover_split)
-    else
-      vim.api.nvim_command("split")
-    end
-
-    hover_split = vim.api.nvim_get_current_win()
-    vim.api.nvim_win_set_var(hover_split, split, buf)
-    vim.api.nvim_win_set_var(hover_split, response, result.contents)
-
-    buf = vim.api.nvim_create_buf(false, true)
-    local contents = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
-    vim.api.nvim_set_current_buf(buf)
-    vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-    vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, contents)
-    vim.api.nvim_buf_set_option(buf, "modifiable", false)
-    vim.api.nvim_set_current_win(win)
-  end)
-end)
-
 setn("<SPACE>s", toggle_status)
 setn("<SPACE>h", toggle_highlight)
 setn("<SPACE>i", toggle_inlay)
@@ -294,6 +180,15 @@ set("t", "jf", "<C-\\><C-n>")
 
 -- Navigation
 setn("gh", function() pcall(vim.cmd.ClangdSwitchSourceHeader) end)
+
+vim.keymap.set("n", "ge",
+  function() vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR }) end)
+vim.keymap.set("n", "gw",
+  function() vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.WARN }) end)
+
+-- Override default ]d and [d mappings
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
 
 vim.o.cursorlineopt = "screenline"
 vim.o.cursorline = false
@@ -358,54 +253,3 @@ vim.api.nvim_create_autocmd("ModeChanged", {
   pattern = { "*:[ivVsSR]*", "*:<CTRL-V>*" },
   callback = function() if navigate then toggle_navigate() end end,
 })
-
-local win_save
-local function toggle_terminal()
-  local win = vim.api.nvim_get_current_win()
-  local term_win = vim.g._term_win
-  local term_buf = vim.g._term_buf
-
-  if term_buf and not vim.api.nvim_buf_is_loaded(term_buf) then
-    pcall(vim.api.nvim_buf_delete, term_buf)
-    term_buf = nil
-  end
-
-  if term_win and not vim.api.nvim_win_is_valid(term_win) then
-    term_win = nil
-  end
-
-  if term_win and term_buf then
-    if win == term_win then
-      if not pcall(vim.api.nvim_set_current_win, win_save) then
-        vim.cmd.wincmd("k")
-      end
-    else
-      win_save = win
-      vim.api.nvim_set_current_win(term_win)
-    end
-    return
-  end
-
-  win_save = win
-  vim.cmd([[botright split]])
-  vim.g._term_win = vim.api.nvim_get_current_win()
-  vim.api.nvim_win_set_height(vim.g._term_win, 10)
-
-  if term_buf then
-    vim.api.nvim_win_set_buf(vim.g._term_win, term_buf)
-    vim.cmd.startinsert()
-  else
-    vim.cmd.terminal()
-    vim.g._term_buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_keymap(vim.g._term_buf, "n", "q", "<CMD>quit<CR>", { silent = true })
-  end
-end
-
-local augroup_term = vim.api.nvim_create_augroup("personal-term", { clear = true })
-vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
-  group = augroup_term,
-  pattern = "term://*",
-  command = "startinsert",
-})
-
-setn("<TAB>", toggle_terminal)

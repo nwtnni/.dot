@@ -10,6 +10,7 @@ return {
     "rust",
     "tex",
     "toml",
+    "typst",
   },
   cmd = {
     "LspInfo",
@@ -44,6 +45,17 @@ return {
     end
 
     lspconfig["clangd"].setup({})
+
+    lspconfig["jdtls"].setup({})
+
+    lspconfig["tinymist"].setup({
+      settings = {
+        exportPdf = "onType",
+        lint = {
+          enabled = true,
+        }
+      }
+    })
 
     lspconfig["nixd"].setup({
       on_new_config = function(config, root_dir)
@@ -81,8 +93,11 @@ return {
     lspconfig["rust_analyzer"].setup({
       settings = {
         ["rust-analyzer"] = {
-          cargo = {
-            features = "all",
+          -- cargo = {
+          --   features = "all",
+          -- },
+          assist = {
+            preferSelf = true,
           },
           check = {
             command = "clippy",
