@@ -15,9 +15,15 @@
       options = [ "defaults" "size=4G" "mode=755" ];
     };
 
-  fileSystems."/boot" =
+  fileSystems."/efi" =
     {
       device = "/dev/disk/by-label/SYSTEM";
+      fsType = "vfat";
+    };
+
+  fileSystems."/boot" =
+    {
+      device = "/dev/disk/by-label/NIXOS-XBOOT";
       fsType = "vfat";
     };
 
@@ -49,6 +55,9 @@
       ];
     };
   };
+
+  boot.loader.efi.efiSysMountPoint = "/efi";
+  boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
 
   hardware = {
     enableAllFirmware = true;
@@ -97,74 +106,74 @@
       SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"
     '';
 
-  specialisation = {
-    # https://github.com/NixOS/nixos-hardware/blob/8251761f93d6f5b91cee45ac09edb6e382641009/common/gpu/nvidia/disable.nix
-    gpu-disable.configuration = {
-      boot = {
-        blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
-        extraModprobeConfig = ''
-          blacklist nouveau
-          options nouveau modeset=0
-        '';
-      };
+  # specialisation = {
+  #   # https://github.com/NixOS/nixos-hardware/blob/8251761f93d6f5b91cee45ac09edb6e382641009/common/gpu/nvidia/disable.nix
+  #   gpu-disable.configuration = {
+  #     boot = {
+  #       blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+  #       extraModprobeConfig = ''
+  #         blacklist nouveau
+  #         options nouveau modeset=0
+  #       '';
+  #     };
 
-      services.udev.extraRules = ''
-        # Remove NVIDIA USB xHCI Host Controller devices, if present
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+  #     services.udev.extraRules = ''
+  #       # Remove NVIDIA USB xHCI Host Controller devices, if present
+  #       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
 
-        # Remove NVIDIA USB Type-C UCSI devices, if present
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+  #       # Remove NVIDIA USB Type-C UCSI devices, if present
+  #       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
 
-        # Remove NVIDIA Audio devices, if present
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+  #       # Remove NVIDIA Audio devices, if present
+  #       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
 
-        # Remove NVIDIA VGA/3D controller devices
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-      '';
-    };
+  #       # Remove NVIDIA VGA/3D controller devices
+  #       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+  #     '';
+  #   };
 
-    gpu-nvidia.configuration = {
-      boot = {
-        blacklistedKernelModules = [ "nouveau" ];
-        kernelParams = ["acpi_backlight=nvidia_wmi_ec" ];
-      };
+  #  gpu-nvidia.configuration = {
+  boot = {
+    blacklistedKernelModules = [ "nouveau" ];
+    kernelParams = ["acpi_backlight=nvidia_wmi_ec" ];
+  };
 
-      programs.sway = {
-        extraOptions = [ "--unsupported-gpu" ];
+  programs.sway = {
+    extraOptions = [ "--unsupported-gpu" ];
 
-        extraSessionCommands = /* bash */ ''
-          # https://wiki.archlinux.org/title/sway#No_visible_cursor
-          export WLR_NO_HARDWARE_CURSORS=1;
+    extraSessionCommands = /* bash */ ''
+      # https://wiki.archlinux.org/title/sway#No_visible_cursor
+      export WLR_NO_HARDWARE_CURSORS=1;
 
-          # Miscellaneous environment variables for trying to get Vulkan
-          # working with sway + wlroots + nvidia + external monitor.
-          # Could not find a working configuration.
-          #
-          # export WLR_RENDERER="vulkan";
-          # export DRI_PRIME="pci-0000_01_00_0";
-          # export __VK_LAYER_NV_optimus="NVIDIA_only";
-          # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
-          # export VK_DRIVER_FILES="/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
-        '';
-      };
+      # Miscellaneous environment variables for trying to get Vulkan
+      # working with sway + wlroots + nvidia + external monitor.
+      # Could not find a working configuration.
+      #
+      # export WLR_RENDERER="vulkan";
+      # export DRI_PRIME="pci-0000_01_00_0";
+      # export __VK_LAYER_NV_optimus="NVIDIA_only";
+      # export __GLX_VENDOR_LIBRARY_NAME="nvidia";
+      # export VK_DRIVER_FILES="/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+    '';
+  };
 
-      services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-      hardware = {
-        graphics.enable = true;
+  hardware = {
+    graphics.enable = true;
 
-        nvidia = {
-          modesetting.enable = true;
-          powerManagement.enable = false;
-          powerManagement.finegrained = false;
-          nvidiaSettings = true;
-          open = true;
-          prime = {
-            intelBusId = "PCI:0:2:0";
-            nvidiaBusId = "PCI:1:0:0";
-          };
-        };
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = false;
+      powerManagement.finegrained = false;
+      nvidiaSettings = true;
+      open = true;
+      prime = {
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
       };
     };
   };
+  # };
+  # };
 }

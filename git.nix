@@ -62,11 +62,20 @@
 
   programs.git = {
     enable = true;
-    userName = "Newton Ni";
-    userEmail = "nwtnni@gmail.com";
 
-    # https://jvns.ca/blog/2024/02/16/popular-git-config-options/#rebase-autostash-true
-    extraConfig = {
+    ignores = [
+      ".DS_Store"
+      ".direnv"
+      ".envrc"
+      "*.tags"
+      "*.swp"
+    ];
+
+    settings = {
+      user.name = "Newton Ni";
+      user.email = "nwtnni@gmail.com";
+
+      # https://jvns.ca/blog/2024/02/16/popular-git-config-options/#rebase-autostash-true
       branch.sort = "-committerdate";
       commit.verbose = true;
       diff.algorithm = "histogram";
@@ -83,17 +92,11 @@
       rerere.enabled = true;
       tag.sort = "-taggerdate";
     };
+  };
 
-    ignores = [
-      ".DS_Store"
-      ".direnv"
-      ".envrc"
-      "*.tags"
-      "*.swp"
-    ];
-
-    delta = {
+  programs.delta = {
       enable = true;
+      enableGitIntegration= true;
       options = {
         dark = true;
         hyperlinks = true;
@@ -143,5 +146,4 @@
         zero-style = "syntax";
       };
     };
-  };
 }

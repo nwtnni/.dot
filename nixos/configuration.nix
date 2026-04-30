@@ -49,7 +49,7 @@
     greetd = {
       enable = true;
       settings.default_session.command = ''
-        ${pkgs.greetd.tuigreet}/bin/tuigreet \
+        ${pkgs.tuigreet}/bin/tuigreet \
           --asterisks \
           --remember \
           --remember-session \
@@ -60,7 +60,10 @@
 
     printing.enable = true;
 
-    udev.extraHwdb = "evdev:name:*[Kk]eyboard*:*\n KEYBOARD_KEY_70039=leftctrl";
+    udev = {
+      enable = true;
+      extraHwdb = "evdev:input:b0003v0B05p19B6*\n KEYBOARD_KEY_70039=leftctrl";
+    };
 
     # https://nixos.wiki/wiki/Calibre
     udisks2.enable = true;
